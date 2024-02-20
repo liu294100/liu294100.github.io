@@ -27,7 +27,7 @@ BLENDING = true;
 /* if empty the text will be a random number */
 var TEXT;
 num = 0;
-TEXTArray = ["Ω™Ê√","LOVE","Y O U","œ≤ª∂ƒ„","LOVE","Y O U","Jiang","Ting"];
+TEXTArray = ["‰ΩôÂÖ∞","LOVE","Y O U","ÂñúÊ¨¢‰Ω†","LOVE","Y O U","Yu","Lan"];
 
 QUALITY_TO_FONT_SIZE = [5, 12, 30, 45, 200, 350];
 QUALITY_TO_SCALE = [20, 6, 4, 1, 0.9, 1.5];
@@ -92,7 +92,7 @@ window.onload = function () {
 
 		tctx.font = "bold " + QUALITY_TO_FONT_SIZE[QUALITY] + "px " + FANCY_FONT;
 
-		//tctx.textAlign='center';//Œƒ±æÀÆ∆Ω∂‘∆Î∑Ω Ω
+		//tctx.textAlign='center';//ÊñáÊú¨Ê∞¥Âπ≥ÂØπÈΩêÊñπÂºè
 		//tctx.textBaseline='middle';
 
 		//tctx.strokeStyle = "black";
