@@ -1,14 +1,2013 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Examples</title>
-<meta name="description" content="">
-<meta name="keywords" content="">
-<link href="" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>网址导航</title>
+  <style>
+    /* 基础样式 */
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "微软雅黑", Arial, sans-serif;
+      background: #f7f9fc;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 36px;
+      color: #007BFF;
+    }
+    /* 搜索框样式 */
+    .search-box {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 40px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 30px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .search-box input:focus {
+      border-color: #007BFF;
+    }
+    /* 分类样式 */
+    .category {
+      margin-bottom: 40px;
+    }
+    .category h2 {
+      background: linear-gradient(90deg, #007BFF, #00d4ff);
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin: 0 0 15px;
+    }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .link-item {
+      display: inline-block;
+      background: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .link-item:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body>
-    Hello world！！！
+  <h1>网址导航</h1>
+  <div class="search-box">
+    <input type="text" id="search" placeholder="搜索网址...">
+  </div>
+  <div id="navigation">
+<div class="category" data-category="书签栏">
+  <h2>书签栏</h2>
+  <div class="links">
+    <a href="https://www.google.com.hk/" class="link-item" target="_blank">Google</a>
+    <a href="https://www.youtube.com/" class="link-item" target="_blank">YouTube</a>
+    <a href="https://www.facebook.com/" class="link-item" target="_blank">Facebook</a>
+    <a href="https://www.wikipedia.org/" class="link-item" target="_blank">Wikipedia</a>
+    <a href="https://translate.google.com/" class="link-item" target="_blank">翻译</a>
+    <a href="https://y.qq.com/" class="link-item" target="_blank">QQ音乐</a>
+    <a href="https://www.bilibili.com/" class="link-item" target="_blank">bilibili</a>
+    <a href="https://www.tumblr.com/" class="link-item" target="_blank">Tumblr</a>
+    <a href="https://twitter.com/" class="link-item" target="_blank">Twitter</a>
+    <a href="https://www.tiktok.com/" class="link-item" target="_blank">TikTok</a>
+    <a href="https://weibo.com/" class="link-item" target="_blank">微博</a>
+    <a href="https://www.quora.com/" class="link-item" target="_blank">Quora</a>
+    <a href="https://outlook.live.com/" class="link-item" target="_blank">Outlook</a>
+    <a href="https://www.reddit.com/" class="link-item" target="_blank">reddit</a>
+    <a href="https://www.instagram.com/" class="link-item" target="_blank">Instagram</a>
+    <a href="https://flipagram.com/" class="link-item" target="_blank">Flipagram</a>
+    <a href="https://www.twitch.tv/" class="link-item" target="_blank">Twitch</a>
+    <a href="https://www.spotify.com/hk-en/" class="link-item" target="_blank">Spotify</a>
+    <a href="https://vine.co/" class="link-item" target="_blank">Vine</a>
+    <a href="http://www.pixiv.net/" class="link-item" target="_blank">Pixiv</a>
+    <a href="https://vimeo.com/" class="link-item" target="_blank">Vimeo</a>
+    <a href="https://www.nicovideo.jp/" class="link-item" target="_blank">niconico</a>
+    <a href="https://www.pinterest.com/" class="link-item" target="_blank">Pinterest</a>
+    <a href="https://imgur.com/" class="link-item" target="_blank">Imgur</a>
+    <a href="https://www.artstation.com/" class="link-item" target="_blank">ArtStation</a>
+    <a href="https://discord.com/" class="link-item" target="_blank">Discord</a>
+    <a href="https://www.dailymotion.com/" class="link-item" target="_blank">Dailymotion</a>
+    <a href="https://www.snapchat.com/" class="link-item" target="_blank">Snapchat</a>
+    <a href="https://www.douyu.com/" class="link-item" target="_blank">斗鱼</a>
+    <a href="https://www.threads.net/" class="link-item" target="_blank">Threads</a>
+    <a href="https://medium.com/" class="link-item" target="_blank">Medium</a>
+    <a href="https://github.com/" class="link-item" target="_blank">GitHub</a>
+    <a href="https://stackoverflow.com/" class="link-item" target="_blank">StackOverflow</a>
+    <a href="https://www.bing.com/" class="link-item" target="_blank">Bing</a>
+    <a href="https://gitee.com/" class="link-item" target="_blank">码云 Gitee.com</a>
+    <a href="https://www.npmjs.com/" class="link-item" target="_blank">npm</a>
+    <a href="https://mvnrepository.com/" class="link-item" target="_blank">Maven Repository</a>
+    <a href="https://searchcode.com/" class="link-item" target="_blank">SearchCode</a>
+    <a href="https://www.draw.io/" class="link-item" target="_blank">draw.io</a>
+    <a href="http://www.dmanywhere.cn/" class="link-item" target="_blank">DataModel anywhere</a>
+    <a href="https://www.docker.com/" class="link-item" target="_blank">Docker</a>
+    <a href="https://sourceforge.net/" class="link-item" target="_blank">SourceForge</a>
+    <a href="https://bit.dev/" class="link-item" target="_blank">Discover Components · Bit</a>
+    <a href="https://jdec.app/" class="link-item" target="_blank">JDec - Java Decompiler Online</a>
+    <a href="https://gitlab.com/" class="link-item" target="_blank">GitLab.com</a>
+    <a href="https://www.namesilo.com/" class="link-item" target="_blank">Cheap Domain Names</a>
+    <a href="https://learn.microsoft.com/en-us/training/" class="link-item" target="_blank">Training | Microsoft Learn</a>
+    <a href="https://vercel.com/" class="link-item" target="_blank">Vercel</a>
+    <a href="https://www.gitpod.io/" class="link-item" target="_blank">Gitpod</a>
+    <a href="https://www.cloudns.net/main/" class="link-item" target="_blank">ClouDNS: Dashboard</a>
+    <a href="https://developer.aliyun.com/mirror/" class="link-item" target="_blank">阿里巴巴开源镜像站</a>
+    <a href="https://repo.trojan-cdn.com/" class="link-item" target="_blank">repo.trojan-cdn.com</a>
+    <a href="https://huggingface.co/" class="link-item" target="_blank">Hugging Face – The AI community building the future.</a>
+    <a href="https://huggingface.co/spaces" class="link-item" target="_blank">Spaces - Hugging Face</a>
+    <a href="https://www.diggui.com/" class="link-item" target="_blank">DiG GUI - DiG Online, DiG Web Interface, DiG DNS, Google Dig, Online Dig, Dig Tool</a>
+    <a href="https://roadmap.sh/get-started" class="link-item" target="_blank">Developer Roadmaps</a>
+    <a href="https://dashboard.render.com/" class="link-item" target="_blank">Render Dashboard</a>
+    <a href="https://fly.io/dashboard" class="link-item" target="_blank">Dashboard · Fly.io</a>
+    <a href="https://bitdownloader.com/en1" class="link-item" target="_blank">Video Downloader FREE - Download videos from YouTube, Instagram, and Facebook</a>
+    <a href="https://weibomiaopai.com/" class="link-item" target="_blank">微博秒拍视频等解析下载</a>
+    <a href="https://www.parsevideo.com/" class="link-item" target="_blank">视频解析下载</a>
+    <a href="https://www.weibovideo.com/" class="link-item" target="_blank">微博视频解析下载</a>
+    <a href="https://www.online-downloader.com/index-Chinese" class="link-item" target="_blank">YouTube视频转换器, YouTube视频下载器, 免费在线YouTube下载︰ 下载 Youtube、 Facebook、 Vimeo、 优酷、 雅虎和其他许多 ！</a>
+    <a href="https://zh.savefrom.net/7/" class="link-item" target="_blank">Youtube视频下载 - 免费在线 YouTube 下载器</a>
+    <a href="https://dlpanda.com/zh-CN" class="link-item" target="_blank">抖音TikTok无水印下载 - 在线视频无水印下载解析 - 抖音无水印 - TikTok无水印 - 最新免费在线去水印解析 - Download Panda</a>
+    <a href="https://bilibili.iiilab.com/" class="link-item" target="_blank">哔哩哔哩(bilibili)等视频解析下载</a>
+    <a href="https://alltubedownload.net/" class="link-item" target="_blank">AllTube Download</a>
+    <a href="https://jianwai.youdao.com/" class="link-item" target="_blank">网易见外</a>
+    <a href="https://www.playlistmusic.com.cn/playList" class="link-item" target="_blank">PlayList-视频工作者素材平台</a>
+    <a href="https://superparse.com/" class="link-item" target="_blank">在线解析视频 - 免费解析并下载视频,支持YouTube, Instagram, Facebook…</a>
+    <a href="https://cobalt.tools/" class="link-item" target="_blank">cobalt</a>
+    <a href="https://www.downloadyoutubesubtitles.com/zh" class="link-item" target="_blank">YouTube 字幕下载器 - DownloadYoutubeSubtitles.com</a>
+    <a href="https://ilovevideo.app/" class="link-item" target="_blank">iLoveVideo - Video Downloader</a>
+    <a href="https://www.fotor.com.cn/" class="link-item" target="_blank">Fotor</a>
+    <a href="https://www.mockplus.cn/" class="link-item" target="_blank">摹客，让设计和协作更快更简单</a>
+    <a href="https://www.processon.com/" class="link-item" target="_blank">ProcessOn</a>
+    <a href="https://modao.cc/dashboard/" class="link-item" target="_blank">墨刀</a>
+    <a href="https://express.adobe.com/zh-Hans-CN/sp" class="link-item" target="_blank">Adobe Express</a>
+    <a href="https://id-photo.cn/color/" class="link-item" target="_blank">在线证件照换底色工具 - 证件照大师</a>
+    <a href="https://app.spline.design/home" class="link-item" target="_blank">Spline</a>
+    <a href="https://www.mindshow.fun/" class="link-item" target="_blank">Templates - MindShow,Make Slides Easy</a>
+    <a href="https://www.canva.com/zh_cn/" class="link-item" target="_blank">Canva - 免费设计工具：演示文稿、视频、社交媒体等 -</a>
+    <a href="https://www.iopaint.com/" class="link-item" target="_blank">IOPaint – IOPaint</a>
+    <a href="https://axurehub.com/" class="link-item" target="_blank">AxureHub产品原型资源站</a>
+    <a href="https://www.whitescreen.online/" class="link-item" target="_blank">White screen | Online Tool</a>
+    <a href="https://www.pacdora.com/" class="link-item" target="_blank">Pacdora - The Largest Mockups and Dieline Templates Platform</a>
+    <a href="https://artsandculture.google.com/?hl=cn" class="link-item" target="_blank">Google 艺术与文化</a>
+    <a href="https://www.photopea.com/" class="link-item" target="_blank">Photopea | Online Photo Editor</a>
+    <a href="https://www.gettyimages.com/" class="link-item" target="_blank">Getty Images</a>
+    <a href="https://removal.ai/" class="link-item" target="_blank">remove.ai | Image Background Remover</a>
+    <a href="https://www.scpta.com.cn/" class="link-item" target="_blank">四川省人力资源和社会保障厅人事考试专栏</a>
+    <a href="http://gypta.e21cn.com/index.html" class="link-item" target="_blank">广元人事考试网</a>
+    <a href="http://www.offcn.com/scgwy/" class="link-item" target="_blank">中公教育网-四川</a>
+    <a href="https://www.ruankao.org.cn/" class="link-item" target="_blank">中国计算机技术职业资格网</a>
+    <a href="https://www.nowcoder.com/" class="link-item" target="_blank">牛客网 程序笔试题</a>
+    <a href="https://gkcx.eol.cn/" class="link-item" target="_blank">高考志愿填报服务平台|-中国教育在线</a>
+    <a href="https://leetcode-cn.com/" class="link-item" target="_blank">力扣（LeetCode）官网</a>
+    <a href="https://www.fenbi.com/page/mokaodasai" class="link-item" target="_blank">粉笔网</a>
+    <a href="http://www.jdpta.com/" class="link-item" target="_blank">四川省人事考试基地</a>
+    <a href="https://yz.chsi.com.cn/" class="link-item" target="_blank">全国硕士研究生招生考试网</a>
+    <a href="http://bm.e21cn.com/" class="link-item" target="_blank">考生之家 - 在线报名</a>
+    <a href="https://www.amac.org.cn/" class="link-item" target="_blank">中国证券投资基金业协会</a>
+    <a href="https://www.tianyiwangxiao.com/personal/begin_exercise" class="link-item" target="_blank">点题库- 在线题库</a>
+    <a href="https://zkt.miyaketang.com/" class="link-item" target="_blank">证课堂</a>
+    <a href="https://songyon.github.io/8valuescn/" class="link-item" target="_blank">8values中文版</a>
+    <a href="https://app.codecrafters.io/" class="link-item" target="_blank">CodeCrafters</a>
+    <a href="https://app.grammarly.com/" class="link-item" target="_blank">My Grammarly - Grammarly</a>
+    <a href="https://interview.dog/" class="link-item" target="_blank">面试狗 - 面试神器|辅助面试|面试助手，面试辅助工具_面试狗</a>
+    <a href="https://www.ximalaya.com/" class="link-item" target="_blank">有声小说,听小说,有声书,在线听书电台-喜马拉雅FM</a>
+    <a href="https://www.missevan.com/" class="link-item" target="_blank">猫耳FM_来自二次元的声音_( :3」∠)_M站</a>
+    <a href="https://www.lalal.ai/" class="link-item" target="_blank">LALAL.AI: 100% AI-Powered Vocal and Instrumental Tracks Removal</a>
+    <a href="https://soundcloud.com/" class="link-item" target="_blank">SoundCloud</a>
+    <a href="https://wenxin.baidu.com/wenxin/pc/lyrics" class="link-item" target="_blank">文心大模型-产业级知识增强大模型</a>
+    <a href="https://tianyin.163.com/" class="link-item" target="_blank">网易天音</a>
+    <a href="https://myedit.online/cn/audio-editor" class="link-item" target="_blank">免费线上编辑您的音讯 - MyEdit</a>
+    <a href="https://audiotoolset.com/cn/#edit" class="link-item" target="_blank">audiotoolset音频编辑器，转换器和工具-在线和免费</a>
+    <a href="https://lingojam.com/MaletoFemaleVoiceChanger" class="link-item" target="_blank">Male to Female Voice Changer― LingoJam</a>
+    <a href="https://vocaroo.com/" class="link-item" target="_blank">Vocaroo | 線上錄音機</a>
+    <a href="https://zeemo.ai/cn/" class="link-item" target="_blank">zeemo  AI</a>
+    <a href="https://luvvoice.com/zh" class="link-item" target="_blank">Luvvoice: 免费在线文字转语音</a>
+    <a href="https://cn.tripadvisor.com/" class="link-item" target="_blank">Tripadvisor： 阅读点评，比较价格和酒店预订</a>
+    <a href="https://www.skylinewebcams.com/" class="link-item" target="_blank">全球高清实况摄像头！ - SkylineWebcams</a>
+    <a href="https://www.passportindex.org/" class="link-item" target="_blank">Passport Index 2024 | World's passports in your pocket.</a>
+    <a href="https://www.webcamtaxi.com/en/" class="link-item" target="_blank">Live HD Streaming Webcams from around the globe</a>
+    <a href="https://visaguide.world/" class="link-item" target="_blank">VisaGuide.World - Guide to Worldwide Travel Visa</a>
+    <a href="https://www.agoda.com/zh-cn/" class="link-item" target="_blank">Agoda官网</a>
+    <a href="http://cdzj.chengdu.gov.cn/" class="link-item" target="_blank">成都市住房和城乡建设局（新）</a>
+    <a href="http://cdzfgjj.chengdu.gov.cn/" class="link-item" target="_blank">成都住房公积金网上政务大厅</a>
+    <a href="https://jsj.cngy.gov.cn/" class="link-item" target="_blank">广元市住房和城乡建设局</a>
+    <a href="http://zwzx.cngy.gov.cn/" class="link-item" target="_blank">广元市政务服务和公共资源交易中心</a>
+    <a href="https://www.cdzjryb.com/" class="link-item" target="_blank">成都住建蓉e办</a>
+    <a href="https://wenshu.court.gov.cn/" class="link-item" target="_blank">中国裁判文书网</a>
+    <a href="https://www.gsxt.gov.cn/index.html" class="link-item" target="_blank">国家企业信用信息公示系统</a>
+    <a href="https://www.onlineconvert.com/" class="link-item" target="_blank">Online Converter - Convert Video, Audio, Image, PDF - OnlineConvert.com</a>
+    <a href="https://pdf2doc.com/zh/" class="link-item" target="_blank">PDF转DOC – 在线转换PDF文档至Word格式</a>
+    <a href="https://www.deepl.com/translator" class="link-item" target="_blank">DeepL翻译：全世界最准确的翻译</a>
+    <a href="https://www.ilovepdf.com/zh-cn" class="link-item" target="_blank">iLovePDF | 为PDF爱好者提供的PDF文件在线处理工具</a>
+    <a href="https://www.runoob.com/" class="link-item" target="_blank">菜鸟教程 - 学的不仅是技术，更是梦想！</a>
+    <a href="https://www.aconvert.com/cn/" class="link-item" target="_blank">在线转换文档，图像，视频，音频文件</a>
+    <a href="https://www.pdf2go.com/zh" class="link-item" target="_blank">在线 PDF 转换器-编辑，旋转和压缩 PDF 文件</a>
+    <a href="https://www.aspose.app/" class="link-item" target="_blank">Free File Format Apps - Process MS Word | PDF | Excel | PPT online</a>
+    <a href="https://cloudconvert.com/" class="link-item" target="_blank">CloudConvert</a>
+    <a href="https://stirlingpdf.io/?lang=zh_CN" class="link-item" target="_blank">Stirling PDF</a>
+    <a href="https://www.iloveimg.com/zh-cn" class="link-item" target="_blank">iLoveIMG | 图像文件在线编辑工具</a>
+    <a href="https://tinyurl.com/" class="link-item" target="_blank">URL Shortener, Branded Short Links & Analytics | TinyURL</a>
+    <a href="https://www.shorturl.at/" class="link-item" target="_blank">URL Shortener</a>
+    <a href="https://app.bitly.com/" class="link-item" target="_blank">Bitly | Link Dashboard</a>
+    <a href="https://math.microsoft.com/zh" class="link-item" target="_blank">Microsoft Math Solver - Math Problem Solver & Calculator</a>
+    <a href="https://www.lagou.com/" class="link-item" target="_blank">拉勾招聘-专业的互联网求职招聘网站</a>
+    <a href="https://www.itneituiquan.com/" class="link-item" target="_blank">成都IT内推圈-求职招聘平台</a>
+    <a href="https://www.zhaopin.com/" class="link-item" target="_blank">智联招聘</a>
+    <a href="https://www.iguopin.com/" class="link-item" target="_blank">国聘官方网站</a>
+    <a href="https://www.liepin.com/" class="link-item" target="_blank">【猎聘】-招聘_找工作_求职_企业招人平台</a>
+    <a href="https://www.upwork.com/" class="link-item" target="_blank">Upwork | The World’s Work Marketplace</a>
+    <a href="https://remoteok.com/" class="link-item" target="_blank">Remote Jobs in Programming, Design, Sales and more #OpenSalaries</a>
+    <a href="https://www.freelancer.com/" class="link-item" target="_blank">Hire Freelancers & Find Freelance Jobs Online | Freelancer</a>
+    <a href="https://www.proginn.com/" class="link-item" target="_blank">程序员客栈-领先的程序员自由工作平台-程序员兼职</a>
+    <a href="https://www.zbj.com/" class="link-item" target="_blank">猪八戒网-品质企业服务 就找猪八戒</a>
+    <a href="https://zb.oschina.net/" class="link-item" target="_blank">开源众包-百万开发者,为您提供专业的软件开发服务</a>
+    <a href="https://www.deel.com/zh-tw/" class="link-item" target="_blank">Deel - 人才平台的理想之選</a>
+    <a href="https://www.waiqi.com/" class="link-item" target="_blank">神仙外企</a>
+    <a href="https://osjobs.net/" class="link-item" target="_blank">Overseas Rabbit | 海外兔</a>
+    <a href="https://www.eastmoney.com/" class="link-item" target="_blank">东方财富网：财经门户，提供专业的财经、股票、行情、证券、基金、理财、银行、保险、信托、期货、黄金、股吧、博客等各类财经资讯及数据</a>
+    <a href="https://finance.sina.com.cn/" class="link-item" target="_blank">新浪财经</a>
+    <a href="http://www.cninfo.com.cn/new/index" class="link-item" target="_blank">巨潮资讯网</a>
+    <a href="https://shop.weixin.qq.com/" class="link-item" target="_blank">微信小商店</a>
+    <a href="https://mp.weixin.qq.com/" class="link-item" target="_blank">微信公众平台</a>
+    <a href="https://www.gwmao.cn/" class="link-item" target="_blank">公文猫-公文范例网站</a>
+    <a href="http://office.hit.edu.cn/cygwmb/list.htm" class="link-item" target="_blank">常用公文模板</a>
+    <a href="https://www.editage.cn/paperpal" class="link-item" target="_blank">Paperpal-专业AI论文润色与论文检测平台 - 意得辑Editage</a>
+    <a href="https://sgi.anycast.gay/" class="link-item" target="_blank">yun1</a>
+    <a href="https://yaofan.cc/lighting/" class="link-item" target="_blank">shandian⚡</a>
+    <a href="https://help.happynothings031.xyz/" class="link-item" target="_blank">yunNet WIKI</a>
+    <a href="https://bianyuan.xyz/" class="link-item" target="_blank">订阅转换API</a>
+    <a href="https://xn--gmq396grzd.com/user" class="link-item" target="_blank">yun2⭐⭐</a>
+    <a href="https://www.duyaoss.com/" class="link-item" target="_blank">DuyaoSS</a>
+    <a href="https://cylink.one/user" class="link-item" target="_blank">CYLINK</a>
+    <a href="https://www.gogocloud.top/#/login" class="link-item" target="_blank">goyun1</a>
+    <a href="https://www.tgcloud.top/#/login" class="link-item" target="_blank">TGCyun</a>
+    <a href="https://my.cloudnx.cc/" class="link-item" target="_blank">KyCloud</a>
+    <a href="https://52.mk/" class="link-item" target="_blank">品云机场导航</a>
+    <a href="https://ffq.la/" class="link-item" target="_blank">ffq优质jichang导航</a>
+    <a href="https://universalbus.cn/" class="link-item" target="_blank">环球巴士</a>
+    <a href="https://www.bygcloud.com/" class="link-item" target="_blank">bygcloud</a>
+    <a href="https://nozomi.wtf/" class="link-item" target="_blank">云temp1</a>
+    <a href="https://go.ssrdog.com/" class="link-item" target="_blank">SSRDOG 导航站</a>
+    <a href="https://1p2c.gardenparty.me/user" class="link-item" target="_blank">STC-SPADES</a>
+    <a href="https://whatshub.top/rule" class="link-item" target="_blank">分流 代理规则 shadowrocket 小火箭 surge quantumultx 圈X loon</a>
+    <a href="https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever" class="link-item" target="_blank">Johnshall/Shadowrocket-ADBlock-Rules-Forever: 提供多款 Shadowrocket 规则，拥有强劲的广告过滤功能。每日 8 时重新构建规则。</a>
+    <a href="https://vip.niuhezu.com/" class="link-item" target="_blank">商店首页 - 多梦小铺</a>
+    <a href="https://www.ihezu.cn/" class="link-item" target="_blank">奈飞小铺 - 智能账号合租平台</a>
+    <a href="https://netflixtown.com/" class="link-item" target="_blank">奈飞小镇账号</a>
+    <a href="https://metshop.vip/#/?sid=MTU6638" class="link-item" target="_blank">MetShop·一站式流媒体合租平台</a>
+    <a href="https://dh.gpt999.shop/" class="link-item" target="_blank">引导页</a>
+    <a href="https://www.gpt777.shop/?categoryId=0" class="link-item" target="_blank">ChatGPT 账号购买-ChatGPT4.0 plus APIkey购买</a>
+    <a href="https://dzqc.link/" class="link-item" target="_blank">New API</a>
+    <a href="https://nf.video/" class="link-item" target="_blank">银河录像局 次世代合租平台</a>
+    <a href="https://wormhole.app/" class="link-item" target="_blank">Wormhole - 简单、私密的文件共享</a>
+    <a href="https://new.space/" class="link-item" target="_blank">Share new.space</a>
+    <a href="https://send-anywhere.com/" class="link-item" target="_blank">Send Anywhere - File transfer</a>
+    <a href="https://www.wenshushu.cn/" class="link-item" target="_blank">wensusu - 传文件</a>
+    <a href="https://www.filemail.com/zh" class="link-item" target="_blank">免费發送大宗文件-安全文件傳輸 - Filemail</a>
+    <a href="https://z-library.sk/" class="link-item" target="_blank">Z-library Project - eBook Library Z. Download free Books</a>
+    <a href="https://zh.z-lib.fm/" class="link-item" target="_blank">Z-Library – 世界上最大的电子图书馆。自由访问知识和文化。</a>
+    <a href="https://litera-reader.com/" class="link-item" target="_blank">LITERA Reader online Tool</a>
+    <a href="https://ctext.org/" class="link-item" target="_blank">Chinese Text Project</a>
+    <a href="https://www.myminifactory.com/" class="link-item" target="_blank">Discover STL files for 3D printing ideas and high-quality 3D printer models. | MyMiniFactory</a>
+    <a href="https://makerworld.com.cn/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://makerworld.com/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://www.tripo3d.ai/" class="link-item" target="_blank">Tripo AI - 用文字或图片免费生成3D模型</a>
+    <a href="https://www.tinkercad.com/" class="link-item" target="_blank">Tinkercad - Create 3D digital designs with online CAD</a>
+    <a href="https://www.shichengbbs.com/#new" class="link-item" target="_blank">狮城BBS - 狮城论坛 - 新加坡</a>
+    <a href="https://bbs.icnkr.com/" class="link-item" target="_blank">奋斗在韩国 韩国留学生华人论坛 奋韩网 - 最大的韩国中文网站</a>
+    <a href="https://www.xiaobaotv.com/" class="link-item" target="_blank">小宝影院 - 在线视频</a>
+    <a href="https://www.iyf.tv/" class="link-item" target="_blank">爱壹帆-海量高清视频免费在线观看</a>
+    <a href="https://www.dygod.net/" class="link-item" target="_blank">电影天堂:高清电影下载,高品质生活</a>
+    <a href="https://www.xl720.com/" class="link-item" target="_blank">迅雷电影天堂</a>
+    <a href="https://www.foodieguide.com/iptvsearch/" class="link-item" target="_blank">电视直播源搜索引擎｜国内外电视频道直播源搜索，m3u8、flv、rtsp、rtmp、txt直播源链接地址每日更新</a>
+    <a href="https://youshandefeiyang.github.io/" class="link-item" target="_blank">IPTV直播源汇总</a>
+    <a href="https://archive.ph/" class="link-item" target="_blank">Webpage archive</a>
+    <a href="https://demo.unlock-music.dev/" class="link-item" target="_blank">音乐解锁下载</a>
+    <a href="https://git.unlock-music.dev/um" class="link-item" target="_blank">Unlock Music Project - Unlock Music Git Service</a>
+    <a href="https://git.unlock-music.dev/um/web" class="link-item" target="_blank">um/web: Unlock Music - Web Edition - web - Unlock Music Git Service</a>
+    <a href="https://unlock-music.dev/" class="link-item" target="_blank">Unlock Music Project</a>
+    <a href="https://fetchrss.com/" class="link-item" target="_blank">RSS Generator - FetchRSS</a>
+    <a href="https://rss.app/rss-feed" class="link-item" target="_blank">Create RSS feeds from almost any website</a>
+    <a href="https://docs.rsshub.app/zh/" class="link-item" target="_blank">RSSHub</a>
+    <a href="https://paywallbuster.com/" class="link-item" target="_blank">Remove Paywalls from News Articles Instantly | PaywallBuster</a>
+    <a href="https://duo3.icu/" class="link-item" target="_blank">磁力多</a>
+    <a href="https://1jubt.xyz/" class="link-item" target="_blank">聚BT - 磁力影视 种子搜索</a>
+    <a href="https://1jubt.top/" class="link-item" target="_blank">聚BT - 聚合磁力资源</a>
+    <a href="https://jubt.pw/cn/index.html" class="link-item" target="_blank">聚BT搜索资源</a>
+    <a href="https://www.upyunso.com/" class="link-item" target="_blank">UP云搜 - 最全云盘资源搜索神器</a>
+    <a href="https://www.niceso.fun/" class="link-item" target="_blank">奈斯搜索 - 资源超丰富的阿里云盘资源搜索网站！</a>
+    <a href="https://yiso.fun/" class="link-item" target="_blank">易搜-网盘搜索</a>
+    <a href="https://apkcombo.com/zh/" class="link-item" target="_blank">APKCombo - #1 APK Downloader</a>
+    <a href="https://piratebayproxy.net/zh/" class="link-item" target="_blank">Pirate Bay Proxy   Torrents</a>
+    <a href="https://rutracker.net/forum/index.php" class="link-item" target="_blank">RuTracker.org</a>
+    <a href="https://sms-activate.org/cn/getNumber" class="link-item" target="_blank">获取虚拟手机短信激活服务</a>
+    <a href="https://www.sms4u.vip/" class="link-item" target="_blank">Online SMS verification |  sms4u.vip</a>
+    <a href="https://book-searcher.eu.org/" class="link-item" target="_blank">Book Searcher</a>
+    <a href="https://search.worldcat.org/" class="link-item" target="_blank">WorldCat.org | Search Book Library</a>
+    <a href="https://kms.cx/" class="link-item" target="_blank">KMS一键激活 windows/office</a>
+    <a href="https://www.stream-link.org/" class="link-item" target="_blank">Stream-link.org</a>
+    <a href="https://apkpremier.com/" class="link-item" target="_blank">APK for Android - Free Download</a>
+    <a href="https://stardots.ink/zh#feature" class="link-item" target="_blank">StarDots：星光图床</a>
+    <a href="https://esimdb.com/" class="link-item" target="_blank">eSIMDB: Find and compare best prepaid eSIM for travelers</a>
+    <a href="https://aktv.top/" class="link-item" target="_blank">AKTV 高清高速數碼電視轉播站</a>
+    <a href="https://massgrave.dev/genuine-installation-media" class="link-item" target="_blank">Download Windows / Office | MAS</a>
+    <a href="https://www.getnomad.app/" class="link-item" target="_blank">Nomad - International data eSIMs in 200+ destinations</a>
+    <a href="https://knoema.com/" class="link-item" target="_blank">Free Data - knoema.com</a>
+    <a href="https://indiegoodies.com/" class="link-item" target="_blank">Indie Goodies</a>
+    <a href="https://www.zaobao.com/" class="link-item" target="_blank">首页 | 联合早报网</a>
+    <a href="https://www.ftchinese.com/" class="link-item" target="_blank">FT中文网</a>
+    <a href="https://edition.cnn.com/" class="link-item" target="_blank">CNN</a>
+    <a href="https://www.bloomberg.com/asia" class="link-item" target="_blank">Bloomberg</a>
+    <a href="https://www.bbc.com/" class="link-item" target="_blank">BBC</a>
+    <a href="https://cn.wsj.com/" class="link-item" target="_blank">华尔街日报中文网</a>
+    <a href="https://www.nytimes.com/" class="link-item" target="_blank">The New York Times</a>
+    <a href="https://www.cgtn.com/" class="link-item" target="_blank">CGTN</a>
+    <a href="https://www.rt.com/" class="link-item" target="_blank">RussiaToday</a>
+    <a href="https://www.foxnews.com/" class="link-item" target="_blank">Fox News</a>
+    <a href="https://www.nhk.or.jp/" class="link-item" target="_blank">NHK | 日本放送協会</a>
+    <a href="https://www.aljazeera.com/" class="link-item" target="_blank">Al Jazeera</a>
+    <a href="https://chinese.aljazeera.net/" class="link-item" target="_blank">Aljazeera半岛电视台中文</a>
+    <a href="https://www.kbs.co.kr/#none" class="link-item" target="_blank">KBS</a>
+    <a href="https://time.com/" class="link-item" target="_blank">TIME</a>
+    <a href="https://www.thetimes.co.uk/" class="link-item" target="_blank">The Times & The Sunday Times</a>
+    <a href="https://www.theguardian.com/international" class="link-item" target="_blank">The Guardian</a>
+    <a href="http://www.xinhuanet.com/" class="link-item" target="_blank">新华网</a>
+    <a href="https://sputniknews.cn/" class="link-item" target="_blank">俄罗斯卫星通讯社</a>
+    <a href="https://cn.nikkei.com/" class="link-item" target="_blank">日经中文网--日本经济新闻</a>
+    <a href="https://www.abc.net.au/news" class="link-item" target="_blank">ABC News -Australia Broadcast Company News</a>
+    <a href="https://cn.yna.co.kr/index" class="link-item" target="_blank">韩联社 (韩国联合通讯社)</a>
+    <a href="https://apnews.com/" class="link-item" target="_blank">Associated Press News</a>
+    <a href="https://www.reuters.com/" class="link-item" target="_blank">Reuters | Breaking International News & Views</a>
+    <a href="https://chinese.joins.com/" class="link-item" target="_blank">韩国最大的传媒机构《中央日报》中文网</a>
+    <a href="https://china.kyodonews.net/" class="link-item" target="_blank">共同社新闻通讯网</a>
+    <a href="https://www.economist.com/" class="link-item" target="_blank">The Economist | Independent journalism</a>
+    <a href="https://www.openstreetmap.org/" class="link-item" target="_blank">OpenStreetMap</a>
+    <a href="https://earthexplorer.usgs.gov/" class="link-item" target="_blank">USGS EarthExplorer</a>
+    <a href="https://earthquake.usgs.gov/earthquakes/map/" class="link-item" target="_blank">Latest Earthquakes</a>
+    <a href="https://glovis.usgs.gov/app" class="link-item" target="_blank">GloVis</a>
+    <a href="https://www.google.com/maps/" class="link-item" target="_blank">Google 地图</a>
+    <a href="https://www.gaode.com/" class="link-item" target="_blank">高德地图</a>
+    <a href="https://www.bing.com/maps/" class="link-item" target="_blank">Bing Maps</a>
+    <a href="https://zoom.earth/" class="link-item" target="_blank">Zoom Earth | 实时天气，风暴追踪器</a>
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html" class="link-item" target="_blank">ArcgisMap</a>
+    <a href="https://www.arcgis.com/home/webmap/viewer.html" class="link-item" target="_blank">ArcGIS - Web Map</a>
+    <a href="https://server.arcgisonline.com/arcgis/rest/services" class="link-item" target="_blank">ArcGIS REST Services Directory</a>
+    <a href="https://satellite-map.com/" class="link-item" target="_blank">Satellite Map: 3D Earth, Maps Directions, Traffic, Weather,Find the Best Directions</a>
+    <a href="https://liveuamap.com/" class="link-item" target="_blank">Latest news on live map - liveuamap.com</a>
+    <a href="https://anitabi.cn/map" class="link-item" target="_blank">巡礼地图 - 共享取景地标与截图 - 动画巡礼 - anitabi - 圣地巡礼 - 聖地巡礼 - せいちじゅんれい - 神奇海螺试验场</a>
+    <a href="https://www.flightaware.com/" class="link-item" target="_blank">FlightAware - 航班跟踪/航班状态/飞行跟踪</a>
+    <a href="https://flightradar.online/" class="link-item" target="_blank">Flightradar24 – LIVE! FlightRadar-Online</a>
+    <a href="https://flightadsb.variflight.com/" class="link-item" target="_blank">全球航班飞行轨迹实时跟踪雷达 | Flightadsb | VariFlight</a>
+    <a href="https://earth.nullschool.net/zh-cn/" class="link-item" target="_blank">earth :: 风、气象、海洋状况的全球地图</a>
+    <a href="https://www.17ditu.com/" class="link-item" target="_blank">高清卫星地图</a>
+    <a href="https://stars.chromeexperiments.com/" class="link-item" target="_blank">100,000 Stars</a>
+    <a href="https://www.submarinecablemap.com/" class="link-item" target="_blank">Submarine Cable Map</a>
+    <a href="https://poe.com/" class="link-item" target="_blank">Sage - Poe</a>
+    <a href="https://chat.openai.com/" class="link-item" target="_blank">ChatGPT-openai</a>
+    <a href="https://bard.google.com/" class="link-item" target="_blank">Bard</a>
+    <a href="https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/" class="link-item" target="_blank">文本转语音 – 真实 AI 语音生成器 | Microsoft Azure</a>
+    <a href="https://beta.openai.com/overview" class="link-item" target="_blank">OpenAI</a>
+    <a href="https://aitestkitchen.withgoogle.com/" class="link-item" target="_blank">AI Test Kitchen</a>
+    <a href="https://new.express.adobe.com/" class="link-item" target="_blank">Adobe Express (Beta)</a>
+    <a href="https://firefly.adobe.com/" class="link-item" target="_blank">Adobe Firefly (Beta)</a>
+    <a href="https://clipdrop.co/uncrop" class="link-item" target="_blank">ClipDrop - Uncrop</a>
+    <a href="https://huggingface.co/spaces/R1ckShi/FunClip" class="link-item" target="_blank">ClipVideo - a Hugging Face Space by R1ckShi</a>
+    <a href="https://platform.minimaxi.com/" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+    <a href="https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo" class="link-item" target="_blank">演示空间 证件照AI工具 · ZeYiLin/HivisionIDPhotos</a>
+    <a href="https://www.tiangong.cn/music" class="link-item" target="_blank">天工AI音乐</a>
+    <a href="https://tianyin.music.163.com/editor/#/workspace" class="link-item" target="_blank">网易天音 - 一站式AI音乐创作工具</a>
+    <a href="https://aimusic.so/zh-CN/app" class="link-item" target="_blank">在线免费生成 AI 音乐</a>
+    <a href="https://songgenerator.io/zh-CN/app" class="link-item" target="_blank">SongGenerator.io：免费在线使用AI歌曲生成器创作音乐</a>
+    <a href="https://www.lalal.ai/zh-hans/" class="link-item" target="_blank">人声去除器和AI智能伴奏分离器 | LALAL.AI</a>
+    <a href="https://anyvoice.net/zh/ai-voice-cloning" class="link-item" target="_blank">AI声音克隆 - AnyVoice</a>
+    <a href="https://aibrm.com/" class="link-item" target="_blank">白日梦AI-领先的AI视频创作类AIGC创作平台</a>
+    <a href="https://klingai.kuaishou.com/" class="link-item" target="_blank">可灵 AI - 新一代 AI 创意生产力平台</a>
+    <a href="https://jimeng.jianying.com/ai-tool/home" class="link-item" target="_blank">即梦AI - 一站式AI创作平台</a>
+    <a href="https://ai-bot.cn/" class="link-item" target="_blank">AI工具集官网 | 1000+ AI工具集合，国内外AI工具集导航大全</a>
+    <a href="https://autocut.video/" class="link-item" target="_blank">自动剪辑神器</a>
+    <a href="https://www.text-to-speech.cn/" class="link-item" target="_blank">Text To Speech - 在线文本转语音</a>
+    <a href="https://elevenlabs.io/" class="link-item" target="_blank">ElevenLabs - Generative AI Text to Speech & Voice Cloning</a>
+    <a href="https://gptscopilot.ai/" class="link-item" target="_blank">GPTsCopilot</a>
+    <a href="https://app.suno.ai/" class="link-item" target="_blank">Suno.AI.Create Music</a>
+    <a href="https://v0.dev/" class="link-item" target="_blank">v0.dev  by Vercel</a>
+    <a href="https://haiper.ai/" class="link-item" target="_blank">Haiper AI</a>
+    <a href="https://www.coze.com/" class="link-item" target="_blank">Coze AI</a>
+    <a href="https://tensorpix.ai/" class="link-item" target="_blank">TensorPix - Online AI Video Enhancer and Upscaler</a>
+    <a href="https://www.topazlabs.com/topaz-video-ai" class="link-item" target="_blank">Topaz Video AI 4</a>
+    <a href="https://modelscope.cn/studios/Damo_XR_Lab/motionshop/summary" class="link-item" target="_blank">Animate 3D Motion——AI角色动画 · 创空间</a>
+    <a href="https://www.udio.com/" class="link-item" target="_blank">Udio | Make your music</a>
+    <a href="https://build.nvidia.com/explore/discover" class="link-item" target="_blank">NVIDIA AI NIM APIs</a>
+    <a href="https://llamacoder.together.ai/" class="link-item" target="_blank">Llama Coder – AI Code Generator</a>
+    <a href="https://app.soundtype.ai/#/dashboard" class="link-item" target="_blank">Dashboard | SoundType AI</a>
+    <a href="https://www.cursor.com/" class="link-item" target="_blank">Cursor</a>
+    <a href="https://ragflow.io/" class="link-item" target="_blank">RAGFlow | RAGFlow</a>
+    <a href="https://gamma.app/create" class="link-item" target="_blank">Gamma</a>
+    <a href="https://huggingface.co/spaces/sczhou/CodeFormer" class="link-item" target="_blank">CodeFormer - a Hugging Face Space by sczhou</a>
+    <a href="https://llamatutor.together.ai/" class="link-item" target="_blank">Llama Tutor – AI Personal Tutor</a>
+    <a href="https://huggingface.co/chat/" class="link-item" target="_blank">HuggingChat</a>
+    <a href="https://www.funasr.com/static/online/index.html#" class="link-item" target="_blank">FunASR Demo语音识别</a>
+    <a href="https://aicodeconvert.com/" class="link-item" target="_blank">AI Code Converter | AI Code Translator | AI Code Generator</a>
+    <a href="https://www.minimaxi.com/?#" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+    <a href="https://storm.genie.stanford.edu/" class="link-item" target="_blank">stanford-oval STORM</a>
+    <a href="https://notebooklm.google/" class="link-item" target="_blank">NotebookLM | Note Taking & Research Assistant Powered by AI</a>
+    <a href="https://cn.strikingly.com/s#/" class="link-item" target="_blank">Strikingly - 可能是移动时代最出色的免费建站工具</a>
+    <a href="https://postgres.new/" class="link-item" target="_blank">Postgres Sandbox</a>
+    <a href="https://designer.microsoft.com/home" class="link-item" target="_blank">Microsoft Designer - Stunning designs in a flash</a>
+    <a href="https://scriptecho.cn/app/home" class="link-item" target="_blank">ScriptEcho</a>
+    <a href="https://www.getmerlin.in/chat" class="link-item" target="_blank">AI Chat | Merlin AI</a>
+    <a href="https://whataicandotoday.com/" class="link-item" target="_blank">What AI Can Do Today</a>
+    <a href="https://app.napkin.ai/" class="link-item" target="_blank">Napkin AI</a>
+    <a href="https://diagrammingai.com/" class="link-item" target="_blank">Diagramming AI - Instantly Design UML & Workflows with AI</a>
+    <a href="https://piktochart.com/" class="link-item" target="_blank">Infographic Maker - Piktochart</a>
+    <a href="https://medio.cool/" class="link-item" target="_blank">米壳AI - Medio.cool 助力企业海外视频推广</a>
+    <a href="https://ollama.com/" class="link-item" target="_blank">Ollama</a>
+    <a href="https://jitter.video/" class="link-item" target="_blank">Jitter · Fast and simple motion design tool.</a>
+    <a href="https://www.marscode.cn/home" class="link-item" target="_blank">豆包 MarsCode - 编程助手</a>
+    <a href="https://appwrite.io/" class="link-item" target="_blank">Appwrite - Build like a team of hundreds</a>
+    <a href="https://www.wondershare.com/?utm_source=admitad&tagtag_uid=Cj0KCQiAwOe8BhCCARIsAGKeD54DGB_kgRI__Ng1Q8AngygZaeXVjVCodIGFfRxHueKSDqMm0TIh_IsaAu1DEALw_wcB&gad_source=1&gclid=Cj0KCQiAwOe8BhCCARIsAGKeD54DGB_kgRI__Ng1Q8AngygZaeXVjVCodIGFfRxHueKSDqMm0TIh_IsaAu1DEALw_wcB" class="link-item" target="_blank">Wondershare Official Website: Creativity, Productivity, Utility</a>
+    <a href="https://n8n.io/" class="link-item" target="_blank">Powerful Workflow Automation Software & Tools - n8n</a>
+    <a href="https://www.magicslides.app/" class="link-item" target="_blank">AI Presentation Maker - Presentation from Topic, YouTube, PDF, URL with AI</a>
+    <a href="https://lmarena.ai/" class="link-item" target="_blank">Chatbot Arena (formerly LMSYS): Free AI Chat to Compare & Test Best AI Chatbots</a>
+    <a href="https://openui.fly.dev/ai/new" class="link-item" target="_blank">Create a new UI</a>
+    <a href="https://www.skyreels.ai/home" class="link-item" target="_blank">SkyReels</a>
+    <a href="https://pika.art/" class="link-item" target="_blank">Pika</a>
+    <a href="https://wenku.baidu.com/board" class="link-item" target="_blank">自由画布｜上传素材，精准生成</a>
+    <a href="https://dify.ai/" class="link-item" target="_blank">Dify.AI · The Innovation Engine for Generative AI Applications</a>
+    <a href="https://anythingllm.com/" class="link-item" target="_blank">AnythingLLM | The all-in-one AI application for everyone</a>
+    <a href="https://olmocr.allenai.org/" class="link-item" target="_blank">olmOCR – Open-Source OCR for Accurate Document Conversion</a>
+    <a href="https://platform.deepseek.com/usage" class="link-item" target="_blank">DeepSeek 开放平台</a>
+    <a href="https://screenshottocode.com/" class="link-item" target="_blank">Screenshot to Code</a>
+    <a href="https://logodiffusion.com/" class="link-item" target="_blank">AI Logo Maker | Logo Maker | Logo Diffusion</a>
+    <a href="https://md2card.com/zh" class="link-item" target="_blank">MD2Card - Markdown 转知识卡片工具</a>
+    <a href="https://www.rabbithole.chat/" class="link-item" target="_blank">Rabbithole</a>
+    <a href="https://same.dev/" class="link-item" target="_blank">Same Copy Web UI</a>
+    <a href="https://chatgpt.com/" class="link-item" target="_blank">ChatGPT</a>
+    <a href="https://aistudio.google.com/" class="link-item" target="_blank">Google AI Studio</a>
+    <a href="https://gemini.google.com/app" class="link-item" target="_blank">Gemini</a>
+    <a href="https://grok.com/" class="link-item" target="_blank">Grok</a>
+    <a href="https://chat.deepseek.com/a/chat/s/be7dbe22-c937-4c0b-b237-6de4f634e8ed" class="link-item" target="_blank">DeepSeek - 探索未至之境</a>
+    <a href="https://tongyi.aliyun.com/" class="link-item" target="_blank">通义tongyi.ai_你的全能AI助手-通义千问</a>
+    <a href="https://kimi.moonshot.cn/" class="link-item" target="_blank">Kimi.ai - 会推理解析，能深度思考的AI助手</a>
+    <a href="https://claude.ai/" class="link-item" target="_blank">Claude</a>
+    <a href="https://www.perplexity.ai/" class="link-item" target="_blank">Perplexity</a>
+    <a href="https://xinghuo.xfyun.cn/desk?prompt=" class="link-item" target="_blank">讯飞星火大模型-AI大语言模型</a>
+    <a href="https://chatglm.cn/" class="link-item" target="_blank">智谱清言</a>
+    <a href="https://zhida.zhihu.com/" class="link-item" target="_blank">知乎直答</a>
+    <a href="https://chat.qwen.ai/" class="link-item" target="_blank">Qwen Chat</a>
+    <a href="https://yuanbao.tencent.com/" class="link-item" target="_blank">腾讯元宝 - Chat</a>
+    <a href="https://ai.eastmoney.com/chat" class="link-item" target="_blank">妙想金融大模型</a>
+    <a href="https://zeabur.com/" class="link-item" target="_blank">Zeabur</a>
+    <a href="https://vercel.com/" class="link-item" target="_blank">Vercel</a>
+    <a href="https://bewildcard.com/service" class="link-item" target="_blank">WildCard | 一分钟注册，轻松订阅海外软件服务</a>
+    <a href="https://rss.app/" class="link-item" target="_blank">RSS Feed Generator, Create RSS feeds from URL</a>
+    <a href="https://www.apple.com/shop/gift-cards" class="link-item" target="_blank">Apple Gift Card - Apple</a>
+    <a href="https://onedrive.live.com/" class="link-item" target="_blank">OneDrive</a>
+    <a href="https://www.microsoft365.com/?auth=1" class="link-item" target="_blank">主页 | Microsoft 365 Online</a>
+    <a href="https://www.bing.com/translator/?mkt=zh-CN" class="link-item" target="_blank">必应在线翻译</a>
+    <a href="https://www.google.cn/intl/zh-CN/inputtools/try/" class="link-item" target="_blank">在线试用 Google 输入工具 – Google 输入工具</a>
+    <a href="https://www.notion.so/" class="link-item" target="_blank">Notion - 主页</a>
+    <a href="https://excalidraw.com/" class="link-item" target="_blank">Excalidraw</a>
+    <a href="https://www.b12.io/" class="link-item" target="_blank">B12 | The easiest AI website builder</a>
+    <a href="https://www.boxofficemojo.com/intl/" class="link-item" target="_blank">Latest International Weekends - Box Office Mojo</a>
+    <a href="https://payloadcms.com/" class="link-item" target="_blank">Home | Payload Cloud | Payload Cloud</a>
+    <a href="https://www.qzoffice.com/" class="link-item" target="_blank">轻竹PPT - AI一键生成PPT - 海量PPT模版 - 智能PPT制作网站</a>
+    <a href="https://config.office.com/deploymentsettings" class="link-item" target="_blank">Office config  deploymentsettings</a>
+    <a href="https://www.microsoft.com/en-us/download/details.aspx?id=49117" class="link-item" target="_blank">Download Office Deployment Tool from Official Microsoft Download Center</a>
+    <a href="https://learn.microsoft.com/zh-cn/office/volume-license-activation/gvlks" class="link-item" target="_blank">用于基于 KMS 和 Active Directory 的 Office、Project 和 Visio 激活的 GVLK - Office | Microsoft Learn</a>
+    <a href="https://www.softpedia.com/" class="link-item" target="_blank">Softpedia</a>
+    <a href="https://patents.google.com/" class="link-item" target="_blank">Google Patents</a>
+    <a href="https://duckduckgo.com/" class="link-item" target="_blank">DuckDuckGo</a>
+    <a href="https://datong.info/ui/index.html" class="link-item" target="_blank">大同搜索</a>
+    <a href="https://www.baidu.com/" class="link-item" target="_blank">百度</a>
+    <a href="http://www.jinyongshuku.com/index.html" class="link-item" target="_blank">金庸网 - 最全的金庸小说资料站 金庸武侠小说全集 - 金庸书屋</a>
+    <a href="https://www.zhihu.com/" class="link-item" target="_blank">知乎</a>
+    <a href="https://www.quora.com/following" class="link-item" target="_blank">Quora</a>
+    <a href="https://www.v2ex.com/" class="link-item" target="_blank">V2EX</a>
+    <a href="https://term.ptt.cc/" class="link-item" target="_blank">ptt</a>
+    <a href="https://www.discuss.com.hk/" class="link-item" target="_blank">香港討論區</a>
+    <a href="https://markmap.js.org/" class="link-item" target="_blank">markmap mindmaster</a>
+    <a href="https://markdown.lovejade.cn/" class="link-item" target="_blank">Arya - 在线 Markdown 编辑器</a>
+    <a href="https://pandao.github.io/editor.md/index.html" class="link-item" target="_blank">Editor.md - 开源在线 Markdown 编辑器</a>
+    <a href="https://mermaid.live/" class="link-item" target="_blank">Online FlowChart & Diagrams Editor - Mermaid Live Editor</a>
+    <a href="https://www.mermaidchart.com/play" class="link-item" target="_blank">Editor | Mermaid Chart</a>
+    <a href="https://app.diagrams.net/" class="link-item" target="_blank">绘图 - draw.io</a>
+    <a href="https://www.processon.com/diagrams" class="link-item" target="_blank">ProcessOn - 我的画图</a>
+    <a href="https://www.feishu.cn/" class="link-item" target="_blank">飞书，AI 时代先进生产力平台，提供一站式工作协同、组织管理、业务提效工具和深入企业场景的 AI 能力，助力企业能增长，有巧降</a>
+    <a href="https://archive.org/" class="link-item" target="_blank">Internet Archive</a>
+    <a href="https://www.cmbchina.com/CmbWebPubInfo/Cal_Loan_Per.aspx?chnl=dkjsq" class="link-item" target="_blank">招商银行 -- 个人贷款计算器</a>
+    <a href="https://high-qr-code-generator.com/" class="link-item" target="_blank">The QR Code Generator to Create High-Definition, Custom QR Codes with Logo</a>
+    <a href="https://www.playok.com/" class="link-item" target="_blank">PlayOK - 免費線上棋牌遊戲</a>
+    <a href="https://www.google.com/android/uncertified/" class="link-item" target="_blank">Andriod设备注册</a>
+    <a href="https://javaguide.cn/" class="link-item" target="_blank">JavaGuide试题</a>
+    <a href="http://www.cyc2018.xyz/" class="link-item" target="_blank">CS-Notes</a>
+    <a href="https://github.com/hadyang/interview" class="link-item" target="_blank">interview: Java 知识整理</a>
+    <a href="https://github.com/Snailclimb/JavaGuide" class="link-item" target="_blank">Snailclimb/JavaGuide:  Java 程序员核心知识</a>
+    <a href="https://hadyang.github.io/interview/" class="link-item" target="_blank">Introduction | Interview</a>
+    <a href="https://www.mianshiya.com/" class="link-item" target="_blank">面试鸭 - 程序员求职面试刷题神器，高频编程题目免费刷</a>
+    <a href="https://www.javacn.site/" class="link-item" target="_blank">Javaᶜⁿ 面试突击</a>
+    <a href="http://www.ibm.com/developerworks/cn/topics/" class="link-item" target="_blank">IBM developerWorks</a>
+    <a href="https://www.tutorialspoint.com/index.htm" class="link-item" target="_blank">Tutorialspoint</a>
+    <a href="http://www.oracle.com/technetwork/cn/index.html" class="link-item" target="_blank">Oracle 技术网</a>
+    <a href="https://developers.google.cn/" class="link-item" target="_blank">Google Developers</a>
+    <a href="https://segmentfault.com/" class="link-item" target="_blank">SF</a>
+    <a href="https://developer.android.com/index.html" class="link-item" target="_blank">Android Developers</a>
+    <a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" class="link-item" target="_blank">Data Structure Visualization</a>
+    <a href="https://angular.cn/" class="link-item" target="_blank">Angular</a>
+    <a href="https://cn.vuejs.org/" class="link-item" target="_blank">Vue.js</a>
+    <a href="https://www.reactjscn.com/" class="link-item" target="_blank">ReactJS</a>
+    <a href="http://www.bootcss.com/" class="link-item" target="_blank">Bootstrap中文网</a>
+    <a href="https://developer.mozilla.org/zh-CN/" class="link-item" target="_blank">MDN Web 文档</a>
+    <a href="http://projects.spring.io/spring-cloud/" class="link-item" target="_blank">Spring Cloud</a>
+    <a href="https://readthedocs.org/" class="link-item" target="_blank">Read the Docs</a>
+    <a href="https://www.apache.org/" class="link-item" target="_blank">Apache Software</a>
+    <a href="https://google.github.io/styleguide/" class="link-item" target="_blank">CodeStyleGuide</a>
+    <a href="https://legacy.gitbook.com/new" class="link-item" target="_blank">GitBook</a>
+    <a href="https://kubernetes.io/zh/" class="link-item" target="_blank">Kubernetes</a>
+    <a href="https://cloud.tencent.com/developer/devdocs" class="link-item" target="_blank">开发者手册 - 云+社区 - 腾讯云</a>
+    <a href="https://www.bookstack.cn/" class="link-item" target="_blank">书栈网 · BookStack_程序员IT互联网开源编程书籍</a>
+    <a href="https://www.britannica.com/" class="link-item" target="_blank">Encyclopedia Britannica</a>
+    <a href="https://wikisource.org/wiki/Main_Page" class="link-item" target="_blank">Wikisource-维基文库</a>
+    <a href="https://species.wikimedia.org/wiki/Main_Page" class="link-item" target="_blank">Wikispecies-维基物种</a>
+    <a href="https://www.gushiwen.org/" class="link-item" target="_blank">古诗文网</a>
+    <a href="http://dugushici.com/" class="link-item" target="_blank">【古诗词大全】 古诗词名句 古诗词、文言文翻译及赏析</a>
+    <a href="https://ctext.org/zhs" class="link-item" target="_blank">中國哲學書電子化計劃</a>
+    <a href="https://www.jpmarumaru.com/tw/index.asp" class="link-item" target="_blank">jpmarumaru</a>
+    <a href="https://dictionary.cambridge.org/zhs/" class="link-item" target="_blank">剑桥词典:解释及翻译</a>
+    <a href="https://jitenon.jp/" class="link-item" target="_blank">辞典オンライン</a>
+    <a href="https://learn.trancy.org/aitalk-center" class="link-item" target="_blank">Trancy</a>
+    <a href="https://www.grammarly.com/" class="link-item" target="_blank">Grammarly: Free Writing AI Assistance</a>
+    <a href="https://www.loecsen.com/zh" class="link-item" target="_blank">免费在线语言课程 | 50种语言</a>
+    <a href="http://www.houdask.com/#/home" class="link-item" target="_blank">司法考试_网络免费法律职业资格考试培训机构_厚大法考</a>
+    <a href="https://study.163.com/" class="link-item" target="_blank">网易云课堂 - 我的职业课堂</a>
+    <a href="https://open.163.com/" class="link-item" target="_blank">网易公开课</a>
+    <a href="https://next.xuetangx.com/" class="link-item" target="_blank">学堂在线-精品在线课程学习平台</a>
+    <a href="https://www.icourse163.org/" class="link-item" target="_blank">中国大学MOOC(慕课)_精品课程在线学习平台</a>
+    <a href="https://ocw.aca.ntu.edu.tw/ntu-ocw/" class="link-item" target="_blank">臺大開放式課程 (NTU OpenCourseWare)</a>
+    <a href="https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html" class="link-item" target="_blank">Filter - PhET Simulations</a>
+    <a href="https://jc.pep.com.cn/" class="link-item" target="_blank">中小学教材电子版</a>
+    <a href="https://www.pep.com.cn/jxzy/" class="link-item" target="_blank">人教教学资源</a>
+    <a href="https://zh.khanacademy.org/" class="link-item" target="_blank">可汗学院 | 免费在线课程, 讲解以及练习</a>
+    <a href="https://www.geogebra.org/calculator" class="link-item" target="_blank">计算器套件 - GeoGebra</a>
+    <a href="https://www.style-arena.jp/ch/" class="link-item" target="_blank">東京のストリートファッション最新情報 | スタイルアリーナ</a>
+    <a href="https://weread.qq.com/" class="link-item" target="_blank">微信读书-正版书籍小说免费阅读</a>
+    <a href="https://yuedu.163.com/" class="link-item" target="_blank">网易云阅读--图书、小说、漫画</a>
+    <a href="https://read.douban.com/#" class="link-item" target="_blank">豆瓣阅读</a>
+    <a href="https://ipaperclip.net/" class="link-item" target="_blank">start [回形针手册]</a>
+    <a href="https://data.eastmoney.com/cjsj/" class="link-item" target="_blank">财经数据 _ 数据中心 _ 东方财富网</a>
+    <a href="https://data.stats.gov.cn/search.htm" class="link-item" target="_blank">国家数据-中国国家统计局</a>
+    <a href="https://data.worldbank.org.cn/" class="link-item" target="_blank">World Bank Open Data | Data</a>
+    <a href="https://kuaixun.eastmoney.com/" class="link-item" target="_blank">全球财经快讯_东方财富网</a>
+    <a href="https://quote.eastmoney.com/center/" class="link-item" target="_blank">行情中心_行情系统_东方财富网</a>
+    <a href="https://www.google.com/finance/" class="link-item" target="_blank">Google 财经</a>
+    <a href="https://www.britannica.com/chatbot" class="link-item" target="_blank">Free Online ChatBox | Britannica</a>
+    <a href="https://openlibrary.org/" class="link-item" target="_blank">欢迎来到开放图书馆 | 开放图书馆</a>
+    <a href="https://www.cnbksy.cn/home" class="link-item" target="_blank">中国全国报刊索引</a>
+    <a href="https://www.pkulaw.com/" class="link-item" target="_blank">法律法规数据库-法律法规检索系统-北大法宝V6官网</a>
+    <a href="https://cadal.edu.cn/index/home" class="link-item" target="_blank">大学数字图书馆国际合作计划</a>
+    <a href="https://ruc-cn.libguides.com/c.php?g=968408&p=7039829" class="link-item" target="_blank">近当代文献数据库 - LibGuides at Renmin University of China</a>
+    <a href="https://aif10.eastmoney.com/pc_extendf10/choicef10.html" class="link-item" target="_blank">妙想金融数据F10</a>
+    <a href="https://www.wordproject.org/index_chinese.htm" class="link-item" target="_blank">圣经国际 - 读到的和听到的圣经在超过40种语言</a>
+    <a href="https://www.bible.com/zh-CN" class="link-item" target="_blank">在线读圣经 | Bible.com</a>
+    <a href="https://www.wordproject.org/bibles/parallel/e/chinese.htm" class="link-item" target="_blank">Chinese and English Parallel Bible</a>
+    <a href="https://bibleproject.com/Mandarin/" class="link-item" target="_blank">BibleProject Resources in Mandarin Translation</a>
+    <a href="https://app.follow.is/" class="link-item" target="_blank">Follow</a>
+    <a href="https://www.netflix.com/" class="link-item" target="_blank">Netflix</a>
+    <a href="https://v.qq.com/" class="link-item" target="_blank">腾讯视频</a>
+    <a href="https://www.youku.com/" class="link-item" target="_blank">优酷</a>
+    <a href="https://www.iqiyi.com/" class="link-item" target="_blank">爱奇艺</a>
+    <a href="https://www.iq.com/" class="link-item" target="_blank">iQIYI 爱奇艺国际版 iQIYI | iQ.com</a>
+    <a href="https://www.mddcloud.com.cn/" class="link-item" target="_blank">埋堆堆</a>
+    <a href="https://www.mgtv.com/" class="link-item" target="_blank">芒果TV</a>
+    <a href="https://live.kankanews.com/huikan/" class="link-item" target="_blank">东方卫视</a>
+    <a href="https://www.sctv.com/watchTV" class="link-item" target="_blank">四川网络广播电视台</a>
+    <a href="https://tv.cctv.com/live/" class="link-item" target="_blank">CCTV直播</a>
+    <a href="https://www.mytvsuper.com/tc/home/" class="link-item" target="_blank">TVB - myTV SUPER</a>
+    <a href="https://www.disneyplus.com/zh-hans/home" class="link-item" target="_blank">Disney+</a>
+    <a href="https://www.hbogoasia.hk/" class="link-item" target="_blank">HBO GO</a>
+    <a href="https://ani.gamer.com.tw/" class="link-item" target="_blank">巴哈姆特動畫瘋</a>
+    <a href="https://www.bbc.co.uk/iplayer/live/bbcone" class="link-item" target="_blank">Watch BBC One TV live - BBC iPlayer</a>
+    <a href="http://epg.51zmt.top:8000/" class="link-item" target="_blank">老张的EPG Since 2019</a>
+  </div>
+</div>
+<div class="category" data-category="SNS">
+  <h2>SNS</h2>
+  <div class="links">
+    <a href="https://www.tumblr.com/" class="link-item" target="_blank">Tumblr</a>
+    <a href="https://twitter.com/" class="link-item" target="_blank">Twitter</a>
+    <a href="https://www.tiktok.com/" class="link-item" target="_blank">TikTok</a>
+    <a href="https://weibo.com/" class="link-item" target="_blank">微博</a>
+    <a href="https://www.quora.com/" class="link-item" target="_blank">Quora</a>
+    <a href="https://outlook.live.com/" class="link-item" target="_blank">Outlook</a>
+    <a href="https://www.reddit.com/" class="link-item" target="_blank">reddit</a>
+    <a href="https://www.instagram.com/" class="link-item" target="_blank">Instagram</a>
+    <a href="https://flipagram.com/" class="link-item" target="_blank">Flipagram</a>
+    <a href="https://www.twitch.tv/" class="link-item" target="_blank">Twitch</a>
+    <a href="https://www.spotify.com/hk-en/" class="link-item" target="_blank">Spotify</a>
+    <a href="https://vine.co/" class="link-item" target="_blank">Vine</a>
+    <a href="http://www.pixiv.net/" class="link-item" target="_blank">Pixiv</a>
+    <a href="https://vimeo.com/" class="link-item" target="_blank">Vimeo</a>
+    <a href="https://www.nicovideo.jp/" class="link-item" target="_blank">niconico</a>
+    <a href="https://www.pinterest.com/" class="link-item" target="_blank">Pinterest</a>
+    <a href="https://imgur.com/" class="link-item" target="_blank">Imgur</a>
+    <a href="https://www.artstation.com/" class="link-item" target="_blank">ArtStation</a>
+    <a href="https://discord.com/" class="link-item" target="_blank">Discord</a>
+    <a href="https://www.dailymotion.com/" class="link-item" target="_blank">Dailymotion</a>
+    <a href="https://www.snapchat.com/" class="link-item" target="_blank">Snapchat</a>
+    <a href="https://www.douyu.com/" class="link-item" target="_blank">斗鱼</a>
+    <a href="https://www.threads.net/" class="link-item" target="_blank">Threads</a>
+    <a href="https://medium.com/" class="link-item" target="_blank">Medium</a>
+  </div>
+</div>
+<div class="category" data-category="Tools">
+  <h2>Tools</h2>
+  <div class="links">
+    <a href="https://gitee.com/" class="link-item" target="_blank">码云 Gitee.com</a>
+    <a href="https://www.npmjs.com/" class="link-item" target="_blank">npm</a>
+    <a href="https://mvnrepository.com/" class="link-item" target="_blank">Maven Repository</a>
+    <a href="https://searchcode.com/" class="link-item" target="_blank">SearchCode</a>
+    <a href="https://www.draw.io/" class="link-item" target="_blank">draw.io</a>
+    <a href="http://www.dmanywhere.cn/" class="link-item" target="_blank">DataModel anywhere</a>
+    <a href="https://www.docker.com/" class="link-item" target="_blank">Docker</a>
+    <a href="https://sourceforge.net/" class="link-item" target="_blank">SourceForge</a>
+    <a href="https://bit.dev/" class="link-item" target="_blank">Discover Components · Bit</a>
+    <a href="https://jdec.app/" class="link-item" target="_blank">JDec - Java Decompiler Online</a>
+    <a href="https://gitlab.com/" class="link-item" target="_blank">GitLab.com</a>
+    <a href="https://www.namesilo.com/" class="link-item" target="_blank">Cheap Domain Names</a>
+    <a href="https://learn.microsoft.com/en-us/training/" class="link-item" target="_blank">Training | Microsoft Learn</a>
+    <a href="https://vercel.com/" class="link-item" target="_blank">Vercel</a>
+    <a href="https://www.gitpod.io/" class="link-item" target="_blank">Gitpod</a>
+    <a href="https://www.cloudns.net/main/" class="link-item" target="_blank">ClouDNS: Dashboard</a>
+    <a href="https://developer.aliyun.com/mirror/" class="link-item" target="_blank">阿里巴巴开源镜像站</a>
+    <a href="https://repo.trojan-cdn.com/" class="link-item" target="_blank">repo.trojan-cdn.com</a>
+    <a href="https://huggingface.co/" class="link-item" target="_blank">Hugging Face – The AI community building the future.</a>
+    <a href="https://huggingface.co/spaces" class="link-item" target="_blank">Spaces - Hugging Face</a>
+    <a href="https://www.diggui.com/" class="link-item" target="_blank">DiG GUI - DiG Online, DiG Web Interface, DiG DNS, Google Dig, Online Dig, Dig Tool</a>
+    <a href="https://roadmap.sh/get-started" class="link-item" target="_blank">Developer Roadmaps</a>
+    <a href="https://dashboard.render.com/" class="link-item" target="_blank">Render Dashboard</a>
+    <a href="https://fly.io/dashboard" class="link-item" target="_blank">Dashboard · Fly.io</a>
+    <a href="https://bitdownloader.com/en1" class="link-item" target="_blank">Video Downloader FREE - Download videos from YouTube, Instagram, and Facebook</a>
+    <a href="https://weibomiaopai.com/" class="link-item" target="_blank">微博秒拍视频等解析下载</a>
+    <a href="https://www.parsevideo.com/" class="link-item" target="_blank">视频解析下载</a>
+    <a href="https://www.weibovideo.com/" class="link-item" target="_blank">微博视频解析下载</a>
+    <a href="https://www.online-downloader.com/index-Chinese" class="link-item" target="_blank">YouTube视频转换器, YouTube视频下载器, 免费在线YouTube下载︰ 下载 Youtube、 Facebook、 Vimeo、 优酷、 雅虎和其他许多 ！</a>
+    <a href="https://zh.savefrom.net/7/" class="link-item" target="_blank">Youtube视频下载 - 免费在线 YouTube 下载器</a>
+    <a href="https://dlpanda.com/zh-CN" class="link-item" target="_blank">抖音TikTok无水印下载 - 在线视频无水印下载解析 - 抖音无水印 - TikTok无水印 - 最新免费在线去水印解析 - Download Panda</a>
+    <a href="https://bilibili.iiilab.com/" class="link-item" target="_blank">哔哩哔哩(bilibili)等视频解析下载</a>
+    <a href="https://alltubedownload.net/" class="link-item" target="_blank">AllTube Download</a>
+    <a href="https://jianwai.youdao.com/" class="link-item" target="_blank">网易见外</a>
+    <a href="https://www.playlistmusic.com.cn/playList" class="link-item" target="_blank">PlayList-视频工作者素材平台</a>
+    <a href="https://superparse.com/" class="link-item" target="_blank">在线解析视频 - 免费解析并下载视频,支持YouTube, Instagram, Facebook…</a>
+    <a href="https://cobalt.tools/" class="link-item" target="_blank">cobalt</a>
+    <a href="https://www.downloadyoutubesubtitles.com/zh" class="link-item" target="_blank">YouTube 字幕下载器 - DownloadYoutubeSubtitles.com</a>
+    <a href="https://ilovevideo.app/" class="link-item" target="_blank">iLoveVideo - Video Downloader</a>
+    <a href="https://www.fotor.com.cn/" class="link-item" target="_blank">Fotor</a>
+    <a href="https://www.mockplus.cn/" class="link-item" target="_blank">摹客，让设计和协作更快更简单</a>
+    <a href="https://www.processon.com/" class="link-item" target="_blank">ProcessOn</a>
+    <a href="https://modao.cc/dashboard/" class="link-item" target="_blank">墨刀</a>
+    <a href="https://express.adobe.com/zh-Hans-CN/sp" class="link-item" target="_blank">Adobe Express</a>
+    <a href="https://id-photo.cn/color/" class="link-item" target="_blank">在线证件照换底色工具 - 证件照大师</a>
+    <a href="https://app.spline.design/home" class="link-item" target="_blank">Spline</a>
+    <a href="https://www.mindshow.fun/" class="link-item" target="_blank">Templates - MindShow,Make Slides Easy</a>
+    <a href="https://www.canva.com/zh_cn/" class="link-item" target="_blank">Canva - 免费设计工具：演示文稿、视频、社交媒体等 -</a>
+    <a href="https://www.iopaint.com/" class="link-item" target="_blank">IOPaint – IOPaint</a>
+    <a href="https://axurehub.com/" class="link-item" target="_blank">AxureHub产品原型资源站</a>
+    <a href="https://www.whitescreen.online/" class="link-item" target="_blank">White screen | Online Tool</a>
+    <a href="https://www.pacdora.com/" class="link-item" target="_blank">Pacdora - The Largest Mockups and Dieline Templates Platform</a>
+    <a href="https://artsandculture.google.com/?hl=cn" class="link-item" target="_blank">Google 艺术与文化</a>
+    <a href="https://www.photopea.com/" class="link-item" target="_blank">Photopea | Online Photo Editor</a>
+    <a href="https://www.gettyimages.com/" class="link-item" target="_blank">Getty Images</a>
+    <a href="https://removal.ai/" class="link-item" target="_blank">remove.ai | Image Background Remover</a>
+    <a href="https://www.scpta.com.cn/" class="link-item" target="_blank">四川省人力资源和社会保障厅人事考试专栏</a>
+    <a href="http://gypta.e21cn.com/index.html" class="link-item" target="_blank">广元人事考试网</a>
+    <a href="http://www.offcn.com/scgwy/" class="link-item" target="_blank">中公教育网-四川</a>
+    <a href="https://www.ruankao.org.cn/" class="link-item" target="_blank">中国计算机技术职业资格网</a>
+    <a href="https://www.nowcoder.com/" class="link-item" target="_blank">牛客网 程序笔试题</a>
+    <a href="https://gkcx.eol.cn/" class="link-item" target="_blank">高考志愿填报服务平台|-中国教育在线</a>
+    <a href="https://leetcode-cn.com/" class="link-item" target="_blank">力扣（LeetCode）官网</a>
+    <a href="https://www.fenbi.com/page/mokaodasai" class="link-item" target="_blank">粉笔网</a>
+    <a href="http://www.jdpta.com/" class="link-item" target="_blank">四川省人事考试基地</a>
+    <a href="https://yz.chsi.com.cn/" class="link-item" target="_blank">全国硕士研究生招生考试网</a>
+    <a href="http://bm.e21cn.com/" class="link-item" target="_blank">考生之家 - 在线报名</a>
+    <a href="https://www.amac.org.cn/" class="link-item" target="_blank">中国证券投资基金业协会</a>
+    <a href="https://www.tianyiwangxiao.com/personal/begin_exercise" class="link-item" target="_blank">点题库- 在线题库</a>
+    <a href="https://zkt.miyaketang.com/" class="link-item" target="_blank">证课堂</a>
+    <a href="https://songyon.github.io/8valuescn/" class="link-item" target="_blank">8values中文版</a>
+    <a href="https://app.codecrafters.io/" class="link-item" target="_blank">CodeCrafters</a>
+    <a href="https://app.grammarly.com/" class="link-item" target="_blank">My Grammarly - Grammarly</a>
+    <a href="https://interview.dog/" class="link-item" target="_blank">面试狗 - 面试神器|辅助面试|面试助手，面试辅助工具_面试狗</a>
+    <a href="https://www.ximalaya.com/" class="link-item" target="_blank">有声小说,听小说,有声书,在线听书电台-喜马拉雅FM</a>
+    <a href="https://www.missevan.com/" class="link-item" target="_blank">猫耳FM_来自二次元的声音_( :3」∠)_M站</a>
+    <a href="https://www.lalal.ai/" class="link-item" target="_blank">LALAL.AI: 100% AI-Powered Vocal and Instrumental Tracks Removal</a>
+    <a href="https://soundcloud.com/" class="link-item" target="_blank">SoundCloud</a>
+    <a href="https://wenxin.baidu.com/wenxin/pc/lyrics" class="link-item" target="_blank">文心大模型-产业级知识增强大模型</a>
+    <a href="https://tianyin.163.com/" class="link-item" target="_blank">网易天音</a>
+    <a href="https://myedit.online/cn/audio-editor" class="link-item" target="_blank">免费线上编辑您的音讯 - MyEdit</a>
+    <a href="https://audiotoolset.com/cn/#edit" class="link-item" target="_blank">audiotoolset音频编辑器，转换器和工具-在线和免费</a>
+    <a href="https://lingojam.com/MaletoFemaleVoiceChanger" class="link-item" target="_blank">Male to Female Voice Changer― LingoJam</a>
+    <a href="https://vocaroo.com/" class="link-item" target="_blank">Vocaroo | 線上錄音機</a>
+    <a href="https://zeemo.ai/cn/" class="link-item" target="_blank">zeemo  AI</a>
+    <a href="https://luvvoice.com/zh" class="link-item" target="_blank">Luvvoice: 免费在线文字转语音</a>
+    <a href="https://cn.tripadvisor.com/" class="link-item" target="_blank">Tripadvisor： 阅读点评，比较价格和酒店预订</a>
+    <a href="https://www.skylinewebcams.com/" class="link-item" target="_blank">全球高清实况摄像头！ - SkylineWebcams</a>
+    <a href="https://www.passportindex.org/" class="link-item" target="_blank">Passport Index 2024 | World's passports in your pocket.</a>
+    <a href="https://www.webcamtaxi.com/en/" class="link-item" target="_blank">Live HD Streaming Webcams from around the globe</a>
+    <a href="https://visaguide.world/" class="link-item" target="_blank">VisaGuide.World - Guide to Worldwide Travel Visa</a>
+    <a href="https://www.agoda.com/zh-cn/" class="link-item" target="_blank">Agoda官网</a>
+    <a href="http://cdzj.chengdu.gov.cn/" class="link-item" target="_blank">成都市住房和城乡建设局（新）</a>
+    <a href="http://cdzfgjj.chengdu.gov.cn/" class="link-item" target="_blank">成都住房公积金网上政务大厅</a>
+    <a href="https://jsj.cngy.gov.cn/" class="link-item" target="_blank">广元市住房和城乡建设局</a>
+    <a href="http://zwzx.cngy.gov.cn/" class="link-item" target="_blank">广元市政务服务和公共资源交易中心</a>
+    <a href="https://www.cdzjryb.com/" class="link-item" target="_blank">成都住建蓉e办</a>
+    <a href="https://wenshu.court.gov.cn/" class="link-item" target="_blank">中国裁判文书网</a>
+    <a href="https://www.gsxt.gov.cn/index.html" class="link-item" target="_blank">国家企业信用信息公示系统</a>
+    <a href="https://www.onlineconvert.com/" class="link-item" target="_blank">Online Converter - Convert Video, Audio, Image, PDF - OnlineConvert.com</a>
+    <a href="https://pdf2doc.com/zh/" class="link-item" target="_blank">PDF转DOC – 在线转换PDF文档至Word格式</a>
+    <a href="https://www.deepl.com/translator" class="link-item" target="_blank">DeepL翻译：全世界最准确的翻译</a>
+    <a href="https://www.ilovepdf.com/zh-cn" class="link-item" target="_blank">iLovePDF | 为PDF爱好者提供的PDF文件在线处理工具</a>
+    <a href="https://www.runoob.com/" class="link-item" target="_blank">菜鸟教程 - 学的不仅是技术，更是梦想！</a>
+    <a href="https://www.aconvert.com/cn/" class="link-item" target="_blank">在线转换文档，图像，视频，音频文件</a>
+    <a href="https://www.pdf2go.com/zh" class="link-item" target="_blank">在线 PDF 转换器-编辑，旋转和压缩 PDF 文件</a>
+    <a href="https://www.aspose.app/" class="link-item" target="_blank">Free File Format Apps - Process MS Word | PDF | Excel | PPT online</a>
+    <a href="https://cloudconvert.com/" class="link-item" target="_blank">CloudConvert</a>
+    <a href="https://stirlingpdf.io/?lang=zh_CN" class="link-item" target="_blank">Stirling PDF</a>
+    <a href="https://www.iloveimg.com/zh-cn" class="link-item" target="_blank">iLoveIMG | 图像文件在线编辑工具</a>
+    <a href="https://tinyurl.com/" class="link-item" target="_blank">URL Shortener, Branded Short Links & Analytics | TinyURL</a>
+    <a href="https://www.shorturl.at/" class="link-item" target="_blank">URL Shortener</a>
+    <a href="https://app.bitly.com/" class="link-item" target="_blank">Bitly | Link Dashboard</a>
+    <a href="https://math.microsoft.com/zh" class="link-item" target="_blank">Microsoft Math Solver - Math Problem Solver & Calculator</a>
+    <a href="https://www.lagou.com/" class="link-item" target="_blank">拉勾招聘-专业的互联网求职招聘网站</a>
+    <a href="https://www.itneituiquan.com/" class="link-item" target="_blank">成都IT内推圈-求职招聘平台</a>
+    <a href="https://www.zhaopin.com/" class="link-item" target="_blank">智联招聘</a>
+    <a href="https://www.iguopin.com/" class="link-item" target="_blank">国聘官方网站</a>
+    <a href="https://www.liepin.com/" class="link-item" target="_blank">【猎聘】-招聘_找工作_求职_企业招人平台</a>
+    <a href="https://www.upwork.com/" class="link-item" target="_blank">Upwork | The World’s Work Marketplace</a>
+    <a href="https://remoteok.com/" class="link-item" target="_blank">Remote Jobs in Programming, Design, Sales and more #OpenSalaries</a>
+    <a href="https://www.freelancer.com/" class="link-item" target="_blank">Hire Freelancers & Find Freelance Jobs Online | Freelancer</a>
+    <a href="https://www.proginn.com/" class="link-item" target="_blank">程序员客栈-领先的程序员自由工作平台-程序员兼职</a>
+    <a href="https://www.zbj.com/" class="link-item" target="_blank">猪八戒网-品质企业服务 就找猪八戒</a>
+    <a href="https://zb.oschina.net/" class="link-item" target="_blank">开源众包-百万开发者,为您提供专业的软件开发服务</a>
+    <a href="https://www.deel.com/zh-tw/" class="link-item" target="_blank">Deel - 人才平台的理想之選</a>
+    <a href="https://www.waiqi.com/" class="link-item" target="_blank">神仙外企</a>
+    <a href="https://osjobs.net/" class="link-item" target="_blank">Overseas Rabbit | 海外兔</a>
+    <a href="https://www.eastmoney.com/" class="link-item" target="_blank">东方财富网：财经门户，提供专业的财经、股票、行情、证券、基金、理财、银行、保险、信托、期货、黄金、股吧、博客等各类财经资讯及数据</a>
+    <a href="https://finance.sina.com.cn/" class="link-item" target="_blank">新浪财经</a>
+    <a href="http://www.cninfo.com.cn/new/index" class="link-item" target="_blank">巨潮资讯网</a>
+    <a href="https://shop.weixin.qq.com/" class="link-item" target="_blank">微信小商店</a>
+    <a href="https://mp.weixin.qq.com/" class="link-item" target="_blank">微信公众平台</a>
+    <a href="https://www.gwmao.cn/" class="link-item" target="_blank">公文猫-公文范例网站</a>
+    <a href="http://office.hit.edu.cn/cygwmb/list.htm" class="link-item" target="_blank">常用公文模板</a>
+    <a href="https://www.editage.cn/paperpal" class="link-item" target="_blank">Paperpal-专业AI论文润色与论文检测平台 - 意得辑Editage</a>
+    <a href="https://sgi.anycast.gay/" class="link-item" target="_blank">yun1</a>
+    <a href="https://yaofan.cc/lighting/" class="link-item" target="_blank">shandian⚡</a>
+    <a href="https://help.happynothings031.xyz/" class="link-item" target="_blank">yunNet WIKI</a>
+    <a href="https://bianyuan.xyz/" class="link-item" target="_blank">订阅转换API</a>
+    <a href="https://xn--gmq396grzd.com/user" class="link-item" target="_blank">yun2⭐⭐</a>
+    <a href="https://www.duyaoss.com/" class="link-item" target="_blank">DuyaoSS</a>
+    <a href="https://cylink.one/user" class="link-item" target="_blank">CYLINK</a>
+    <a href="https://www.gogocloud.top/#/login" class="link-item" target="_blank">goyun1</a>
+    <a href="https://www.tgcloud.top/#/login" class="link-item" target="_blank">TGCyun</a>
+    <a href="https://my.cloudnx.cc/" class="link-item" target="_blank">KyCloud</a>
+    <a href="https://52.mk/" class="link-item" target="_blank">品云机场导航</a>
+    <a href="https://ffq.la/" class="link-item" target="_blank">ffq优质jichang导航</a>
+    <a href="https://universalbus.cn/" class="link-item" target="_blank">环球巴士</a>
+    <a href="https://www.bygcloud.com/" class="link-item" target="_blank">bygcloud</a>
+    <a href="https://nozomi.wtf/" class="link-item" target="_blank">云temp1</a>
+    <a href="https://go.ssrdog.com/" class="link-item" target="_blank">SSRDOG 导航站</a>
+    <a href="https://1p2c.gardenparty.me/user" class="link-item" target="_blank">STC-SPADES</a>
+    <a href="https://whatshub.top/rule" class="link-item" target="_blank">分流 代理规则 shadowrocket 小火箭 surge quantumultx 圈X loon</a>
+    <a href="https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever" class="link-item" target="_blank">Johnshall/Shadowrocket-ADBlock-Rules-Forever: 提供多款 Shadowrocket 规则，拥有强劲的广告过滤功能。每日 8 时重新构建规则。</a>
+    <a href="https://vip.niuhezu.com/" class="link-item" target="_blank">商店首页 - 多梦小铺</a>
+    <a href="https://www.ihezu.cn/" class="link-item" target="_blank">奈飞小铺 - 智能账号合租平台</a>
+    <a href="https://netflixtown.com/" class="link-item" target="_blank">奈飞小镇账号</a>
+    <a href="https://metshop.vip/#/?sid=MTU6638" class="link-item" target="_blank">MetShop·一站式流媒体合租平台</a>
+    <a href="https://dh.gpt999.shop/" class="link-item" target="_blank">引导页</a>
+    <a href="https://www.gpt777.shop/?categoryId=0" class="link-item" target="_blank">ChatGPT 账号购买-ChatGPT4.0 plus APIkey购买</a>
+    <a href="https://dzqc.link/" class="link-item" target="_blank">New API</a>
+    <a href="https://nf.video/" class="link-item" target="_blank">银河录像局 次世代合租平台</a>
+    <a href="https://wormhole.app/" class="link-item" target="_blank">Wormhole - 简单、私密的文件共享</a>
+    <a href="https://new.space/" class="link-item" target="_blank">Share new.space</a>
+    <a href="https://send-anywhere.com/" class="link-item" target="_blank">Send Anywhere - File transfer</a>
+    <a href="https://www.wenshushu.cn/" class="link-item" target="_blank">wensusu - 传文件</a>
+    <a href="https://www.filemail.com/zh" class="link-item" target="_blank">免费發送大宗文件-安全文件傳輸 - Filemail</a>
+    <a href="https://z-library.sk/" class="link-item" target="_blank">Z-library Project - eBook Library Z. Download free Books</a>
+    <a href="https://zh.z-lib.fm/" class="link-item" target="_blank">Z-Library – 世界上最大的电子图书馆。自由访问知识和文化。</a>
+    <a href="https://litera-reader.com/" class="link-item" target="_blank">LITERA Reader online Tool</a>
+    <a href="https://ctext.org/" class="link-item" target="_blank">Chinese Text Project</a>
+    <a href="https://www.myminifactory.com/" class="link-item" target="_blank">Discover STL files for 3D printing ideas and high-quality 3D printer models. | MyMiniFactory</a>
+    <a href="https://makerworld.com.cn/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://makerworld.com/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://www.tripo3d.ai/" class="link-item" target="_blank">Tripo AI - 用文字或图片免费生成3D模型</a>
+    <a href="https://www.tinkercad.com/" class="link-item" target="_blank">Tinkercad - Create 3D digital designs with online CAD</a>
+    <a href="https://www.shichengbbs.com/#new" class="link-item" target="_blank">狮城BBS - 狮城论坛 - 新加坡</a>
+    <a href="https://bbs.icnkr.com/" class="link-item" target="_blank">奋斗在韩国 韩国留学生华人论坛 奋韩网 - 最大的韩国中文网站</a>
+    <a href="https://www.xiaobaotv.com/" class="link-item" target="_blank">小宝影院 - 在线视频</a>
+    <a href="https://www.iyf.tv/" class="link-item" target="_blank">爱壹帆-海量高清视频免费在线观看</a>
+    <a href="https://www.dygod.net/" class="link-item" target="_blank">电影天堂:高清电影下载,高品质生活</a>
+    <a href="https://www.xl720.com/" class="link-item" target="_blank">迅雷电影天堂</a>
+    <a href="https://www.foodieguide.com/iptvsearch/" class="link-item" target="_blank">电视直播源搜索引擎｜国内外电视频道直播源搜索，m3u8、flv、rtsp、rtmp、txt直播源链接地址每日更新</a>
+    <a href="https://youshandefeiyang.github.io/" class="link-item" target="_blank">IPTV直播源汇总</a>
+    <a href="https://archive.ph/" class="link-item" target="_blank">Webpage archive</a>
+    <a href="https://demo.unlock-music.dev/" class="link-item" target="_blank">音乐解锁下载</a>
+    <a href="https://git.unlock-music.dev/um" class="link-item" target="_blank">Unlock Music Project - Unlock Music Git Service</a>
+    <a href="https://git.unlock-music.dev/um/web" class="link-item" target="_blank">um/web: Unlock Music - Web Edition - web - Unlock Music Git Service</a>
+    <a href="https://unlock-music.dev/" class="link-item" target="_blank">Unlock Music Project</a>
+    <a href="https://fetchrss.com/" class="link-item" target="_blank">RSS Generator - FetchRSS</a>
+    <a href="https://rss.app/rss-feed" class="link-item" target="_blank">Create RSS feeds from almost any website</a>
+    <a href="https://docs.rsshub.app/zh/" class="link-item" target="_blank">RSSHub</a>
+    <a href="https://paywallbuster.com/" class="link-item" target="_blank">Remove Paywalls from News Articles Instantly | PaywallBuster</a>
+    <a href="https://duo3.icu/" class="link-item" target="_blank">磁力多</a>
+    <a href="https://1jubt.xyz/" class="link-item" target="_blank">聚BT - 磁力影视 种子搜索</a>
+    <a href="https://1jubt.top/" class="link-item" target="_blank">聚BT - 聚合磁力资源</a>
+    <a href="https://jubt.pw/cn/index.html" class="link-item" target="_blank">聚BT搜索资源</a>
+    <a href="https://www.upyunso.com/" class="link-item" target="_blank">UP云搜 - 最全云盘资源搜索神器</a>
+    <a href="https://www.niceso.fun/" class="link-item" target="_blank">奈斯搜索 - 资源超丰富的阿里云盘资源搜索网站！</a>
+    <a href="https://yiso.fun/" class="link-item" target="_blank">易搜-网盘搜索</a>
+    <a href="https://apkcombo.com/zh/" class="link-item" target="_blank">APKCombo - #1 APK Downloader</a>
+    <a href="https://piratebayproxy.net/zh/" class="link-item" target="_blank">Pirate Bay Proxy   Torrents</a>
+    <a href="https://rutracker.net/forum/index.php" class="link-item" target="_blank">RuTracker.org</a>
+    <a href="https://sms-activate.org/cn/getNumber" class="link-item" target="_blank">获取虚拟手机短信激活服务</a>
+    <a href="https://www.sms4u.vip/" class="link-item" target="_blank">Online SMS verification |  sms4u.vip</a>
+    <a href="https://book-searcher.eu.org/" class="link-item" target="_blank">Book Searcher</a>
+    <a href="https://search.worldcat.org/" class="link-item" target="_blank">WorldCat.org | Search Book Library</a>
+    <a href="https://kms.cx/" class="link-item" target="_blank">KMS一键激活 windows/office</a>
+    <a href="https://www.stream-link.org/" class="link-item" target="_blank">Stream-link.org</a>
+    <a href="https://apkpremier.com/" class="link-item" target="_blank">APK for Android - Free Download</a>
+    <a href="https://stardots.ink/zh#feature" class="link-item" target="_blank">StarDots：星光图床</a>
+    <a href="https://esimdb.com/" class="link-item" target="_blank">eSIMDB: Find and compare best prepaid eSIM for travelers</a>
+    <a href="https://aktv.top/" class="link-item" target="_blank">AKTV 高清高速數碼電視轉播站</a>
+    <a href="https://massgrave.dev/genuine-installation-media" class="link-item" target="_blank">Download Windows / Office | MAS</a>
+    <a href="https://www.getnomad.app/" class="link-item" target="_blank">Nomad - International data eSIMs in 200+ destinations</a>
+    <a href="https://knoema.com/" class="link-item" target="_blank">Free Data - knoema.com</a>
+    <a href="https://indiegoodies.com/" class="link-item" target="_blank">Indie Goodies</a>
+    <a href="https://www.zaobao.com/" class="link-item" target="_blank">首页 | 联合早报网</a>
+    <a href="https://www.ftchinese.com/" class="link-item" target="_blank">FT中文网</a>
+    <a href="https://edition.cnn.com/" class="link-item" target="_blank">CNN</a>
+    <a href="https://www.bloomberg.com/asia" class="link-item" target="_blank">Bloomberg</a>
+    <a href="https://www.bbc.com/" class="link-item" target="_blank">BBC</a>
+    <a href="https://cn.wsj.com/" class="link-item" target="_blank">华尔街日报中文网</a>
+    <a href="https://www.nytimes.com/" class="link-item" target="_blank">The New York Times</a>
+    <a href="https://www.cgtn.com/" class="link-item" target="_blank">CGTN</a>
+    <a href="https://www.rt.com/" class="link-item" target="_blank">RussiaToday</a>
+    <a href="https://www.foxnews.com/" class="link-item" target="_blank">Fox News</a>
+    <a href="https://www.nhk.or.jp/" class="link-item" target="_blank">NHK | 日本放送協会</a>
+    <a href="https://www.aljazeera.com/" class="link-item" target="_blank">Al Jazeera</a>
+    <a href="https://chinese.aljazeera.net/" class="link-item" target="_blank">Aljazeera半岛电视台中文</a>
+    <a href="https://www.kbs.co.kr/#none" class="link-item" target="_blank">KBS</a>
+    <a href="https://time.com/" class="link-item" target="_blank">TIME</a>
+    <a href="https://www.thetimes.co.uk/" class="link-item" target="_blank">The Times & The Sunday Times</a>
+    <a href="https://www.theguardian.com/international" class="link-item" target="_blank">The Guardian</a>
+    <a href="http://www.xinhuanet.com/" class="link-item" target="_blank">新华网</a>
+    <a href="https://sputniknews.cn/" class="link-item" target="_blank">俄罗斯卫星通讯社</a>
+    <a href="https://cn.nikkei.com/" class="link-item" target="_blank">日经中文网--日本经济新闻</a>
+    <a href="https://www.abc.net.au/news" class="link-item" target="_blank">ABC News -Australia Broadcast Company News</a>
+    <a href="https://cn.yna.co.kr/index" class="link-item" target="_blank">韩联社 (韩国联合通讯社)</a>
+    <a href="https://apnews.com/" class="link-item" target="_blank">Associated Press News</a>
+    <a href="https://www.reuters.com/" class="link-item" target="_blank">Reuters | Breaking International News & Views</a>
+    <a href="https://chinese.joins.com/" class="link-item" target="_blank">韩国最大的传媒机构《中央日报》中文网</a>
+    <a href="https://china.kyodonews.net/" class="link-item" target="_blank">共同社新闻通讯网</a>
+    <a href="https://www.economist.com/" class="link-item" target="_blank">The Economist | Independent journalism</a>
+    <a href="https://www.openstreetmap.org/" class="link-item" target="_blank">OpenStreetMap</a>
+    <a href="https://earthexplorer.usgs.gov/" class="link-item" target="_blank">USGS EarthExplorer</a>
+    <a href="https://earthquake.usgs.gov/earthquakes/map/" class="link-item" target="_blank">Latest Earthquakes</a>
+    <a href="https://glovis.usgs.gov/app" class="link-item" target="_blank">GloVis</a>
+    <a href="https://www.google.com/maps/" class="link-item" target="_blank">Google 地图</a>
+    <a href="https://www.gaode.com/" class="link-item" target="_blank">高德地图</a>
+    <a href="https://www.bing.com/maps/" class="link-item" target="_blank">Bing Maps</a>
+    <a href="https://zoom.earth/" class="link-item" target="_blank">Zoom Earth | 实时天气，风暴追踪器</a>
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html" class="link-item" target="_blank">ArcgisMap</a>
+    <a href="https://www.arcgis.com/home/webmap/viewer.html" class="link-item" target="_blank">ArcGIS - Web Map</a>
+    <a href="https://server.arcgisonline.com/arcgis/rest/services" class="link-item" target="_blank">ArcGIS REST Services Directory</a>
+    <a href="https://satellite-map.com/" class="link-item" target="_blank">Satellite Map: 3D Earth, Maps Directions, Traffic, Weather,Find the Best Directions</a>
+    <a href="https://liveuamap.com/" class="link-item" target="_blank">Latest news on live map - liveuamap.com</a>
+    <a href="https://anitabi.cn/map" class="link-item" target="_blank">巡礼地图 - 共享取景地标与截图 - 动画巡礼 - anitabi - 圣地巡礼 - 聖地巡礼 - せいちじゅんれい - 神奇海螺试验场</a>
+    <a href="https://www.flightaware.com/" class="link-item" target="_blank">FlightAware - 航班跟踪/航班状态/飞行跟踪</a>
+    <a href="https://flightradar.online/" class="link-item" target="_blank">Flightradar24 – LIVE! FlightRadar-Online</a>
+    <a href="https://flightadsb.variflight.com/" class="link-item" target="_blank">全球航班飞行轨迹实时跟踪雷达 | Flightadsb | VariFlight</a>
+    <a href="https://earth.nullschool.net/zh-cn/" class="link-item" target="_blank">earth :: 风、气象、海洋状况的全球地图</a>
+    <a href="https://www.17ditu.com/" class="link-item" target="_blank">高清卫星地图</a>
+    <a href="https://stars.chromeexperiments.com/" class="link-item" target="_blank">100,000 Stars</a>
+    <a href="https://www.submarinecablemap.com/" class="link-item" target="_blank">Submarine Cable Map</a>
+    <a href="https://poe.com/" class="link-item" target="_blank">Sage - Poe</a>
+    <a href="https://chat.openai.com/" class="link-item" target="_blank">ChatGPT-openai</a>
+    <a href="https://bard.google.com/" class="link-item" target="_blank">Bard</a>
+    <a href="https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/" class="link-item" target="_blank">文本转语音 – 真实 AI 语音生成器 | Microsoft Azure</a>
+    <a href="https://beta.openai.com/overview" class="link-item" target="_blank">OpenAI</a>
+    <a href="https://aitestkitchen.withgoogle.com/" class="link-item" target="_blank">AI Test Kitchen</a>
+    <a href="https://new.express.adobe.com/" class="link-item" target="_blank">Adobe Express (Beta)</a>
+    <a href="https://firefly.adobe.com/" class="link-item" target="_blank">Adobe Firefly (Beta)</a>
+    <a href="https://clipdrop.co/uncrop" class="link-item" target="_blank">ClipDrop - Uncrop</a>
+    <a href="https://huggingface.co/spaces/R1ckShi/FunClip" class="link-item" target="_blank">ClipVideo - a Hugging Face Space by R1ckShi</a>
+    <a href="https://platform.minimaxi.com/" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+    <a href="https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo" class="link-item" target="_blank">演示空间 证件照AI工具 · ZeYiLin/HivisionIDPhotos</a>
+    <a href="https://www.tiangong.cn/music" class="link-item" target="_blank">天工AI音乐</a>
+    <a href="https://tianyin.music.163.com/editor/#/workspace" class="link-item" target="_blank">网易天音 - 一站式AI音乐创作工具</a>
+    <a href="https://aimusic.so/zh-CN/app" class="link-item" target="_blank">在线免费生成 AI 音乐</a>
+    <a href="https://songgenerator.io/zh-CN/app" class="link-item" target="_blank">SongGenerator.io：免费在线使用AI歌曲生成器创作音乐</a>
+    <a href="https://www.lalal.ai/zh-hans/" class="link-item" target="_blank">人声去除器和AI智能伴奏分离器 | LALAL.AI</a>
+    <a href="https://anyvoice.net/zh/ai-voice-cloning" class="link-item" target="_blank">AI声音克隆 - AnyVoice</a>
+    <a href="https://aibrm.com/" class="link-item" target="_blank">白日梦AI-领先的AI视频创作类AIGC创作平台</a>
+    <a href="https://klingai.kuaishou.com/" class="link-item" target="_blank">可灵 AI - 新一代 AI 创意生产力平台</a>
+    <a href="https://jimeng.jianying.com/ai-tool/home" class="link-item" target="_blank">即梦AI - 一站式AI创作平台</a>
+    <a href="https://ai-bot.cn/" class="link-item" target="_blank">AI工具集官网 | 1000+ AI工具集合，国内外AI工具集导航大全</a>
+    <a href="https://autocut.video/" class="link-item" target="_blank">自动剪辑神器</a>
+    <a href="https://www.text-to-speech.cn/" class="link-item" target="_blank">Text To Speech - 在线文本转语音</a>
+    <a href="https://elevenlabs.io/" class="link-item" target="_blank">ElevenLabs - Generative AI Text to Speech & Voice Cloning</a>
+    <a href="https://gptscopilot.ai/" class="link-item" target="_blank">GPTsCopilot</a>
+    <a href="https://app.suno.ai/" class="link-item" target="_blank">Suno.AI.Create Music</a>
+    <a href="https://v0.dev/" class="link-item" target="_blank">v0.dev  by Vercel</a>
+    <a href="https://haiper.ai/" class="link-item" target="_blank">Haiper AI</a>
+    <a href="https://www.coze.com/" class="link-item" target="_blank">Coze AI</a>
+    <a href="https://tensorpix.ai/" class="link-item" target="_blank">TensorPix - Online AI Video Enhancer and Upscaler</a>
+    <a href="https://www.topazlabs.com/topaz-video-ai" class="link-item" target="_blank">Topaz Video AI 4</a>
+    <a href="https://modelscope.cn/studios/Damo_XR_Lab/motionshop/summary" class="link-item" target="_blank">Animate 3D Motion——AI角色动画 · 创空间</a>
+    <a href="https://www.udio.com/" class="link-item" target="_blank">Udio | Make your music</a>
+    <a href="https://build.nvidia.com/explore/discover" class="link-item" target="_blank">NVIDIA AI NIM APIs</a>
+    <a href="https://llamacoder.together.ai/" class="link-item" target="_blank">Llama Coder – AI Code Generator</a>
+    <a href="https://app.soundtype.ai/#/dashboard" class="link-item" target="_blank">Dashboard | SoundType AI</a>
+    <a href="https://www.cursor.com/" class="link-item" target="_blank">Cursor</a>
+    <a href="https://ragflow.io/" class="link-item" target="_blank">RAGFlow | RAGFlow</a>
+    <a href="https://gamma.app/create" class="link-item" target="_blank">Gamma</a>
+    <a href="https://huggingface.co/spaces/sczhou/CodeFormer" class="link-item" target="_blank">CodeFormer - a Hugging Face Space by sczhou</a>
+    <a href="https://llamatutor.together.ai/" class="link-item" target="_blank">Llama Tutor – AI Personal Tutor</a>
+    <a href="https://huggingface.co/chat/" class="link-item" target="_blank">HuggingChat</a>
+    <a href="https://www.funasr.com/static/online/index.html#" class="link-item" target="_blank">FunASR Demo语音识别</a>
+    <a href="https://aicodeconvert.com/" class="link-item" target="_blank">AI Code Converter | AI Code Translator | AI Code Generator</a>
+    <a href="https://www.minimaxi.com/?#" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+    <a href="https://storm.genie.stanford.edu/" class="link-item" target="_blank">stanford-oval STORM</a>
+    <a href="https://notebooklm.google/" class="link-item" target="_blank">NotebookLM | Note Taking & Research Assistant Powered by AI</a>
+    <a href="https://cn.strikingly.com/s#/" class="link-item" target="_blank">Strikingly - 可能是移动时代最出色的免费建站工具</a>
+    <a href="https://postgres.new/" class="link-item" target="_blank">Postgres Sandbox</a>
+    <a href="https://designer.microsoft.com/home" class="link-item" target="_blank">Microsoft Designer - Stunning designs in a flash</a>
+    <a href="https://scriptecho.cn/app/home" class="link-item" target="_blank">ScriptEcho</a>
+    <a href="https://www.getmerlin.in/chat" class="link-item" target="_blank">AI Chat | Merlin AI</a>
+    <a href="https://whataicandotoday.com/" class="link-item" target="_blank">What AI Can Do Today</a>
+    <a href="https://app.napkin.ai/" class="link-item" target="_blank">Napkin AI</a>
+    <a href="https://diagrammingai.com/" class="link-item" target="_blank">Diagramming AI - Instantly Design UML & Workflows with AI</a>
+    <a href="https://piktochart.com/" class="link-item" target="_blank">Infographic Maker - Piktochart</a>
+    <a href="https://medio.cool/" class="link-item" target="_blank">米壳AI - Medio.cool 助力企业海外视频推广</a>
+    <a href="https://ollama.com/" class="link-item" target="_blank">Ollama</a>
+    <a href="https://jitter.video/" class="link-item" target="_blank">Jitter · Fast and simple motion design tool.</a>
+    <a href="https://www.marscode.cn/home" class="link-item" target="_blank">豆包 MarsCode - 编程助手</a>
+    <a href="https://appwrite.io/" class="link-item" target="_blank">Appwrite - Build like a team of hundreds</a>
+    <a href="https://www.wondershare.com/?utm_source=admitad&tagtag_uid=Cj0KCQiAwOe8BhCCARIsAGKeD54DGB_kgRI__Ng1Q8AngygZaeXVjVCodIGFfRxHueKSDqMm0TIh_IsaAu1DEALw_wcB&gad_source=1&gclid=Cj0KCQiAwOe8BhCCARIsAGKeD54DGB_kgRI__Ng1Q8AngygZaeXVjVCodIGFfRxHueKSDqMm0TIh_IsaAu1DEALw_wcB" class="link-item" target="_blank">Wondershare Official Website: Creativity, Productivity, Utility</a>
+    <a href="https://n8n.io/" class="link-item" target="_blank">Powerful Workflow Automation Software & Tools - n8n</a>
+    <a href="https://www.magicslides.app/" class="link-item" target="_blank">AI Presentation Maker - Presentation from Topic, YouTube, PDF, URL with AI</a>
+    <a href="https://lmarena.ai/" class="link-item" target="_blank">Chatbot Arena (formerly LMSYS): Free AI Chat to Compare & Test Best AI Chatbots</a>
+    <a href="https://openui.fly.dev/ai/new" class="link-item" target="_blank">Create a new UI</a>
+    <a href="https://www.skyreels.ai/home" class="link-item" target="_blank">SkyReels</a>
+    <a href="https://pika.art/" class="link-item" target="_blank">Pika</a>
+    <a href="https://wenku.baidu.com/board" class="link-item" target="_blank">自由画布｜上传素材，精准生成</a>
+    <a href="https://dify.ai/" class="link-item" target="_blank">Dify.AI · The Innovation Engine for Generative AI Applications</a>
+    <a href="https://anythingllm.com/" class="link-item" target="_blank">AnythingLLM | The all-in-one AI application for everyone</a>
+    <a href="https://olmocr.allenai.org/" class="link-item" target="_blank">olmOCR – Open-Source OCR for Accurate Document Conversion</a>
+    <a href="https://platform.deepseek.com/usage" class="link-item" target="_blank">DeepSeek 开放平台</a>
+    <a href="https://screenshottocode.com/" class="link-item" target="_blank">Screenshot to Code</a>
+    <a href="https://logodiffusion.com/" class="link-item" target="_blank">AI Logo Maker | Logo Maker | Logo Diffusion</a>
+    <a href="https://md2card.com/zh" class="link-item" target="_blank">MD2Card - Markdown 转知识卡片工具</a>
+    <a href="https://www.rabbithole.chat/" class="link-item" target="_blank">Rabbithole</a>
+    <a href="https://same.dev/" class="link-item" target="_blank">Same Copy Web UI</a>
+    <a href="https://chatgpt.com/" class="link-item" target="_blank">ChatGPT</a>
+    <a href="https://aistudio.google.com/" class="link-item" target="_blank">Google AI Studio</a>
+    <a href="https://gemini.google.com/app" class="link-item" target="_blank">Gemini</a>
+    <a href="https://grok.com/" class="link-item" target="_blank">Grok</a>
+    <a href="https://chat.deepseek.com/a/chat/s/be7dbe22-c937-4c0b-b237-6de4f634e8ed" class="link-item" target="_blank">DeepSeek - 探索未至之境</a>
+    <a href="https://tongyi.aliyun.com/" class="link-item" target="_blank">通义tongyi.ai_你的全能AI助手-通义千问</a>
+    <a href="https://kimi.moonshot.cn/" class="link-item" target="_blank">Kimi.ai - 会推理解析，能深度思考的AI助手</a>
+    <a href="https://claude.ai/" class="link-item" target="_blank">Claude</a>
+    <a href="https://www.perplexity.ai/" class="link-item" target="_blank">Perplexity</a>
+    <a href="https://xinghuo.xfyun.cn/desk?prompt=" class="link-item" target="_blank">讯飞星火大模型-AI大语言模型</a>
+    <a href="https://chatglm.cn/" class="link-item" target="_blank">智谱清言</a>
+    <a href="https://zhida.zhihu.com/" class="link-item" target="_blank">知乎直答</a>
+    <a href="https://chat.qwen.ai/" class="link-item" target="_blank">Qwen Chat</a>
+    <a href="https://yuanbao.tencent.com/" class="link-item" target="_blank">腾讯元宝 - Chat</a>
+    <a href="https://ai.eastmoney.com/chat" class="link-item" target="_blank">妙想金融大模型</a>
+    <a href="https://zeabur.com/" class="link-item" target="_blank">Zeabur</a>
+    <a href="https://vercel.com/" class="link-item" target="_blank">Vercel</a>
+    <a href="https://bewildcard.com/service" class="link-item" target="_blank">WildCard | 一分钟注册，轻松订阅海外软件服务</a>
+    <a href="https://rss.app/" class="link-item" target="_blank">RSS Feed Generator, Create RSS feeds from URL</a>
+    <a href="https://www.apple.com/shop/gift-cards" class="link-item" target="_blank">Apple Gift Card - Apple</a>
+    <a href="https://onedrive.live.com/" class="link-item" target="_blank">OneDrive</a>
+    <a href="https://www.microsoft365.com/?auth=1" class="link-item" target="_blank">主页 | Microsoft 365 Online</a>
+    <a href="https://www.bing.com/translator/?mkt=zh-CN" class="link-item" target="_blank">必应在线翻译</a>
+    <a href="https://www.google.cn/intl/zh-CN/inputtools/try/" class="link-item" target="_blank">在线试用 Google 输入工具 – Google 输入工具</a>
+    <a href="https://www.notion.so/" class="link-item" target="_blank">Notion - 主页</a>
+    <a href="https://excalidraw.com/" class="link-item" target="_blank">Excalidraw</a>
+    <a href="https://www.b12.io/" class="link-item" target="_blank">B12 | The easiest AI website builder</a>
+    <a href="https://www.boxofficemojo.com/intl/" class="link-item" target="_blank">Latest International Weekends - Box Office Mojo</a>
+    <a href="https://payloadcms.com/" class="link-item" target="_blank">Home | Payload Cloud | Payload Cloud</a>
+    <a href="https://www.qzoffice.com/" class="link-item" target="_blank">轻竹PPT - AI一键生成PPT - 海量PPT模版 - 智能PPT制作网站</a>
+    <a href="https://config.office.com/deploymentsettings" class="link-item" target="_blank">Office config  deploymentsettings</a>
+    <a href="https://www.microsoft.com/en-us/download/details.aspx?id=49117" class="link-item" target="_blank">Download Office Deployment Tool from Official Microsoft Download Center</a>
+    <a href="https://learn.microsoft.com/zh-cn/office/volume-license-activation/gvlks" class="link-item" target="_blank">用于基于 KMS 和 Active Directory 的 Office、Project 和 Visio 激活的 GVLK - Office | Microsoft Learn</a>
+    <a href="https://www.softpedia.com/" class="link-item" target="_blank">Softpedia</a>
+    <a href="https://patents.google.com/" class="link-item" target="_blank">Google Patents</a>
+    <a href="https://duckduckgo.com/" class="link-item" target="_blank">DuckDuckGo</a>
+    <a href="https://datong.info/ui/index.html" class="link-item" target="_blank">大同搜索</a>
+    <a href="https://www.baidu.com/" class="link-item" target="_blank">百度</a>
+    <a href="http://www.jinyongshuku.com/index.html" class="link-item" target="_blank">金庸网 - 最全的金庸小说资料站 金庸武侠小说全集 - 金庸书屋</a>
+    <a href="https://www.zhihu.com/" class="link-item" target="_blank">知乎</a>
+    <a href="https://www.quora.com/following" class="link-item" target="_blank">Quora</a>
+    <a href="https://www.v2ex.com/" class="link-item" target="_blank">V2EX</a>
+    <a href="https://term.ptt.cc/" class="link-item" target="_blank">ptt</a>
+    <a href="https://www.discuss.com.hk/" class="link-item" target="_blank">香港討論區</a>
+    <a href="https://markmap.js.org/" class="link-item" target="_blank">markmap mindmaster</a>
+    <a href="https://markdown.lovejade.cn/" class="link-item" target="_blank">Arya - 在线 Markdown 编辑器</a>
+    <a href="https://pandao.github.io/editor.md/index.html" class="link-item" target="_blank">Editor.md - 开源在线 Markdown 编辑器</a>
+    <a href="https://mermaid.live/" class="link-item" target="_blank">Online FlowChart & Diagrams Editor - Mermaid Live Editor</a>
+    <a href="https://www.mermaidchart.com/play" class="link-item" target="_blank">Editor | Mermaid Chart</a>
+    <a href="https://app.diagrams.net/" class="link-item" target="_blank">绘图 - draw.io</a>
+    <a href="https://www.processon.com/diagrams" class="link-item" target="_blank">ProcessOn - 我的画图</a>
+    <a href="https://www.feishu.cn/" class="link-item" target="_blank">飞书，AI 时代先进生产力平台，提供一站式工作协同、组织管理、业务提效工具和深入企业场景的 AI 能力，助力企业能增长，有巧降</a>
+    <a href="https://archive.org/" class="link-item" target="_blank">Internet Archive</a>
+    <a href="https://www.cmbchina.com/CmbWebPubInfo/Cal_Loan_Per.aspx?chnl=dkjsq" class="link-item" target="_blank">招商银行 -- 个人贷款计算器</a>
+    <a href="https://high-qr-code-generator.com/" class="link-item" target="_blank">The QR Code Generator to Create High-Definition, Custom QR Codes with Logo</a>
+    <a href="https://www.playok.com/" class="link-item" target="_blank">PlayOK - 免費線上棋牌遊戲</a>
+    <a href="https://www.google.com/android/uncertified/" class="link-item" target="_blank">Andriod设备注册</a>
+  </div>
+</div>
+<div class="category" data-category="dev">
+  <h2>dev</h2>
+  <div class="links">
+    <a href="https://gitee.com/" class="link-item" target="_blank">码云 Gitee.com</a>
+    <a href="https://www.npmjs.com/" class="link-item" target="_blank">npm</a>
+    <a href="https://mvnrepository.com/" class="link-item" target="_blank">Maven Repository</a>
+    <a href="https://searchcode.com/" class="link-item" target="_blank">SearchCode</a>
+    <a href="https://www.draw.io/" class="link-item" target="_blank">draw.io</a>
+    <a href="http://www.dmanywhere.cn/" class="link-item" target="_blank">DataModel anywhere</a>
+    <a href="https://www.docker.com/" class="link-item" target="_blank">Docker</a>
+    <a href="https://sourceforge.net/" class="link-item" target="_blank">SourceForge</a>
+    <a href="https://bit.dev/" class="link-item" target="_blank">Discover Components · Bit</a>
+    <a href="https://jdec.app/" class="link-item" target="_blank">JDec - Java Decompiler Online</a>
+    <a href="https://gitlab.com/" class="link-item" target="_blank">GitLab.com</a>
+    <a href="https://www.namesilo.com/" class="link-item" target="_blank">Cheap Domain Names</a>
+    <a href="https://learn.microsoft.com/en-us/training/" class="link-item" target="_blank">Training | Microsoft Learn</a>
+    <a href="https://vercel.com/" class="link-item" target="_blank">Vercel</a>
+    <a href="https://www.gitpod.io/" class="link-item" target="_blank">Gitpod</a>
+    <a href="https://www.cloudns.net/main/" class="link-item" target="_blank">ClouDNS: Dashboard</a>
+    <a href="https://developer.aliyun.com/mirror/" class="link-item" target="_blank">阿里巴巴开源镜像站</a>
+    <a href="https://repo.trojan-cdn.com/" class="link-item" target="_blank">repo.trojan-cdn.com</a>
+    <a href="https://huggingface.co/" class="link-item" target="_blank">Hugging Face – The AI community building the future.</a>
+    <a href="https://huggingface.co/spaces" class="link-item" target="_blank">Spaces - Hugging Face</a>
+    <a href="https://www.diggui.com/" class="link-item" target="_blank">DiG GUI - DiG Online, DiG Web Interface, DiG DNS, Google Dig, Online Dig, Dig Tool</a>
+    <a href="https://roadmap.sh/get-started" class="link-item" target="_blank">Developer Roadmaps</a>
+    <a href="https://dashboard.render.com/" class="link-item" target="_blank">Render Dashboard</a>
+    <a href="https://fly.io/dashboard" class="link-item" target="_blank">Dashboard · Fly.io</a>
+  </div>
+</div>
+<div class="category" data-category="video">
+  <h2>video</h2>
+  <div class="links">
+    <a href="https://bitdownloader.com/en1" class="link-item" target="_blank">Video Downloader FREE - Download videos from YouTube, Instagram, and Facebook</a>
+    <a href="https://weibomiaopai.com/" class="link-item" target="_blank">微博秒拍视频等解析下载</a>
+    <a href="https://www.parsevideo.com/" class="link-item" target="_blank">视频解析下载</a>
+    <a href="https://www.weibovideo.com/" class="link-item" target="_blank">微博视频解析下载</a>
+    <a href="https://www.online-downloader.com/index-Chinese" class="link-item" target="_blank">YouTube视频转换器, YouTube视频下载器, 免费在线YouTube下载︰ 下载 Youtube、 Facebook、 Vimeo、 优酷、 雅虎和其他许多 ！</a>
+    <a href="https://zh.savefrom.net/7/" class="link-item" target="_blank">Youtube视频下载 - 免费在线 YouTube 下载器</a>
+    <a href="https://dlpanda.com/zh-CN" class="link-item" target="_blank">抖音TikTok无水印下载 - 在线视频无水印下载解析 - 抖音无水印 - TikTok无水印 - 最新免费在线去水印解析 - Download Panda</a>
+    <a href="https://bilibili.iiilab.com/" class="link-item" target="_blank">哔哩哔哩(bilibili)等视频解析下载</a>
+    <a href="https://alltubedownload.net/" class="link-item" target="_blank">AllTube Download</a>
+    <a href="https://jianwai.youdao.com/" class="link-item" target="_blank">网易见外</a>
+    <a href="https://www.playlistmusic.com.cn/playList" class="link-item" target="_blank">PlayList-视频工作者素材平台</a>
+    <a href="https://superparse.com/" class="link-item" target="_blank">在线解析视频 - 免费解析并下载视频,支持YouTube, Instagram, Facebook…</a>
+    <a href="https://cobalt.tools/" class="link-item" target="_blank">cobalt</a>
+    <a href="https://www.downloadyoutubesubtitles.com/zh" class="link-item" target="_blank">YouTube 字幕下载器 - DownloadYoutubeSubtitles.com</a>
+    <a href="https://ilovevideo.app/" class="link-item" target="_blank">iLoveVideo - Video Downloader</a>
+  </div>
+</div>
+<div class="category" data-category="design">
+  <h2>design</h2>
+  <div class="links">
+    <a href="https://www.fotor.com.cn/" class="link-item" target="_blank">Fotor</a>
+    <a href="https://www.mockplus.cn/" class="link-item" target="_blank">摹客，让设计和协作更快更简单</a>
+    <a href="https://www.processon.com/" class="link-item" target="_blank">ProcessOn</a>
+    <a href="https://modao.cc/dashboard/" class="link-item" target="_blank">墨刀</a>
+    <a href="https://express.adobe.com/zh-Hans-CN/sp" class="link-item" target="_blank">Adobe Express</a>
+    <a href="https://id-photo.cn/color/" class="link-item" target="_blank">在线证件照换底色工具 - 证件照大师</a>
+    <a href="https://app.spline.design/home" class="link-item" target="_blank">Spline</a>
+    <a href="https://www.mindshow.fun/" class="link-item" target="_blank">Templates - MindShow,Make Slides Easy</a>
+    <a href="https://www.canva.com/zh_cn/" class="link-item" target="_blank">Canva - 免费设计工具：演示文稿、视频、社交媒体等 -</a>
+    <a href="https://www.iopaint.com/" class="link-item" target="_blank">IOPaint – IOPaint</a>
+    <a href="https://axurehub.com/" class="link-item" target="_blank">AxureHub产品原型资源站</a>
+    <a href="https://www.whitescreen.online/" class="link-item" target="_blank">White screen | Online Tool</a>
+    <a href="https://www.pacdora.com/" class="link-item" target="_blank">Pacdora - The Largest Mockups and Dieline Templates Platform</a>
+    <a href="https://artsandculture.google.com/?hl=cn" class="link-item" target="_blank">Google 艺术与文化</a>
+    <a href="https://www.photopea.com/" class="link-item" target="_blank">Photopea | Online Photo Editor</a>
+    <a href="https://www.gettyimages.com/" class="link-item" target="_blank">Getty Images</a>
+    <a href="https://removal.ai/" class="link-item" target="_blank">remove.ai | Image Background Remover</a>
+  </div>
+</div>
+<div class="category" data-category="test">
+  <h2>test</h2>
+  <div class="links">
+    <a href="https://www.scpta.com.cn/" class="link-item" target="_blank">四川省人力资源和社会保障厅人事考试专栏</a>
+    <a href="http://gypta.e21cn.com/index.html" class="link-item" target="_blank">广元人事考试网</a>
+    <a href="http://www.offcn.com/scgwy/" class="link-item" target="_blank">中公教育网-四川</a>
+    <a href="https://www.ruankao.org.cn/" class="link-item" target="_blank">中国计算机技术职业资格网</a>
+    <a href="https://www.nowcoder.com/" class="link-item" target="_blank">牛客网 程序笔试题</a>
+    <a href="https://gkcx.eol.cn/" class="link-item" target="_blank">高考志愿填报服务平台|-中国教育在线</a>
+    <a href="https://leetcode-cn.com/" class="link-item" target="_blank">力扣（LeetCode）官网</a>
+    <a href="https://www.fenbi.com/page/mokaodasai" class="link-item" target="_blank">粉笔网</a>
+    <a href="http://www.jdpta.com/" class="link-item" target="_blank">四川省人事考试基地</a>
+    <a href="https://yz.chsi.com.cn/" class="link-item" target="_blank">全国硕士研究生招生考试网</a>
+    <a href="http://bm.e21cn.com/" class="link-item" target="_blank">考生之家 - 在线报名</a>
+    <a href="https://www.amac.org.cn/" class="link-item" target="_blank">中国证券投资基金业协会</a>
+    <a href="https://www.tianyiwangxiao.com/personal/begin_exercise" class="link-item" target="_blank">点题库- 在线题库</a>
+    <a href="https://zkt.miyaketang.com/" class="link-item" target="_blank">证课堂</a>
+    <a href="https://songyon.github.io/8valuescn/" class="link-item" target="_blank">8values中文版</a>
+    <a href="https://app.codecrafters.io/" class="link-item" target="_blank">CodeCrafters</a>
+    <a href="https://app.grammarly.com/" class="link-item" target="_blank">My Grammarly - Grammarly</a>
+    <a href="https://interview.dog/" class="link-item" target="_blank">面试狗 - 面试神器|辅助面试|面试助手，面试辅助工具_面试狗</a>
+  </div>
+</div>
+<div class="category" data-category="TestTools">
+  <h2>TestTools</h2>
+  <div class="links">
+    <a href="https://songyon.github.io/8valuescn/" class="link-item" target="_blank">8values中文版</a>
+    <a href="https://app.codecrafters.io/" class="link-item" target="_blank">CodeCrafters</a>
+  </div>
+</div>
+<div class="category" data-category="audio">
+  <h2>audio</h2>
+  <div class="links">
+    <a href="https://www.ximalaya.com/" class="link-item" target="_blank">有声小说,听小说,有声书,在线听书电台-喜马拉雅FM</a>
+    <a href="https://www.missevan.com/" class="link-item" target="_blank">猫耳FM_来自二次元的声音_( :3」∠)_M站</a>
+    <a href="https://www.lalal.ai/" class="link-item" target="_blank">LALAL.AI: 100% AI-Powered Vocal and Instrumental Tracks Removal</a>
+    <a href="https://soundcloud.com/" class="link-item" target="_blank">SoundCloud</a>
+    <a href="https://wenxin.baidu.com/wenxin/pc/lyrics" class="link-item" target="_blank">文心大模型-产业级知识增强大模型</a>
+    <a href="https://tianyin.163.com/" class="link-item" target="_blank">网易天音</a>
+    <a href="https://myedit.online/cn/audio-editor" class="link-item" target="_blank">免费线上编辑您的音讯 - MyEdit</a>
+    <a href="https://audiotoolset.com/cn/#edit" class="link-item" target="_blank">audiotoolset音频编辑器，转换器和工具-在线和免费</a>
+    <a href="https://lingojam.com/MaletoFemaleVoiceChanger" class="link-item" target="_blank">Male to Female Voice Changer― LingoJam</a>
+    <a href="https://vocaroo.com/" class="link-item" target="_blank">Vocaroo | 線上錄音機</a>
+    <a href="https://zeemo.ai/cn/" class="link-item" target="_blank">zeemo  AI</a>
+    <a href="https://luvvoice.com/zh" class="link-item" target="_blank">Luvvoice: 免费在线文字转语音</a>
+  </div>
+</div>
+<div class="category" data-category="trip">
+  <h2>trip</h2>
+  <div class="links">
+    <a href="https://cn.tripadvisor.com/" class="link-item" target="_blank">Tripadvisor： 阅读点评，比较价格和酒店预订</a>
+    <a href="https://www.skylinewebcams.com/" class="link-item" target="_blank">全球高清实况摄像头！ - SkylineWebcams</a>
+    <a href="https://www.passportindex.org/" class="link-item" target="_blank">Passport Index 2024 | World's passports in your pocket.</a>
+    <a href="https://www.webcamtaxi.com/en/" class="link-item" target="_blank">Live HD Streaming Webcams from around the globe</a>
+    <a href="https://visaguide.world/" class="link-item" target="_blank">VisaGuide.World - Guide to Worldwide Travel Visa</a>
+    <a href="https://www.agoda.com/zh-cn/" class="link-item" target="_blank">Agoda官网</a>
+  </div>
+</div>
+<div class="category" data-category="gov">
+  <h2>gov</h2>
+  <div class="links">
+    <a href="http://cdzj.chengdu.gov.cn/" class="link-item" target="_blank">成都市住房和城乡建设局（新）</a>
+    <a href="http://cdzfgjj.chengdu.gov.cn/" class="link-item" target="_blank">成都住房公积金网上政务大厅</a>
+    <a href="https://jsj.cngy.gov.cn/" class="link-item" target="_blank">广元市住房和城乡建设局</a>
+    <a href="http://zwzx.cngy.gov.cn/" class="link-item" target="_blank">广元市政务服务和公共资源交易中心</a>
+    <a href="https://www.cdzjryb.com/" class="link-item" target="_blank">成都住建蓉e办</a>
+    <a href="https://wenshu.court.gov.cn/" class="link-item" target="_blank">中国裁判文书网</a>
+    <a href="https://www.gsxt.gov.cn/index.html" class="link-item" target="_blank">国家企业信用信息公示系统</a>
+  </div>
+</div>
+<div class="category" data-category="convert">
+  <h2>convert</h2>
+  <div class="links">
+    <a href="https://www.onlineconvert.com/" class="link-item" target="_blank">Online Converter - Convert Video, Audio, Image, PDF - OnlineConvert.com</a>
+    <a href="https://pdf2doc.com/zh/" class="link-item" target="_blank">PDF转DOC – 在线转换PDF文档至Word格式</a>
+    <a href="https://www.deepl.com/translator" class="link-item" target="_blank">DeepL翻译：全世界最准确的翻译</a>
+    <a href="https://www.ilovepdf.com/zh-cn" class="link-item" target="_blank">iLovePDF | 为PDF爱好者提供的PDF文件在线处理工具</a>
+    <a href="https://www.runoob.com/" class="link-item" target="_blank">菜鸟教程 - 学的不仅是技术，更是梦想！</a>
+    <a href="https://www.aconvert.com/cn/" class="link-item" target="_blank">在线转换文档，图像，视频，音频文件</a>
+    <a href="https://www.pdf2go.com/zh" class="link-item" target="_blank">在线 PDF 转换器-编辑，旋转和压缩 PDF 文件</a>
+    <a href="https://www.aspose.app/" class="link-item" target="_blank">Free File Format Apps - Process MS Word | PDF | Excel | PPT online</a>
+    <a href="https://cloudconvert.com/" class="link-item" target="_blank">CloudConvert</a>
+    <a href="https://stirlingpdf.io/?lang=zh_CN" class="link-item" target="_blank">Stirling PDF</a>
+    <a href="https://www.iloveimg.com/zh-cn" class="link-item" target="_blank">iLoveIMG | 图像文件在线编辑工具</a>
+    <a href="https://tinyurl.com/" class="link-item" target="_blank">URL Shortener, Branded Short Links & Analytics | TinyURL</a>
+    <a href="https://www.shorturl.at/" class="link-item" target="_blank">URL Shortener</a>
+    <a href="https://app.bitly.com/" class="link-item" target="_blank">Bitly | Link Dashboard</a>
+  </div>
+</div>
+<div class="category" data-category="shorturlLinks">
+  <h2>shorturlLinks</h2>
+  <div class="links">
+    <a href="https://tinyurl.com/" class="link-item" target="_blank">URL Shortener, Branded Short Links & Analytics | TinyURL</a>
+    <a href="https://www.shorturl.at/" class="link-item" target="_blank">URL Shortener</a>
+    <a href="https://app.bitly.com/" class="link-item" target="_blank">Bitly | Link Dashboard</a>
+  </div>
+</div>
+<div class="category" data-category="math">
+  <h2>math</h2>
+  <div class="links">
+    <a href="https://math.microsoft.com/zh" class="link-item" target="_blank">Microsoft Math Solver - Math Problem Solver & Calculator</a>
+  </div>
+</div>
+<div class="category" data-category="Jobs">
+  <h2>Jobs</h2>
+  <div class="links">
+    <a href="https://www.lagou.com/" class="link-item" target="_blank">拉勾招聘-专业的互联网求职招聘网站</a>
+    <a href="https://www.itneituiquan.com/" class="link-item" target="_blank">成都IT内推圈-求职招聘平台</a>
+    <a href="https://www.zhaopin.com/" class="link-item" target="_blank">智联招聘</a>
+    <a href="https://www.iguopin.com/" class="link-item" target="_blank">国聘官方网站</a>
+    <a href="https://www.liepin.com/" class="link-item" target="_blank">【猎聘】-招聘_找工作_求职_企业招人平台</a>
+    <a href="https://www.upwork.com/" class="link-item" target="_blank">Upwork | The World’s Work Marketplace</a>
+    <a href="https://remoteok.com/" class="link-item" target="_blank">Remote Jobs in Programming, Design, Sales and more #OpenSalaries</a>
+    <a href="https://www.freelancer.com/" class="link-item" target="_blank">Hire Freelancers & Find Freelance Jobs Online | Freelancer</a>
+    <a href="https://www.proginn.com/" class="link-item" target="_blank">程序员客栈-领先的程序员自由工作平台-程序员兼职</a>
+    <a href="https://www.zbj.com/" class="link-item" target="_blank">猪八戒网-品质企业服务 就找猪八戒</a>
+    <a href="https://zb.oschina.net/" class="link-item" target="_blank">开源众包-百万开发者,为您提供专业的软件开发服务</a>
+    <a href="https://www.deel.com/zh-tw/" class="link-item" target="_blank">Deel - 人才平台的理想之選</a>
+    <a href="https://www.waiqi.com/" class="link-item" target="_blank">神仙外企</a>
+    <a href="https://osjobs.net/" class="link-item" target="_blank">Overseas Rabbit | 海外兔</a>
+  </div>
+</div>
+<div class="category" data-category="remote">
+  <h2>remote</h2>
+  <div class="links">
+    <a href="https://www.upwork.com/" class="link-item" target="_blank">Upwork | The World’s Work Marketplace</a>
+    <a href="https://remoteok.com/" class="link-item" target="_blank">Remote Jobs in Programming, Design, Sales and more #OpenSalaries</a>
+    <a href="https://www.freelancer.com/" class="link-item" target="_blank">Hire Freelancers & Find Freelance Jobs Online | Freelancer</a>
+    <a href="https://www.proginn.com/" class="link-item" target="_blank">程序员客栈-领先的程序员自由工作平台-程序员兼职</a>
+    <a href="https://www.zbj.com/" class="link-item" target="_blank">猪八戒网-品质企业服务 就找猪八戒</a>
+    <a href="https://zb.oschina.net/" class="link-item" target="_blank">开源众包-百万开发者,为您提供专业的软件开发服务</a>
+    <a href="https://www.deel.com/zh-tw/" class="link-item" target="_blank">Deel - 人才平台的理想之選</a>
+  </div>
+</div>
+<div class="category" data-category="assistant">
+  <h2>assistant</h2>
+  <div class="links">
+    <a href="https://osjobs.net/" class="link-item" target="_blank">Overseas Rabbit | 海外兔</a>
+  </div>
+</div>
+<div class="category" data-category="finance">
+  <h2>finance</h2>
+  <div class="links">
+    <a href="https://www.eastmoney.com/" class="link-item" target="_blank">东方财富网：财经门户，提供专业的财经、股票、行情、证券、基金、理财、银行、保险、信托、期货、黄金、股吧、博客等各类财经资讯及数据</a>
+    <a href="https://finance.sina.com.cn/" class="link-item" target="_blank">新浪财经</a>
+    <a href="http://www.cninfo.com.cn/new/index" class="link-item" target="_blank">巨潮资讯网</a>
+  </div>
+</div>
+<div class="category" data-category="wechat">
+  <h2>wechat</h2>
+  <div class="links">
+    <a href="https://shop.weixin.qq.com/" class="link-item" target="_blank">微信小商店</a>
+    <a href="https://mp.weixin.qq.com/" class="link-item" target="_blank">微信公众平台</a>
+  </div>
+</div>
+<div class="category" data-category="公文">
+  <h2>公文</h2>
+  <div class="links">
+    <a href="https://www.gwmao.cn/" class="link-item" target="_blank">公文猫-公文范例网站</a>
+    <a href="http://office.hit.edu.cn/cygwmb/list.htm" class="link-item" target="_blank">常用公文模板</a>
+    <a href="https://www.editage.cn/paperpal" class="link-item" target="_blank">Paperpal-专业AI论文润色与论文检测平台 - 意得辑Editage</a>
+  </div>
+</div>
+<div class="category" data-category="资源">
+  <h2>资源</h2>
+  <div class="links">
+    <a href="https://sgi.anycast.gay/" class="link-item" target="_blank">yun1</a>
+    <a href="https://yaofan.cc/lighting/" class="link-item" target="_blank">shandian⚡</a>
+    <a href="https://help.happynothings031.xyz/" class="link-item" target="_blank">yunNet WIKI</a>
+    <a href="https://bianyuan.xyz/" class="link-item" target="_blank">订阅转换API</a>
+    <a href="https://xn--gmq396grzd.com/user" class="link-item" target="_blank">yun2⭐⭐</a>
+    <a href="https://www.duyaoss.com/" class="link-item" target="_blank">DuyaoSS</a>
+    <a href="https://cylink.one/user" class="link-item" target="_blank">CYLINK</a>
+    <a href="https://www.gogocloud.top/#/login" class="link-item" target="_blank">goyun1</a>
+    <a href="https://www.tgcloud.top/#/login" class="link-item" target="_blank">TGCyun</a>
+    <a href="https://my.cloudnx.cc/" class="link-item" target="_blank">KyCloud</a>
+    <a href="https://52.mk/" class="link-item" target="_blank">品云机场导航</a>
+    <a href="https://ffq.la/" class="link-item" target="_blank">ffq优质jichang导航</a>
+    <a href="https://universalbus.cn/" class="link-item" target="_blank">环球巴士</a>
+    <a href="https://www.bygcloud.com/" class="link-item" target="_blank">bygcloud</a>
+    <a href="https://nozomi.wtf/" class="link-item" target="_blank">云temp1</a>
+    <a href="https://go.ssrdog.com/" class="link-item" target="_blank">SSRDOG 导航站</a>
+    <a href="https://1p2c.gardenparty.me/user" class="link-item" target="_blank">STC-SPADES</a>
+    <a href="https://whatshub.top/rule" class="link-item" target="_blank">分流 代理规则 shadowrocket 小火箭 surge quantumultx 圈X loon</a>
+    <a href="https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever" class="link-item" target="_blank">Johnshall/Shadowrocket-ADBlock-Rules-Forever: 提供多款 Shadowrocket 规则，拥有强劲的广告过滤功能。每日 8 时重新构建规则。</a>
+    <a href="https://vip.niuhezu.com/" class="link-item" target="_blank">商店首页 - 多梦小铺</a>
+    <a href="https://www.ihezu.cn/" class="link-item" target="_blank">奈飞小铺 - 智能账号合租平台</a>
+    <a href="https://netflixtown.com/" class="link-item" target="_blank">奈飞小镇账号</a>
+    <a href="https://metshop.vip/#/?sid=MTU6638" class="link-item" target="_blank">MetShop·一站式流媒体合租平台</a>
+    <a href="https://dh.gpt999.shop/" class="link-item" target="_blank">引导页</a>
+    <a href="https://www.gpt777.shop/?categoryId=0" class="link-item" target="_blank">ChatGPT 账号购买-ChatGPT4.0 plus APIkey购买</a>
+    <a href="https://dzqc.link/" class="link-item" target="_blank">New API</a>
+    <a href="https://nf.video/" class="link-item" target="_blank">银河录像局 次世代合租平台</a>
+    <a href="https://wormhole.app/" class="link-item" target="_blank">Wormhole - 简单、私密的文件共享</a>
+    <a href="https://new.space/" class="link-item" target="_blank">Share new.space</a>
+    <a href="https://send-anywhere.com/" class="link-item" target="_blank">Send Anywhere - File transfer</a>
+    <a href="https://www.wenshushu.cn/" class="link-item" target="_blank">wensusu - 传文件</a>
+    <a href="https://www.filemail.com/zh" class="link-item" target="_blank">免费發送大宗文件-安全文件傳輸 - Filemail</a>
+    <a href="https://z-library.sk/" class="link-item" target="_blank">Z-library Project - eBook Library Z. Download free Books</a>
+    <a href="https://zh.z-lib.fm/" class="link-item" target="_blank">Z-Library – 世界上最大的电子图书馆。自由访问知识和文化。</a>
+    <a href="https://litera-reader.com/" class="link-item" target="_blank">LITERA Reader online Tool</a>
+    <a href="https://ctext.org/" class="link-item" target="_blank">Chinese Text Project</a>
+    <a href="https://www.myminifactory.com/" class="link-item" target="_blank">Discover STL files for 3D printing ideas and high-quality 3D printer models. | MyMiniFactory</a>
+    <a href="https://makerworld.com.cn/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://makerworld.com/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://www.tripo3d.ai/" class="link-item" target="_blank">Tripo AI - 用文字或图片免费生成3D模型</a>
+    <a href="https://www.tinkercad.com/" class="link-item" target="_blank">Tinkercad - Create 3D digital designs with online CAD</a>
+    <a href="https://www.shichengbbs.com/#new" class="link-item" target="_blank">狮城BBS - 狮城论坛 - 新加坡</a>
+    <a href="https://bbs.icnkr.com/" class="link-item" target="_blank">奋斗在韩国 韩国留学生华人论坛 奋韩网 - 最大的韩国中文网站</a>
+    <a href="https://www.xiaobaotv.com/" class="link-item" target="_blank">小宝影院 - 在线视频</a>
+    <a href="https://www.iyf.tv/" class="link-item" target="_blank">爱壹帆-海量高清视频免费在线观看</a>
+    <a href="https://www.dygod.net/" class="link-item" target="_blank">电影天堂:高清电影下载,高品质生活</a>
+    <a href="https://www.xl720.com/" class="link-item" target="_blank">迅雷电影天堂</a>
+    <a href="https://www.foodieguide.com/iptvsearch/" class="link-item" target="_blank">电视直播源搜索引擎｜国内外电视频道直播源搜索，m3u8、flv、rtsp、rtmp、txt直播源链接地址每日更新</a>
+    <a href="https://youshandefeiyang.github.io/" class="link-item" target="_blank">IPTV直播源汇总</a>
+    <a href="https://archive.ph/" class="link-item" target="_blank">Webpage archive</a>
+    <a href="https://demo.unlock-music.dev/" class="link-item" target="_blank">音乐解锁下载</a>
+    <a href="https://git.unlock-music.dev/um" class="link-item" target="_blank">Unlock Music Project - Unlock Music Git Service</a>
+    <a href="https://git.unlock-music.dev/um/web" class="link-item" target="_blank">um/web: Unlock Music - Web Edition - web - Unlock Music Git Service</a>
+    <a href="https://unlock-music.dev/" class="link-item" target="_blank">Unlock Music Project</a>
+    <a href="https://fetchrss.com/" class="link-item" target="_blank">RSS Generator - FetchRSS</a>
+    <a href="https://rss.app/rss-feed" class="link-item" target="_blank">Create RSS feeds from almost any website</a>
+    <a href="https://docs.rsshub.app/zh/" class="link-item" target="_blank">RSSHub</a>
+    <a href="https://paywallbuster.com/" class="link-item" target="_blank">Remove Paywalls from News Articles Instantly | PaywallBuster</a>
+    <a href="https://duo3.icu/" class="link-item" target="_blank">磁力多</a>
+    <a href="https://1jubt.xyz/" class="link-item" target="_blank">聚BT - 磁力影视 种子搜索</a>
+    <a href="https://1jubt.top/" class="link-item" target="_blank">聚BT - 聚合磁力资源</a>
+    <a href="https://jubt.pw/cn/index.html" class="link-item" target="_blank">聚BT搜索资源</a>
+    <a href="https://www.upyunso.com/" class="link-item" target="_blank">UP云搜 - 最全云盘资源搜索神器</a>
+    <a href="https://www.niceso.fun/" class="link-item" target="_blank">奈斯搜索 - 资源超丰富的阿里云盘资源搜索网站！</a>
+    <a href="https://yiso.fun/" class="link-item" target="_blank">易搜-网盘搜索</a>
+    <a href="https://apkcombo.com/zh/" class="link-item" target="_blank">APKCombo - #1 APK Downloader</a>
+    <a href="https://piratebayproxy.net/zh/" class="link-item" target="_blank">Pirate Bay Proxy   Torrents</a>
+    <a href="https://rutracker.net/forum/index.php" class="link-item" target="_blank">RuTracker.org</a>
+    <a href="https://sms-activate.org/cn/getNumber" class="link-item" target="_blank">获取虚拟手机短信激活服务</a>
+    <a href="https://www.sms4u.vip/" class="link-item" target="_blank">Online SMS verification |  sms4u.vip</a>
+    <a href="https://book-searcher.eu.org/" class="link-item" target="_blank">Book Searcher</a>
+    <a href="https://search.worldcat.org/" class="link-item" target="_blank">WorldCat.org | Search Book Library</a>
+    <a href="https://kms.cx/" class="link-item" target="_blank">KMS一键激活 windows/office</a>
+    <a href="https://www.stream-link.org/" class="link-item" target="_blank">Stream-link.org</a>
+    <a href="https://apkpremier.com/" class="link-item" target="_blank">APK for Android - Free Download</a>
+    <a href="https://stardots.ink/zh#feature" class="link-item" target="_blank">StarDots：星光图床</a>
+    <a href="https://esimdb.com/" class="link-item" target="_blank">eSIMDB: Find and compare best prepaid eSIM for travelers</a>
+    <a href="https://aktv.top/" class="link-item" target="_blank">AKTV 高清高速數碼電視轉播站</a>
+    <a href="https://massgrave.dev/genuine-installation-media" class="link-item" target="_blank">Download Windows / Office | MAS</a>
+    <a href="https://www.getnomad.app/" class="link-item" target="_blank">Nomad - International data eSIMs in 200+ destinations</a>
+    <a href="https://knoema.com/" class="link-item" target="_blank">Free Data - knoema.com</a>
+    <a href="https://indiegoodies.com/" class="link-item" target="_blank">Indie Goodies</a>
+  </div>
+</div>
+<div class="category" data-category="Network">
+  <h2>Network</h2>
+  <div class="links">
+    <a href="https://sgi.anycast.gay/" class="link-item" target="_blank">yun1</a>
+    <a href="https://yaofan.cc/lighting/" class="link-item" target="_blank">shandian⚡</a>
+    <a href="https://help.happynothings031.xyz/" class="link-item" target="_blank">yunNet WIKI</a>
+    <a href="https://bianyuan.xyz/" class="link-item" target="_blank">订阅转换API</a>
+    <a href="https://xn--gmq396grzd.com/user" class="link-item" target="_blank">yun2⭐⭐</a>
+    <a href="https://www.duyaoss.com/" class="link-item" target="_blank">DuyaoSS</a>
+    <a href="https://cylink.one/user" class="link-item" target="_blank">CYLINK</a>
+    <a href="https://www.gogocloud.top/#/login" class="link-item" target="_blank">goyun1</a>
+    <a href="https://www.tgcloud.top/#/login" class="link-item" target="_blank">TGCyun</a>
+    <a href="https://my.cloudnx.cc/" class="link-item" target="_blank">KyCloud</a>
+    <a href="https://52.mk/" class="link-item" target="_blank">品云机场导航</a>
+    <a href="https://ffq.la/" class="link-item" target="_blank">ffq优质jichang导航</a>
+    <a href="https://universalbus.cn/" class="link-item" target="_blank">环球巴士</a>
+    <a href="https://www.bygcloud.com/" class="link-item" target="_blank">bygcloud</a>
+    <a href="https://nozomi.wtf/" class="link-item" target="_blank">云temp1</a>
+    <a href="https://go.ssrdog.com/" class="link-item" target="_blank">SSRDOG 导航站</a>
+    <a href="https://1p2c.gardenparty.me/user" class="link-item" target="_blank">STC-SPADES</a>
+    <a href="https://whatshub.top/rule" class="link-item" target="_blank">分流 代理规则 shadowrocket 小火箭 surge quantumultx 圈X loon</a>
+    <a href="https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever" class="link-item" target="_blank">Johnshall/Shadowrocket-ADBlock-Rules-Forever: 提供多款 Shadowrocket 规则，拥有强劲的广告过滤功能。每日 8 时重新构建规则。</a>
+  </div>
+</div>
+<div class="category" data-category="账号">
+  <h2>账号</h2>
+  <div class="links">
+    <a href="https://vip.niuhezu.com/" class="link-item" target="_blank">商店首页 - 多梦小铺</a>
+    <a href="https://www.ihezu.cn/" class="link-item" target="_blank">奈飞小铺 - 智能账号合租平台</a>
+    <a href="https://netflixtown.com/" class="link-item" target="_blank">奈飞小镇账号</a>
+    <a href="https://metshop.vip/#/?sid=MTU6638" class="link-item" target="_blank">MetShop·一站式流媒体合租平台</a>
+    <a href="https://dh.gpt999.shop/" class="link-item" target="_blank">引导页</a>
+    <a href="https://www.gpt777.shop/?categoryId=0" class="link-item" target="_blank">ChatGPT 账号购买-ChatGPT4.0 plus APIkey购买</a>
+    <a href="https://dzqc.link/" class="link-item" target="_blank">New API</a>
+    <a href="https://nf.video/" class="link-item" target="_blank">银河录像局 次世代合租平台</a>
+  </div>
+</div>
+<div class="category" data-category="Sender">
+  <h2>Sender</h2>
+  <div class="links">
+    <a href="https://wormhole.app/" class="link-item" target="_blank">Wormhole - 简单、私密的文件共享</a>
+    <a href="https://new.space/" class="link-item" target="_blank">Share new.space</a>
+    <a href="https://send-anywhere.com/" class="link-item" target="_blank">Send Anywhere - File transfer</a>
+    <a href="https://www.wenshushu.cn/" class="link-item" target="_blank">wensusu - 传文件</a>
+    <a href="https://www.filemail.com/zh" class="link-item" target="_blank">免费發送大宗文件-安全文件傳輸 - Filemail</a>
+  </div>
+</div>
+<div class="category" data-category="e-Book">
+  <h2>e-Book</h2>
+  <div class="links">
+    <a href="https://z-library.sk/" class="link-item" target="_blank">Z-library Project - eBook Library Z. Download free Books</a>
+    <a href="https://zh.z-lib.fm/" class="link-item" target="_blank">Z-Library – 世界上最大的电子图书馆。自由访问知识和文化。</a>
+    <a href="https://litera-reader.com/" class="link-item" target="_blank">LITERA Reader online Tool</a>
+    <a href="https://ctext.org/" class="link-item" target="_blank">Chinese Text Project</a>
+  </div>
+</div>
+<div class="category" data-category="model">
+  <h2>model</h2>
+  <div class="links">
+    <a href="https://www.myminifactory.com/" class="link-item" target="_blank">Discover STL files for 3D printing ideas and high-quality 3D printer models. | MyMiniFactory</a>
+    <a href="https://makerworld.com.cn/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://makerworld.com/zh" class="link-item" target="_blank">MakerWorld：下载免费 3D 打印模型</a>
+    <a href="https://www.tripo3d.ai/" class="link-item" target="_blank">Tripo AI - 用文字或图片免费生成3D模型</a>
+    <a href="https://www.tinkercad.com/" class="link-item" target="_blank">Tinkercad - Create 3D digital designs with online CAD</a>
+  </div>
+</div>
+<div class="category" data-category="论坛">
+  <h2>论坛</h2>
+  <div class="links">
+    <a href="https://www.shichengbbs.com/#new" class="link-item" target="_blank">狮城BBS - 狮城论坛 - 新加坡</a>
+    <a href="https://bbs.icnkr.com/" class="link-item" target="_blank">奋斗在韩国 韩国留学生华人论坛 奋韩网 - 最大的韩国中文网站</a>
+  </div>
+</div>
+<div class="category" data-category="Video">
+  <h2>Video</h2>
+  <div class="links">
+    <a href="https://www.xiaobaotv.com/" class="link-item" target="_blank">小宝影院 - 在线视频</a>
+    <a href="https://www.iyf.tv/" class="link-item" target="_blank">爱壹帆-海量高清视频免费在线观看</a>
+    <a href="https://www.dygod.net/" class="link-item" target="_blank">电影天堂:高清电影下载,高品质生活</a>
+    <a href="https://www.xl720.com/" class="link-item" target="_blank">迅雷电影天堂</a>
+    <a href="https://www.foodieguide.com/iptvsearch/" class="link-item" target="_blank">电视直播源搜索引擎｜国内外电视频道直播源搜索，m3u8、flv、rtsp、rtmp、txt直播源链接地址每日更新</a>
+    <a href="https://youshandefeiyang.github.io/" class="link-item" target="_blank">IPTV直播源汇总</a>
+  </div>
+</div>
+<div class="category" data-category="archive">
+  <h2>archive</h2>
+  <div class="links">
+    <a href="https://archive.ph/" class="link-item" target="_blank">Webpage archive</a>
+  </div>
+</div>
+<div class="category" data-category="musicTool">
+  <h2>musicTool</h2>
+  <div class="links">
+    <a href="https://demo.unlock-music.dev/" class="link-item" target="_blank">音乐解锁下载</a>
+    <a href="https://git.unlock-music.dev/um" class="link-item" target="_blank">Unlock Music Project - Unlock Music Git Service</a>
+    <a href="https://git.unlock-music.dev/um/web" class="link-item" target="_blank">um/web: Unlock Music - Web Edition - web - Unlock Music Git Service</a>
+    <a href="https://unlock-music.dev/" class="link-item" target="_blank">Unlock Music Project</a>
+  </div>
+</div>
+<div class="category" data-category="RSS">
+  <h2>RSS</h2>
+  <div class="links">
+    <a href="https://fetchrss.com/" class="link-item" target="_blank">RSS Generator - FetchRSS</a>
+    <a href="https://rss.app/rss-feed" class="link-item" target="_blank">Create RSS feeds from almost any website</a>
+    <a href="https://docs.rsshub.app/zh/" class="link-item" target="_blank">RSSHub</a>
+  </div>
+</div>
+<div class="category" data-category="News">
+  <h2>News</h2>
+  <div class="links">
+    <a href="https://www.zaobao.com/" class="link-item" target="_blank">首页 | 联合早报网</a>
+    <a href="https://www.ftchinese.com/" class="link-item" target="_blank">FT中文网</a>
+    <a href="https://edition.cnn.com/" class="link-item" target="_blank">CNN</a>
+    <a href="https://www.bloomberg.com/asia" class="link-item" target="_blank">Bloomberg</a>
+    <a href="https://www.bbc.com/" class="link-item" target="_blank">BBC</a>
+    <a href="https://cn.wsj.com/" class="link-item" target="_blank">华尔街日报中文网</a>
+    <a href="https://www.nytimes.com/" class="link-item" target="_blank">The New York Times</a>
+    <a href="https://www.cgtn.com/" class="link-item" target="_blank">CGTN</a>
+    <a href="https://www.rt.com/" class="link-item" target="_blank">RussiaToday</a>
+    <a href="https://www.foxnews.com/" class="link-item" target="_blank">Fox News</a>
+    <a href="https://www.nhk.or.jp/" class="link-item" target="_blank">NHK | 日本放送協会</a>
+    <a href="https://www.aljazeera.com/" class="link-item" target="_blank">Al Jazeera</a>
+    <a href="https://chinese.aljazeera.net/" class="link-item" target="_blank">Aljazeera半岛电视台中文</a>
+    <a href="https://www.kbs.co.kr/#none" class="link-item" target="_blank">KBS</a>
+    <a href="https://time.com/" class="link-item" target="_blank">TIME</a>
+    <a href="https://www.thetimes.co.uk/" class="link-item" target="_blank">The Times & The Sunday Times</a>
+    <a href="https://www.theguardian.com/international" class="link-item" target="_blank">The Guardian</a>
+    <a href="http://www.xinhuanet.com/" class="link-item" target="_blank">新华网</a>
+    <a href="https://sputniknews.cn/" class="link-item" target="_blank">俄罗斯卫星通讯社</a>
+    <a href="https://cn.nikkei.com/" class="link-item" target="_blank">日经中文网--日本经济新闻</a>
+    <a href="https://www.abc.net.au/news" class="link-item" target="_blank">ABC News -Australia Broadcast Company News</a>
+    <a href="https://cn.yna.co.kr/index" class="link-item" target="_blank">韩联社 (韩国联合通讯社)</a>
+    <a href="https://apnews.com/" class="link-item" target="_blank">Associated Press News</a>
+    <a href="https://www.reuters.com/" class="link-item" target="_blank">Reuters | Breaking International News & Views</a>
+    <a href="https://chinese.joins.com/" class="link-item" target="_blank">韩国最大的传媒机构《中央日报》中文网</a>
+    <a href="https://china.kyodonews.net/" class="link-item" target="_blank">共同社新闻通讯网</a>
+    <a href="https://www.economist.com/" class="link-item" target="_blank">The Economist | Independent journalism</a>
+  </div>
+</div>
+<div class="category" data-category="Maps">
+  <h2>Maps</h2>
+  <div class="links">
+    <a href="https://www.openstreetmap.org/" class="link-item" target="_blank">OpenStreetMap</a>
+    <a href="https://earthexplorer.usgs.gov/" class="link-item" target="_blank">USGS EarthExplorer</a>
+    <a href="https://earthquake.usgs.gov/earthquakes/map/" class="link-item" target="_blank">Latest Earthquakes</a>
+    <a href="https://glovis.usgs.gov/app" class="link-item" target="_blank">GloVis</a>
+    <a href="https://www.google.com/maps/" class="link-item" target="_blank">Google 地图</a>
+    <a href="https://www.gaode.com/" class="link-item" target="_blank">高德地图</a>
+    <a href="https://www.bing.com/maps/" class="link-item" target="_blank">Bing Maps</a>
+    <a href="https://zoom.earth/" class="link-item" target="_blank">Zoom Earth | 实时天气，风暴追踪器</a>
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html" class="link-item" target="_blank">ArcgisMap</a>
+    <a href="https://www.arcgis.com/home/webmap/viewer.html" class="link-item" target="_blank">ArcGIS - Web Map</a>
+    <a href="https://server.arcgisonline.com/arcgis/rest/services" class="link-item" target="_blank">ArcGIS REST Services Directory</a>
+    <a href="https://satellite-map.com/" class="link-item" target="_blank">Satellite Map: 3D Earth, Maps Directions, Traffic, Weather,Find the Best Directions</a>
+    <a href="https://liveuamap.com/" class="link-item" target="_blank">Latest news on live map - liveuamap.com</a>
+    <a href="https://anitabi.cn/map" class="link-item" target="_blank">巡礼地图 - 共享取景地标与截图 - 动画巡礼 - anitabi - 圣地巡礼 - 聖地巡礼 - せいちじゅんれい - 神奇海螺试验场</a>
+    <a href="https://www.flightaware.com/" class="link-item" target="_blank">FlightAware - 航班跟踪/航班状态/飞行跟踪</a>
+    <a href="https://flightradar.online/" class="link-item" target="_blank">Flightradar24 – LIVE! FlightRadar-Online</a>
+    <a href="https://flightadsb.variflight.com/" class="link-item" target="_blank">全球航班飞行轨迹实时跟踪雷达 | Flightadsb | VariFlight</a>
+    <a href="https://earth.nullschool.net/zh-cn/" class="link-item" target="_blank">earth :: 风、气象、海洋状况的全球地图</a>
+    <a href="https://www.17ditu.com/" class="link-item" target="_blank">高清卫星地图</a>
+    <a href="https://stars.chromeexperiments.com/" class="link-item" target="_blank">100,000 Stars</a>
+    <a href="https://www.submarinecablemap.com/" class="link-item" target="_blank">Submarine Cable Map</a>
+  </div>
+</div>
+<div class="category" data-category="GPT">
+  <h2>GPT</h2>
+  <div class="links">
+    <a href="https://poe.com/" class="link-item" target="_blank">Sage - Poe</a>
+    <a href="https://chat.openai.com/" class="link-item" target="_blank">ChatGPT-openai</a>
+    <a href="https://bard.google.com/" class="link-item" target="_blank">Bard</a>
+  </div>
+</div>
+<div class="category" data-category="AI">
+  <h2>AI</h2>
+  <div class="links">
+    <a href="https://azure.microsoft.com/zh-cn/services/cognitive-services/text-to-speech/" class="link-item" target="_blank">文本转语音 – 真实 AI 语音生成器 | Microsoft Azure</a>
+    <a href="https://beta.openai.com/overview" class="link-item" target="_blank">OpenAI</a>
+    <a href="https://aitestkitchen.withgoogle.com/" class="link-item" target="_blank">AI Test Kitchen</a>
+    <a href="https://new.express.adobe.com/" class="link-item" target="_blank">Adobe Express (Beta)</a>
+    <a href="https://firefly.adobe.com/" class="link-item" target="_blank">Adobe Firefly (Beta)</a>
+    <a href="https://clipdrop.co/uncrop" class="link-item" target="_blank">ClipDrop - Uncrop</a>
+    <a href="https://huggingface.co/spaces/R1ckShi/FunClip" class="link-item" target="_blank">ClipVideo - a Hugging Face Space by R1ckShi</a>
+    <a href="https://platform.minimaxi.com/" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+    <a href="https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo" class="link-item" target="_blank">演示空间 证件照AI工具 · ZeYiLin/HivisionIDPhotos</a>
+    <a href="https://www.tiangong.cn/music" class="link-item" target="_blank">天工AI音乐</a>
+    <a href="https://tianyin.music.163.com/editor/#/workspace" class="link-item" target="_blank">网易天音 - 一站式AI音乐创作工具</a>
+    <a href="https://aimusic.so/zh-CN/app" class="link-item" target="_blank">在线免费生成 AI 音乐</a>
+    <a href="https://songgenerator.io/zh-CN/app" class="link-item" target="_blank">SongGenerator.io：免费在线使用AI歌曲生成器创作音乐</a>
+    <a href="https://www.lalal.ai/zh-hans/" class="link-item" target="_blank">人声去除器和AI智能伴奏分离器 | LALAL.AI</a>
+    <a href="https://anyvoice.net/zh/ai-voice-cloning" class="link-item" target="_blank">AI声音克隆 - AnyVoice</a>
+    <a href="https://aibrm.com/" class="link-item" target="_blank">白日梦AI-领先的AI视频创作类AIGC创作平台</a>
+    <a href="https://klingai.kuaishou.com/" class="link-item" target="_blank">可灵 AI - 新一代 AI 创意生产力平台</a>
+    <a href="https://jimeng.jianying.com/ai-tool/home" class="link-item" target="_blank">即梦AI - 一站式AI创作平台</a>
+    <a href="https://ai-bot.cn/" class="link-item" target="_blank">AI工具集官网 | 1000+ AI工具集合，国内外AI工具集导航大全</a>
+    <a href="https://autocut.video/" class="link-item" target="_blank">自动剪辑神器</a>
+    <a href="https://www.text-to-speech.cn/" class="link-item" target="_blank">Text To Speech - 在线文本转语音</a>
+    <a href="https://elevenlabs.io/" class="link-item" target="_blank">ElevenLabs - Generative AI Text to Speech & Voice Cloning</a>
+    <a href="https://gptscopilot.ai/" class="link-item" target="_blank">GPTsCopilot</a>
+    <a href="https://app.suno.ai/" class="link-item" target="_blank">Suno.AI.Create Music</a>
+    <a href="https://v0.dev/" class="link-item" target="_blank">v0.dev  by Vercel</a>
+    <a href="https://haiper.ai/" class="link-item" target="_blank">Haiper AI</a>
+    <a href="https://www.coze.com/" class="link-item" target="_blank">Coze AI</a>
+    <a href="https://tensorpix.ai/" class="link-item" target="_blank">TensorPix - Online AI Video Enhancer and Upscaler</a>
+    <a href="https://www.topazlabs.com/topaz-video-ai" class="link-item" target="_blank">Topaz Video AI 4</a>
+    <a href="https://modelscope.cn/studios/Damo_XR_Lab/motionshop/summary" class="link-item" target="_blank">Animate 3D Motion——AI角色动画 · 创空间</a>
+    <a href="https://www.udio.com/" class="link-item" target="_blank">Udio | Make your music</a>
+    <a href="https://build.nvidia.com/explore/discover" class="link-item" target="_blank">NVIDIA AI NIM APIs</a>
+    <a href="https://llamacoder.together.ai/" class="link-item" target="_blank">Llama Coder – AI Code Generator</a>
+    <a href="https://app.soundtype.ai/#/dashboard" class="link-item" target="_blank">Dashboard | SoundType AI</a>
+    <a href="https://www.cursor.com/" class="link-item" target="_blank">Cursor</a>
+    <a href="https://ragflow.io/" class="link-item" target="_blank">RAGFlow | RAGFlow</a>
+    <a href="https://gamma.app/create" class="link-item" target="_blank">Gamma</a>
+    <a href="https://huggingface.co/spaces/sczhou/CodeFormer" class="link-item" target="_blank">CodeFormer - a Hugging Face Space by sczhou</a>
+    <a href="https://llamatutor.together.ai/" class="link-item" target="_blank">Llama Tutor – AI Personal Tutor</a>
+    <a href="https://huggingface.co/chat/" class="link-item" target="_blank">HuggingChat</a>
+    <a href="https://www.funasr.com/static/online/index.html#" class="link-item" target="_blank">FunASR Demo语音识别</a>
+    <a href="https://aicodeconvert.com/" class="link-item" target="_blank">AI Code Converter | AI Code Translator | AI Code Generator</a>
+    <a href="https://www.minimaxi.com/?#" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+    <a href="https://storm.genie.stanford.edu/" class="link-item" target="_blank">stanford-oval STORM</a>
+    <a href="https://notebooklm.google/" class="link-item" target="_blank">NotebookLM | Note Taking & Research Assistant Powered by AI</a>
+    <a href="https://cn.strikingly.com/s#/" class="link-item" target="_blank">Strikingly - 可能是移动时代最出色的免费建站工具</a>
+    <a href="https://postgres.new/" class="link-item" target="_blank">Postgres Sandbox</a>
+    <a href="https://designer.microsoft.com/home" class="link-item" target="_blank">Microsoft Designer - Stunning designs in a flash</a>
+    <a href="https://scriptecho.cn/app/home" class="link-item" target="_blank">ScriptEcho</a>
+    <a href="https://www.getmerlin.in/chat" class="link-item" target="_blank">AI Chat | Merlin AI</a>
+    <a href="https://whataicandotoday.com/" class="link-item" target="_blank">What AI Can Do Today</a>
+    <a href="https://app.napkin.ai/" class="link-item" target="_blank">Napkin AI</a>
+    <a href="https://diagrammingai.com/" class="link-item" target="_blank">Diagramming AI - Instantly Design UML & Workflows with AI</a>
+    <a href="https://piktochart.com/" class="link-item" target="_blank">Infographic Maker - Piktochart</a>
+    <a href="https://medio.cool/" class="link-item" target="_blank">米壳AI - Medio.cool 助力企业海外视频推广</a>
+    <a href="https://ollama.com/" class="link-item" target="_blank">Ollama</a>
+    <a href="https://jitter.video/" class="link-item" target="_blank">Jitter · Fast and simple motion design tool.</a>
+    <a href="https://www.marscode.cn/home" class="link-item" target="_blank">豆包 MarsCode - 编程助手</a>
+    <a href="https://appwrite.io/" class="link-item" target="_blank">Appwrite - Build like a team of hundreds</a>
+    <a href="https://www.wondershare.com/?utm_source=admitad&tagtag_uid=Cj0KCQiAwOe8BhCCARIsAGKeD54DGB_kgRI__Ng1Q8AngygZaeXVjVCodIGFfRxHueKSDqMm0TIh_IsaAu1DEALw_wcB&gad_source=1&gclid=Cj0KCQiAwOe8BhCCARIsAGKeD54DGB_kgRI__Ng1Q8AngygZaeXVjVCodIGFfRxHueKSDqMm0TIh_IsaAu1DEALw_wcB" class="link-item" target="_blank">Wondershare Official Website: Creativity, Productivity, Utility</a>
+    <a href="https://n8n.io/" class="link-item" target="_blank">Powerful Workflow Automation Software & Tools - n8n</a>
+    <a href="https://www.magicslides.app/" class="link-item" target="_blank">AI Presentation Maker - Presentation from Topic, YouTube, PDF, URL with AI</a>
+    <a href="https://lmarena.ai/" class="link-item" target="_blank">Chatbot Arena (formerly LMSYS): Free AI Chat to Compare & Test Best AI Chatbots</a>
+    <a href="https://openui.fly.dev/ai/new" class="link-item" target="_blank">Create a new UI</a>
+    <a href="https://www.skyreels.ai/home" class="link-item" target="_blank">SkyReels</a>
+    <a href="https://pika.art/" class="link-item" target="_blank">Pika</a>
+    <a href="https://wenku.baidu.com/board" class="link-item" target="_blank">自由画布｜上传素材，精准生成</a>
+    <a href="https://dify.ai/" class="link-item" target="_blank">Dify.AI · The Innovation Engine for Generative AI Applications</a>
+    <a href="https://anythingllm.com/" class="link-item" target="_blank">AnythingLLM | The all-in-one AI application for everyone</a>
+    <a href="https://olmocr.allenai.org/" class="link-item" target="_blank">olmOCR – Open-Source OCR for Accurate Document Conversion</a>
+    <a href="https://platform.deepseek.com/usage" class="link-item" target="_blank">DeepSeek 开放平台</a>
+    <a href="https://screenshottocode.com/" class="link-item" target="_blank">Screenshot to Code</a>
+    <a href="https://logodiffusion.com/" class="link-item" target="_blank">AI Logo Maker | Logo Maker | Logo Diffusion</a>
+    <a href="https://md2card.com/zh" class="link-item" target="_blank">MD2Card - Markdown 转知识卡片工具</a>
+    <a href="https://www.rabbithole.chat/" class="link-item" target="_blank">Rabbithole</a>
+    <a href="https://same.dev/" class="link-item" target="_blank">Same Copy Web UI</a>
+  </div>
+</div>
+<div class="category" data-category="huggingface">
+  <h2>huggingface</h2>
+  <div class="links">
+    <a href="https://huggingface.co/spaces/R1ckShi/FunClip" class="link-item" target="_blank">ClipVideo - a Hugging Face Space by R1ckShi</a>
+  </div>
+</div>
+<div class="category" data-category="API">
+  <h2>API</h2>
+  <div class="links">
+    <a href="https://platform.minimaxi.com/" class="link-item" target="_blank">MiniMax-与用户共创智能</a>
+  </div>
+</div>
+<div class="category" data-category="SwanHub">
+  <h2>SwanHub</h2>
+  <div class="links">
+    <a href="https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo" class="link-item" target="_blank">演示空间 证件照AI工具 · ZeYiLin/HivisionIDPhotos</a>
+  </div>
+</div>
+<div class="category" data-category="sound">
+  <h2>sound</h2>
+  <div class="links">
+    <a href="https://www.tiangong.cn/music" class="link-item" target="_blank">天工AI音乐</a>
+    <a href="https://tianyin.music.163.com/editor/#/workspace" class="link-item" target="_blank">网易天音 - 一站式AI音乐创作工具</a>
+    <a href="https://aimusic.so/zh-CN/app" class="link-item" target="_blank">在线免费生成 AI 音乐</a>
+    <a href="https://songgenerator.io/zh-CN/app" class="link-item" target="_blank">SongGenerator.io：免费在线使用AI歌曲生成器创作音乐</a>
+    <a href="https://www.lalal.ai/zh-hans/" class="link-item" target="_blank">人声去除器和AI智能伴奏分离器 | LALAL.AI</a>
+    <a href="https://anyvoice.net/zh/ai-voice-cloning" class="link-item" target="_blank">AI声音克隆 - AnyVoice</a>
+  </div>
+</div>
+<div class="category" data-category="video">
+  <h2>video</h2>
+  <div class="links">
+    <a href="https://aibrm.com/" class="link-item" target="_blank">白日梦AI-领先的AI视频创作类AIGC创作平台</a>
+    <a href="https://klingai.kuaishou.com/" class="link-item" target="_blank">可灵 AI - 新一代 AI 创意生产力平台</a>
+    <a href="https://jimeng.jianying.com/ai-tool/home" class="link-item" target="_blank">即梦AI - 一站式AI创作平台</a>
+  </div>
+</div>
+<div class="category" data-category="AI.Chat">
+  <h2>AI.Chat</h2>
+  <div class="links">
+    <a href="https://chatgpt.com/" class="link-item" target="_blank">ChatGPT</a>
+    <a href="https://aistudio.google.com/" class="link-item" target="_blank">Google AI Studio</a>
+    <a href="https://gemini.google.com/app" class="link-item" target="_blank">Gemini</a>
+    <a href="https://grok.com/" class="link-item" target="_blank">Grok</a>
+    <a href="https://chat.deepseek.com/a/chat/s/be7dbe22-c937-4c0b-b237-6de4f634e8ed" class="link-item" target="_blank">DeepSeek - 探索未至之境</a>
+    <a href="https://tongyi.aliyun.com/" class="link-item" target="_blank">通义tongyi.ai_你的全能AI助手-通义千问</a>
+    <a href="https://kimi.moonshot.cn/" class="link-item" target="_blank">Kimi.ai - 会推理解析，能深度思考的AI助手</a>
+    <a href="https://claude.ai/" class="link-item" target="_blank">Claude</a>
+    <a href="https://www.perplexity.ai/" class="link-item" target="_blank">Perplexity</a>
+    <a href="https://xinghuo.xfyun.cn/desk?prompt=" class="link-item" target="_blank">讯飞星火大模型-AI大语言模型</a>
+    <a href="https://chatglm.cn/" class="link-item" target="_blank">智谱清言</a>
+    <a href="https://zhida.zhihu.com/" class="link-item" target="_blank">知乎直答</a>
+    <a href="https://chat.qwen.ai/" class="link-item" target="_blank">Qwen Chat</a>
+    <a href="https://yuanbao.tencent.com/" class="link-item" target="_blank">腾讯元宝 - Chat</a>
+    <a href="https://ai.eastmoney.com/chat" class="link-item" target="_blank">妙想金融大模型</a>
+  </div>
+</div>
+<div class="category" data-category="Service">
+  <h2>Service</h2>
+  <div class="links">
+    <a href="https://zeabur.com/" class="link-item" target="_blank">Zeabur</a>
+    <a href="https://vercel.com/" class="link-item" target="_blank">Vercel</a>
+    <a href="https://bewildcard.com/service" class="link-item" target="_blank">WildCard | 一分钟注册，轻松订阅海外软件服务</a>
+    <a href="https://rss.app/" class="link-item" target="_blank">RSS Feed Generator, Create RSS feeds from URL</a>
+    <a href="https://www.apple.com/shop/gift-cards" class="link-item" target="_blank">Apple Gift Card - Apple</a>
+  </div>
+</div>
+<div class="category" data-category="Office">
+  <h2>Office</h2>
+  <div class="links">
+    <a href="https://onedrive.live.com/" class="link-item" target="_blank">OneDrive</a>
+    <a href="https://www.microsoft365.com/?auth=1" class="link-item" target="_blank">主页 | Microsoft 365 Online</a>
+    <a href="https://www.bing.com/translator/?mkt=zh-CN" class="link-item" target="_blank">必应在线翻译</a>
+    <a href="https://www.google.cn/intl/zh-CN/inputtools/try/" class="link-item" target="_blank">在线试用 Google 输入工具 – Google 输入工具</a>
+    <a href="https://www.notion.so/" class="link-item" target="_blank">Notion - 主页</a>
+    <a href="https://excalidraw.com/" class="link-item" target="_blank">Excalidraw</a>
+    <a href="https://www.b12.io/" class="link-item" target="_blank">B12 | The easiest AI website builder</a>
+    <a href="https://www.boxofficemojo.com/intl/" class="link-item" target="_blank">Latest International Weekends - Box Office Mojo</a>
+    <a href="https://payloadcms.com/" class="link-item" target="_blank">Home | Payload Cloud | Payload Cloud</a>
+    <a href="https://www.qzoffice.com/" class="link-item" target="_blank">轻竹PPT - AI一键生成PPT - 海量PPT模版 - 智能PPT制作网站</a>
+    <a href="https://config.office.com/deploymentsettings" class="link-item" target="_blank">Office config  deploymentsettings</a>
+    <a href="https://www.microsoft.com/en-us/download/details.aspx?id=49117" class="link-item" target="_blank">Download Office Deployment Tool from Official Microsoft Download Center</a>
+    <a href="https://learn.microsoft.com/zh-cn/office/volume-license-activation/gvlks" class="link-item" target="_blank">用于基于 KMS 和 Active Directory 的 Office、Project 和 Visio 激活的 GVLK - Office | Microsoft Learn</a>
+  </div>
+</div>
+<div class="category" data-category="Microsoft Office">
+  <h2>Microsoft Office</h2>
+  <div class="links">
+    <a href="https://config.office.com/deploymentsettings" class="link-item" target="_blank">Office config  deploymentsettings</a>
+    <a href="https://www.microsoft.com/en-us/download/details.aspx?id=49117" class="link-item" target="_blank">Download Office Deployment Tool from Official Microsoft Download Center</a>
+    <a href="https://learn.microsoft.com/zh-cn/office/volume-license-activation/gvlks" class="link-item" target="_blank">用于基于 KMS 和 Active Directory 的 Office、Project 和 Visio 激活的 GVLK - Office | Microsoft Learn</a>
+  </div>
+</div>
+<div class="category" data-category="Search">
+  <h2>Search</h2>
+  <div class="links">
+    <a href="https://www.softpedia.com/" class="link-item" target="_blank">Softpedia</a>
+    <a href="https://patents.google.com/" class="link-item" target="_blank">Google Patents</a>
+    <a href="https://duckduckgo.com/" class="link-item" target="_blank">DuckDuckGo</a>
+    <a href="https://datong.info/ui/index.html" class="link-item" target="_blank">大同搜索</a>
+    <a href="https://www.baidu.com/" class="link-item" target="_blank">百度</a>
+  </div>
+</div>
+<div class="category" data-category="Articles">
+  <h2>Articles</h2>
+  <div class="links">
+    <a href="http://www.jinyongshuku.com/index.html" class="link-item" target="_blank">金庸网 - 最全的金庸小说资料站 金庸武侠小说全集 - 金庸书屋</a>
+  </div>
+</div>
+<div class="category" data-category="forum">
+  <h2>forum</h2>
+  <div class="links">
+    <a href="https://www.zhihu.com/" class="link-item" target="_blank">知乎</a>
+    <a href="https://www.quora.com/following" class="link-item" target="_blank">Quora</a>
+    <a href="https://www.v2ex.com/" class="link-item" target="_blank">V2EX</a>
+    <a href="https://term.ptt.cc/" class="link-item" target="_blank">ptt</a>
+    <a href="https://www.discuss.com.hk/" class="link-item" target="_blank">香港討論區</a>
+  </div>
+</div>
+<div class="category" data-category="mind">
+  <h2>mind</h2>
+  <div class="links">
+    <a href="https://markmap.js.org/" class="link-item" target="_blank">markmap mindmaster</a>
+    <a href="https://markdown.lovejade.cn/" class="link-item" target="_blank">Arya - 在线 Markdown 编辑器</a>
+    <a href="https://pandao.github.io/editor.md/index.html" class="link-item" target="_blank">Editor.md - 开源在线 Markdown 编辑器</a>
+    <a href="https://mermaid.live/" class="link-item" target="_blank">Online FlowChart & Diagrams Editor - Mermaid Live Editor</a>
+    <a href="https://www.mermaidchart.com/play" class="link-item" target="_blank">Editor | Mermaid Chart</a>
+    <a href="https://app.diagrams.net/" class="link-item" target="_blank">绘图 - draw.io</a>
+    <a href="https://www.processon.com/diagrams" class="link-item" target="_blank">ProcessOn - 我的画图</a>
+  </div>
+</div>
+<div class="category" data-category="business">
+  <h2>business</h2>
+  <div class="links">
+    <a href="https://www.feishu.cn/" class="link-item" target="_blank">飞书，AI 时代先进生产力平台，提供一站式工作协同、组织管理、业务提效工具和深入企业场景的 AI 能力，助力企业能增长，有巧降</a>
+  </div>
+</div>
+<div class="category" data-category="doc">
+  <h2>doc</h2>
+  <div class="links">
+    <a href="https://javaguide.cn/" class="link-item" target="_blank">JavaGuide试题</a>
+    <a href="http://www.cyc2018.xyz/" class="link-item" target="_blank">CS-Notes</a>
+    <a href="https://github.com/hadyang/interview" class="link-item" target="_blank">interview: Java 知识整理</a>
+    <a href="https://github.com/Snailclimb/JavaGuide" class="link-item" target="_blank">Snailclimb/JavaGuide:  Java 程序员核心知识</a>
+    <a href="https://hadyang.github.io/interview/" class="link-item" target="_blank">Introduction | Interview</a>
+    <a href="https://www.mianshiya.com/" class="link-item" target="_blank">面试鸭 - 程序员求职面试刷题神器，高频编程题目免费刷</a>
+    <a href="https://www.javacn.site/" class="link-item" target="_blank">Javaᶜⁿ 面试突击</a>
+    <a href="http://www.ibm.com/developerworks/cn/topics/" class="link-item" target="_blank">IBM developerWorks</a>
+    <a href="https://www.tutorialspoint.com/index.htm" class="link-item" target="_blank">Tutorialspoint</a>
+    <a href="http://www.oracle.com/technetwork/cn/index.html" class="link-item" target="_blank">Oracle 技术网</a>
+    <a href="https://developers.google.cn/" class="link-item" target="_blank">Google Developers</a>
+    <a href="https://segmentfault.com/" class="link-item" target="_blank">SF</a>
+    <a href="https://developer.android.com/index.html" class="link-item" target="_blank">Android Developers</a>
+    <a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" class="link-item" target="_blank">Data Structure Visualization</a>
+    <a href="https://angular.cn/" class="link-item" target="_blank">Angular</a>
+    <a href="https://cn.vuejs.org/" class="link-item" target="_blank">Vue.js</a>
+    <a href="https://www.reactjscn.com/" class="link-item" target="_blank">ReactJS</a>
+    <a href="http://www.bootcss.com/" class="link-item" target="_blank">Bootstrap中文网</a>
+    <a href="https://developer.mozilla.org/zh-CN/" class="link-item" target="_blank">MDN Web 文档</a>
+    <a href="http://projects.spring.io/spring-cloud/" class="link-item" target="_blank">Spring Cloud</a>
+    <a href="https://readthedocs.org/" class="link-item" target="_blank">Read the Docs</a>
+    <a href="https://www.apache.org/" class="link-item" target="_blank">Apache Software</a>
+    <a href="https://google.github.io/styleguide/" class="link-item" target="_blank">CodeStyleGuide</a>
+    <a href="https://legacy.gitbook.com/new" class="link-item" target="_blank">GitBook</a>
+    <a href="https://kubernetes.io/zh/" class="link-item" target="_blank">Kubernetes</a>
+    <a href="https://cloud.tencent.com/developer/devdocs" class="link-item" target="_blank">开发者手册 - 云+社区 - 腾讯云</a>
+    <a href="https://www.bookstack.cn/" class="link-item" target="_blank">书栈网 · BookStack_程序员IT互联网开源编程书籍</a>
+    <a href="https://www.britannica.com/" class="link-item" target="_blank">Encyclopedia Britannica</a>
+    <a href="https://wikisource.org/wiki/Main_Page" class="link-item" target="_blank">Wikisource-维基文库</a>
+    <a href="https://species.wikimedia.org/wiki/Main_Page" class="link-item" target="_blank">Wikispecies-维基物种</a>
+    <a href="https://www.gushiwen.org/" class="link-item" target="_blank">古诗文网</a>
+    <a href="http://dugushici.com/" class="link-item" target="_blank">【古诗词大全】 古诗词名句 古诗词、文言文翻译及赏析</a>
+    <a href="https://ctext.org/zhs" class="link-item" target="_blank">中國哲學書電子化計劃</a>
+    <a href="https://www.jpmarumaru.com/tw/index.asp" class="link-item" target="_blank">jpmarumaru</a>
+    <a href="https://dictionary.cambridge.org/zhs/" class="link-item" target="_blank">剑桥词典:解释及翻译</a>
+    <a href="https://jitenon.jp/" class="link-item" target="_blank">辞典オンライン</a>
+    <a href="https://learn.trancy.org/aitalk-center" class="link-item" target="_blank">Trancy</a>
+    <a href="https://www.grammarly.com/" class="link-item" target="_blank">Grammarly: Free Writing AI Assistance</a>
+    <a href="https://www.loecsen.com/zh" class="link-item" target="_blank">免费在线语言课程 | 50种语言</a>
+    <a href="http://www.houdask.com/#/home" class="link-item" target="_blank">司法考试_网络免费法律职业资格考试培训机构_厚大法考</a>
+    <a href="https://study.163.com/" class="link-item" target="_blank">网易云课堂 - 我的职业课堂</a>
+    <a href="https://open.163.com/" class="link-item" target="_blank">网易公开课</a>
+    <a href="https://next.xuetangx.com/" class="link-item" target="_blank">学堂在线-精品在线课程学习平台</a>
+    <a href="https://www.icourse163.org/" class="link-item" target="_blank">中国大学MOOC(慕课)_精品课程在线学习平台</a>
+    <a href="https://ocw.aca.ntu.edu.tw/ntu-ocw/" class="link-item" target="_blank">臺大開放式課程 (NTU OpenCourseWare)</a>
+    <a href="https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html" class="link-item" target="_blank">Filter - PhET Simulations</a>
+    <a href="https://jc.pep.com.cn/" class="link-item" target="_blank">中小学教材电子版</a>
+    <a href="https://www.pep.com.cn/jxzy/" class="link-item" target="_blank">人教教学资源</a>
+    <a href="https://zh.khanacademy.org/" class="link-item" target="_blank">可汗学院 | 免费在线课程, 讲解以及练习</a>
+    <a href="https://www.geogebra.org/calculator" class="link-item" target="_blank">计算器套件 - GeoGebra</a>
+    <a href="https://www.style-arena.jp/ch/" class="link-item" target="_blank">東京のストリートファッション最新情報 | スタイルアリーナ</a>
+    <a href="https://weread.qq.com/" class="link-item" target="_blank">微信读书-正版书籍小说免费阅读</a>
+    <a href="https://yuedu.163.com/" class="link-item" target="_blank">网易云阅读--图书、小说、漫画</a>
+    <a href="https://read.douban.com/#" class="link-item" target="_blank">豆瓣阅读</a>
+    <a href="https://ipaperclip.net/" class="link-item" target="_blank">start [回形针手册]</a>
+    <a href="https://data.eastmoney.com/cjsj/" class="link-item" target="_blank">财经数据 _ 数据中心 _ 东方财富网</a>
+    <a href="https://data.stats.gov.cn/search.htm" class="link-item" target="_blank">国家数据-中国国家统计局</a>
+    <a href="https://data.worldbank.org.cn/" class="link-item" target="_blank">World Bank Open Data | Data</a>
+    <a href="https://kuaixun.eastmoney.com/" class="link-item" target="_blank">全球财经快讯_东方财富网</a>
+    <a href="https://quote.eastmoney.com/center/" class="link-item" target="_blank">行情中心_行情系统_东方财富网</a>
+    <a href="https://www.google.com/finance/" class="link-item" target="_blank">Google 财经</a>
+    <a href="https://www.britannica.com/chatbot" class="link-item" target="_blank">Free Online ChatBox | Britannica</a>
+    <a href="https://openlibrary.org/" class="link-item" target="_blank">欢迎来到开放图书馆 | 开放图书馆</a>
+    <a href="https://www.cnbksy.cn/home" class="link-item" target="_blank">中国全国报刊索引</a>
+    <a href="https://www.pkulaw.com/" class="link-item" target="_blank">法律法规数据库-法律法规检索系统-北大法宝V6官网</a>
+    <a href="https://cadal.edu.cn/index/home" class="link-item" target="_blank">大学数字图书馆国际合作计划</a>
+    <a href="https://ruc-cn.libguides.com/c.php?g=968408&p=7039829" class="link-item" target="_blank">近当代文献数据库 - LibGuides at Renmin University of China</a>
+    <a href="https://aif10.eastmoney.com/pc_extendf10/choicef10.html" class="link-item" target="_blank">妙想金融数据F10</a>
+    <a href="https://www.wordproject.org/index_chinese.htm" class="link-item" target="_blank">圣经国际 - 读到的和听到的圣经在超过40种语言</a>
+    <a href="https://www.bible.com/zh-CN" class="link-item" target="_blank">在线读圣经 | Bible.com</a>
+    <a href="https://www.wordproject.org/bibles/parallel/e/chinese.htm" class="link-item" target="_blank">Chinese and English Parallel Bible</a>
+    <a href="https://bibleproject.com/Mandarin/" class="link-item" target="_blank">BibleProject Resources in Mandarin Translation</a>
+    <a href="https://app.follow.is/" class="link-item" target="_blank">Follow</a>
+  </div>
+</div>
+<div class="category" data-category="Developer">
+  <h2>Developer</h2>
+  <div class="links">
+    <a href="https://javaguide.cn/" class="link-item" target="_blank">JavaGuide试题</a>
+    <a href="http://www.cyc2018.xyz/" class="link-item" target="_blank">CS-Notes</a>
+    <a href="https://github.com/hadyang/interview" class="link-item" target="_blank">interview: Java 知识整理</a>
+    <a href="https://github.com/Snailclimb/JavaGuide" class="link-item" target="_blank">Snailclimb/JavaGuide:  Java 程序员核心知识</a>
+    <a href="https://hadyang.github.io/interview/" class="link-item" target="_blank">Introduction | Interview</a>
+    <a href="https://www.mianshiya.com/" class="link-item" target="_blank">面试鸭 - 程序员求职面试刷题神器，高频编程题目免费刷</a>
+    <a href="https://www.javacn.site/" class="link-item" target="_blank">Javaᶜⁿ 面试突击</a>
+    <a href="http://www.ibm.com/developerworks/cn/topics/" class="link-item" target="_blank">IBM developerWorks</a>
+    <a href="https://www.tutorialspoint.com/index.htm" class="link-item" target="_blank">Tutorialspoint</a>
+    <a href="http://www.oracle.com/technetwork/cn/index.html" class="link-item" target="_blank">Oracle 技术网</a>
+    <a href="https://developers.google.cn/" class="link-item" target="_blank">Google Developers</a>
+    <a href="https://segmentfault.com/" class="link-item" target="_blank">SF</a>
+    <a href="https://developer.android.com/index.html" class="link-item" target="_blank">Android Developers</a>
+    <a href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html" class="link-item" target="_blank">Data Structure Visualization</a>
+    <a href="https://angular.cn/" class="link-item" target="_blank">Angular</a>
+    <a href="https://cn.vuejs.org/" class="link-item" target="_blank">Vue.js</a>
+    <a href="https://www.reactjscn.com/" class="link-item" target="_blank">ReactJS</a>
+    <a href="http://www.bootcss.com/" class="link-item" target="_blank">Bootstrap中文网</a>
+    <a href="https://developer.mozilla.org/zh-CN/" class="link-item" target="_blank">MDN Web 文档</a>
+    <a href="http://projects.spring.io/spring-cloud/" class="link-item" target="_blank">Spring Cloud</a>
+    <a href="https://readthedocs.org/" class="link-item" target="_blank">Read the Docs</a>
+    <a href="https://www.apache.org/" class="link-item" target="_blank">Apache Software</a>
+    <a href="https://google.github.io/styleguide/" class="link-item" target="_blank">CodeStyleGuide</a>
+    <a href="https://legacy.gitbook.com/new" class="link-item" target="_blank">GitBook</a>
+    <a href="https://kubernetes.io/zh/" class="link-item" target="_blank">Kubernetes</a>
+    <a href="https://cloud.tencent.com/developer/devdocs" class="link-item" target="_blank">开发者手册 - 云+社区 - 腾讯云</a>
+    <a href="https://www.bookstack.cn/" class="link-item" target="_blank">书栈网 · BookStack_程序员IT互联网开源编程书籍</a>
+  </div>
+</div>
+<div class="category" data-category="Java">
+  <h2>Java</h2>
+  <div class="links">
+    <a href="https://javaguide.cn/" class="link-item" target="_blank">JavaGuide试题</a>
+    <a href="http://www.cyc2018.xyz/" class="link-item" target="_blank">CS-Notes</a>
+    <a href="https://github.com/hadyang/interview" class="link-item" target="_blank">interview: Java 知识整理</a>
+    <a href="https://github.com/Snailclimb/JavaGuide" class="link-item" target="_blank">Snailclimb/JavaGuide:  Java 程序员核心知识</a>
+    <a href="https://hadyang.github.io/interview/" class="link-item" target="_blank">Introduction | Interview</a>
+    <a href="https://www.mianshiya.com/" class="link-item" target="_blank">面试鸭 - 程序员求职面试刷题神器，高频编程题目免费刷</a>
+    <a href="https://www.javacn.site/" class="link-item" target="_blank">Javaᶜⁿ 面试突击</a>
+  </div>
+</div>
+<div class="category" data-category="文典">
+  <h2>文典</h2>
+  <div class="links">
+    <a href="https://www.britannica.com/" class="link-item" target="_blank">Encyclopedia Britannica</a>
+    <a href="https://wikisource.org/wiki/Main_Page" class="link-item" target="_blank">Wikisource-维基文库</a>
+    <a href="https://species.wikimedia.org/wiki/Main_Page" class="link-item" target="_blank">Wikispecies-维基物种</a>
+    <a href="https://www.gushiwen.org/" class="link-item" target="_blank">古诗文网</a>
+    <a href="http://dugushici.com/" class="link-item" target="_blank">【古诗词大全】 古诗词名句 古诗词、文言文翻译及赏析</a>
+    <a href="https://ctext.org/zhs" class="link-item" target="_blank">中國哲學書電子化計劃</a>
+  </div>
+</div>
+<div class="category" data-category="语言">
+  <h2>语言</h2>
+  <div class="links">
+    <a href="https://www.jpmarumaru.com/tw/index.asp" class="link-item" target="_blank">jpmarumaru</a>
+    <a href="https://dictionary.cambridge.org/zhs/" class="link-item" target="_blank">剑桥词典:解释及翻译</a>
+    <a href="https://jitenon.jp/" class="link-item" target="_blank">辞典オンライン</a>
+    <a href="https://learn.trancy.org/aitalk-center" class="link-item" target="_blank">Trancy</a>
+    <a href="https://www.grammarly.com/" class="link-item" target="_blank">Grammarly: Free Writing AI Assistance</a>
+    <a href="https://www.loecsen.com/zh" class="link-item" target="_blank">免费在线语言课程 | 50种语言</a>
+  </div>
+</div>
+<div class="category" data-category="课程类">
+  <h2>课程类</h2>
+  <div class="links">
+    <a href="http://www.houdask.com/#/home" class="link-item" target="_blank">司法考试_网络免费法律职业资格考试培训机构_厚大法考</a>
+    <a href="https://study.163.com/" class="link-item" target="_blank">网易云课堂 - 我的职业课堂</a>
+    <a href="https://open.163.com/" class="link-item" target="_blank">网易公开课</a>
+    <a href="https://next.xuetangx.com/" class="link-item" target="_blank">学堂在线-精品在线课程学习平台</a>
+    <a href="https://www.icourse163.org/" class="link-item" target="_blank">中国大学MOOC(慕课)_精品课程在线学习平台</a>
+    <a href="https://ocw.aca.ntu.edu.tw/ntu-ocw/" class="link-item" target="_blank">臺大開放式課程 (NTU OpenCourseWare)</a>
+    <a href="https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html" class="link-item" target="_blank">Filter - PhET Simulations</a>
+    <a href="https://jc.pep.com.cn/" class="link-item" target="_blank">中小学教材电子版</a>
+    <a href="https://www.pep.com.cn/jxzy/" class="link-item" target="_blank">人教教学资源</a>
+    <a href="https://zh.khanacademy.org/" class="link-item" target="_blank">可汗学院 | 免费在线课程, 讲解以及练习</a>
+    <a href="https://www.geogebra.org/calculator" class="link-item" target="_blank">计算器套件 - GeoGebra</a>
+  </div>
+</div>
+<div class="category" data-category="Style">
+  <h2>Style</h2>
+  <div class="links">
+    <a href="https://www.style-arena.jp/ch/" class="link-item" target="_blank">東京のストリートファッション最新情報 | スタイルアリーナ</a>
+  </div>
+</div>
+<div class="category" data-category="综合">
+  <h2>综合</h2>
+  <div class="links">
+    <a href="https://weread.qq.com/" class="link-item" target="_blank">微信读书-正版书籍小说免费阅读</a>
+    <a href="https://yuedu.163.com/" class="link-item" target="_blank">网易云阅读--图书、小说、漫画</a>
+    <a href="https://read.douban.com/#" class="link-item" target="_blank">豆瓣阅读</a>
+    <a href="https://ipaperclip.net/" class="link-item" target="_blank">start [回形针手册]</a>
+  </div>
+</div>
+<div class="category" data-category="数据">
+  <h2>数据</h2>
+  <div class="links">
+    <a href="https://data.eastmoney.com/cjsj/" class="link-item" target="_blank">财经数据 _ 数据中心 _ 东方财富网</a>
+    <a href="https://data.stats.gov.cn/search.htm" class="link-item" target="_blank">国家数据-中国国家统计局</a>
+    <a href="https://data.worldbank.org.cn/" class="link-item" target="_blank">World Bank Open Data | Data</a>
+    <a href="https://kuaixun.eastmoney.com/" class="link-item" target="_blank">全球财经快讯_东方财富网</a>
+    <a href="https://quote.eastmoney.com/center/" class="link-item" target="_blank">行情中心_行情系统_东方财富网</a>
+    <a href="https://www.google.com/finance/" class="link-item" target="_blank">Google 财经</a>
+    <a href="https://www.britannica.com/chatbot" class="link-item" target="_blank">Free Online ChatBox | Britannica</a>
+    <a href="https://openlibrary.org/" class="link-item" target="_blank">欢迎来到开放图书馆 | 开放图书馆</a>
+    <a href="https://www.cnbksy.cn/home" class="link-item" target="_blank">中国全国报刊索引</a>
+    <a href="https://www.pkulaw.com/" class="link-item" target="_blank">法律法规数据库-法律法规检索系统-北大法宝V6官网</a>
+    <a href="https://cadal.edu.cn/index/home" class="link-item" target="_blank">大学数字图书馆国际合作计划</a>
+    <a href="https://ruc-cn.libguides.com/c.php?g=968408&p=7039829" class="link-item" target="_blank">近当代文献数据库 - LibGuides at Renmin University of China</a>
+    <a href="https://aif10.eastmoney.com/pc_extendf10/choicef10.html" class="link-item" target="_blank">妙想金融数据F10</a>
+  </div>
+</div>
+<div class="category" data-category="belief">
+  <h2>belief</h2>
+  <div class="links">
+    <a href="https://www.wordproject.org/index_chinese.htm" class="link-item" target="_blank">圣经国际 - 读到的和听到的圣经在超过40种语言</a>
+    <a href="https://www.bible.com/zh-CN" class="link-item" target="_blank">在线读圣经 | Bible.com</a>
+    <a href="https://www.wordproject.org/bibles/parallel/e/chinese.htm" class="link-item" target="_blank">Chinese and English Parallel Bible</a>
+    <a href="https://bibleproject.com/Mandarin/" class="link-item" target="_blank">BibleProject Resources in Mandarin Translation</a>
+  </div>
+</div>
+<div class="category" data-category="TV">
+  <h2>TV</h2>
+  <div class="links">
+    <a href="https://www.netflix.com/" class="link-item" target="_blank">Netflix</a>
+    <a href="https://v.qq.com/" class="link-item" target="_blank">腾讯视频</a>
+    <a href="https://www.youku.com/" class="link-item" target="_blank">优酷</a>
+    <a href="https://www.iqiyi.com/" class="link-item" target="_blank">爱奇艺</a>
+    <a href="https://www.iq.com/" class="link-item" target="_blank">iQIYI 爱奇艺国际版 iQIYI | iQ.com</a>
+    <a href="https://www.mddcloud.com.cn/" class="link-item" target="_blank">埋堆堆</a>
+    <a href="https://www.mgtv.com/" class="link-item" target="_blank">芒果TV</a>
+    <a href="https://live.kankanews.com/huikan/" class="link-item" target="_blank">东方卫视</a>
+    <a href="https://www.sctv.com/watchTV" class="link-item" target="_blank">四川网络广播电视台</a>
+    <a href="https://tv.cctv.com/live/" class="link-item" target="_blank">CCTV直播</a>
+    <a href="https://www.mytvsuper.com/tc/home/" class="link-item" target="_blank">TVB - myTV SUPER</a>
+    <a href="https://www.disneyplus.com/zh-hans/home" class="link-item" target="_blank">Disney+</a>
+    <a href="https://www.hbogoasia.hk/" class="link-item" target="_blank">HBO GO</a>
+    <a href="https://ani.gamer.com.tw/" class="link-item" target="_blank">巴哈姆特動畫瘋</a>
+    <a href="https://www.bbc.co.uk/iplayer/live/bbcone" class="link-item" target="_blank">Watch BBC One TV live - BBC iPlayer</a>
+    <a href="http://epg.51zmt.top:8000/" class="link-item" target="_blank">老张的EPG Since 2019</a>
+  </div>
+</div>
+<div class="category" data-category="TV Data">
+  <h2>TV Data</h2>
+  <div class="links">
+    <a href="http://epg.51zmt.top:8000/" class="link-item" target="_blank">老张的EPG Since 2019</a>
+  </div>
+</div>
+
+  </div>
+  <script>
+    // 搜索功能：实时筛选链接（同时匹配名称和 URL）
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('keyup', function() {
+      const query = this.value.toLowerCase();
+      const linkItems = document.querySelectorAll('.link-item');
+      linkItems.forEach(item => {
+        if(item.textContent.toLowerCase().includes(query) || item.href.toLowerCase().includes(query)) {
+          item.style.display = 'inline-block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
