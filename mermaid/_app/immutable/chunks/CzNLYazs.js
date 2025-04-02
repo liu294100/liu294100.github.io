@@ -1,1 +1,0 @@
-import{J as r,b as e,A as l}from"./TulOPPd2.js";const n={xmlns:"http://www.w3.org/2000/svg","xml:space":"preserve",fill:"none",viewBox:"0 0 20 20"},t=l("circle",{cx:"10",cy:"10",r:"10",fill:"#000","fill-opacity":".1"},null,-1),o=[t];function s(c,i){return e(),r("svg",n,o)}const f={render:s};export{f as default,s as render};
