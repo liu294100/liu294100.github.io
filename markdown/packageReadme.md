@@ -94,7 +94,7 @@ nativefier --name "My Offline App" --icon "C:/Projects/mywebsite/icon.png" "file
 创建一个 `pack.bat` 文件：
 ```bat
 @echo off
-set URL=https://stackedit.io/app
+set URL=https://apollo.abcworld.cloudns.org/markdown/
 set NAME=Markdown Online Editor
 set ICON=C:/path/to/icon.png
 nativefier "%URL%" --name "%NAME%" --icon "%ICON%"
@@ -106,7 +106,7 @@ pause
 创建一个 `pack.sh` 文件：
 ```bash
 #!/bin/bash
-URL="https://stackedit.io/app"
+URL="https://apollo.abcworld.cloudns.org/markdown/"
 NAME="Markdown Online Editor"
 ICON="/path/to/icon.png"
 nativefier "$URL" --name "$NAME" --icon "$ICON"
