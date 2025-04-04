@@ -337,9 +337,32 @@ console.log(greet('World'));
                     renderMathInElement(preview, {
                         delimiters: [
                             {left: "$$", right: "$$", display: true},
-                            {left: "$", right: "$", display: false}
+                            {left: "$", right: "$", display: false},
+                            {left: "\\[", right: "\\]", display: true},
+                            {left: "\\(", right: "\\)", display: false}
                         ],
-                        throwOnError: false
+                        throwOnError: false,
+                        macros: {
+                            "\\sum": "\\sum\\limits",
+                            "\\choose": "\\binom",
+                            "\\frac": "\\frac",
+                            "\\vec": "\\vec",
+                            "\\hat": "\\hat",
+                            "\\text": "\\text",
+                            "\\partial": "\\partial",
+                            "\\int": "\\int\\limits",
+                            "\\Grac": "G\\frac"
+                        },
+                        fleqn: false,
+                        leqno: false,
+                        strict: false,
+                        trust: true,
+                        output: "html",
+                        displayMode: true,
+                        minRuleThickness: 0.05,
+                        maxSize: 10,
+                        maxExpand: 1000,
+                        strict: false
                     });
                     
                     // Re-render mermaid diagrams
@@ -356,10 +379,10 @@ console.log(greet('World'));
             editor.addEventListener('input', updatePreview);
 
             // 导出功能
-            document.querySelectorAll('.dropdown-content[data-format]').forEach(item => {
+            document.querySelectorAll('.dropdown-content a[data-format]').forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const format = e.target.dataset.format;
+                    const format = this.dataset.format;
                     const content = editor.value;
                     const previewContent = preview.innerHTML;
 
