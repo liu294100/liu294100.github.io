@@ -34,11 +34,11 @@ nativefier "https://example.com" --name "YourAppName"
 ```
 
 #### ✅ 示例
-打包 StackEdit 在线 Markdown 编辑器：
+打包 markdownEdit 在线 Markdown 编辑器：
 ```bash
-nativefier "https://stackedit.io/app" --name "Markdown Online Editor"
+nativefier "https://apollo.abcworld.cloudns.org/markdown/" --name "Markdown Online Editor"
 ```
-- 作用：将 `https://stackedit.io/app` 打包成桌面应用。
+- 作用：将 `https://apollo.abcworld.cloudns.org/markdown/` 打包成桌面应用。
 - 应用名称：`Markdown Online Editor`。
 - 输出：打包好的程序会保存在当前目录下的子文件夹中，例如 `./Markdown Online Editor-win32-x64/`。
 
@@ -116,8 +116,6 @@ nativefier "$URL" --name "$NAME" --icon "$ICON"
 ---
 
 ### 💡 Coming up
----------
----------
 ---------
 ---------
 ---------
