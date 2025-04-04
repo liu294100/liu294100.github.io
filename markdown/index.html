@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Editor</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .editor-pane, .preview-pane {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        .editor-pane {
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+        }
+        .preview-pane {
+            background-color: #ffffff;
+        }
+        #editor {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+            font-size: 14px;
+            resize: none;
+            padding: 10px;
+            line-height: 1.5;
+        }
+        .toolbar {
+            background-color: #ecf0f1;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .toolbar button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .toolbar button:hover {
+            background-color: #2980b9;
+        }
+        .toolbar select {
+            padding: 5px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 3px;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a {
+            color: #333;
+            padding: 8px 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .preview-pane img {
+            max-width: 100%;
+        }
+        .preview-pane table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        .preview-pane th, .preview-pane td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .preview-pane th {
+            background-color: #f2f2f2;
+        }
+        .preview-pane blockquote {
+            border-left: 5px solid #eee;
+            padding-left: 15px;
+            color: #666;
+        }
+        .preview-pane pre {
+            background-color: #f6f8fa;
+            padding: 15px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        .preview-pane code {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+            background-color: #f6f8fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Markdown Editor</h1>
+        <div class="header-buttons">
+            <div class="dropdown">
+                <button id="download">导出</button>
+                <div class="dropdown-content">
+                    <a href="#" data-format="markdown">Markdown (.md)</a>
+                    <a href="#" data-format="pdf">PDF (.pdf)</a>
+                    <a href="#" data-format="image">图片 (.png)</a>
+                    <a href="#" data-format="html">网页 (.html)</a>
+                </div>
+            </div>
+            <button id="copy">复制HTML</button>
+        </div>
+    </div>
+    <div class="toolbar">
+        <button id="btn-bold">Bold</button>
+        <button id="btn-italic">Italic</button>
+        <button id="btn-heading">Heading</button>
+        <button id="btn-link">Link</button>
+        <button id="btn-image">Image</button>
+        <button id="btn-code">Code</button>
+        <button id="btn-list">List</button>
+        <button id="btn-quote">Quote</button>
+        <button id="btn-hr">HR</button>
+        <button id="btn-table">Table</button>
+        <div class="dropdown">
+            <button id="btn-math">Math</button>
+            <div class="dropdown-content">
+                <a href="#" data-category="basic">基础数学</a>
+                <a href="#" data-category="calculus">微积分</a>
+                <a href="#" data-category="linearAlgebra">线性代数</a>
+                <a href="#" data-category="statistics">统计概率</a>
+                <a href="#" data-category="physics">物理公式</a>
+                <a href="#" data-category="geometry">几何公式</a>
+                <a href="#" data-category="discrete">离散数学</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button id="btn-mermaid">Mermaid</button>
+            <div class="dropdown-content">
+                <a href="#" data-type="flowchart">流程图</a>
+                <a href="#" data-type="sequence">时序图</a>
+                <a href="#" data-type="classDiagram">类图</a>
+                <a href="#" data-type="stateDiagram">状态图</a>
+                <a href="#" data-type="entityRelationship">ER图</a>
+                <a href="#" data-type="gantt">甘特图</a>
+                <a href="#" data-type="pie">饼图</a>
+                <a href="#" data-type="journey">用户旅程图</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="editor-pane">
+            <textarea id="editor" spellcheck="false" placeholder="Type your markdown here..."></textarea>
+        </div>
+        <div class="preview-pane">
+            <div id="preview"></div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Markdown Editor with math and mermaid support</p>
+    </div>
+
+    <!-- Required libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.2.4/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+
+    <!-- 导入自定义模块 -->
+    <script src="js/export-utils.js"></script>
+    <script src="js/math-templates.js"></script>
+    <script src="js/mermaid-templates.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const editor = document.getElementById('editor');
+            const preview = document.getElementById('preview');
+            const downloadBtn = document.getElementById('download');
+            const copyBtn = document.getElementById('copy');
+
+            // Initialize mermaid
+            mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+            // Set up marked with syntax highlighting
+            marked.setOptions({
+                highlight: function(code, lang) {
+                    if (lang && hljs.getLanguage(lang)) {
+                        return hljs.highlight(code, { language: lang }).value;
+                    }
+                    return hljs.highlightAuto(code).value;
+                },
+                breaks: true
+            });
+
+            // Custom renderer for math and mermaid
+            const renderer = new marked.Renderer();
+            
+            // Original code renderer
+            const originalCodeRenderer = renderer.code.bind(renderer);
+            
+            // Override code renderer to handle mermaid diagrams
+            renderer.code = function(code, language) {
+                if (language === 'mermaid') {
+                    return `<div class="mermaid">${code}</div>`;
+                } else if (language === 'math' || language === 'tex') {
+                    return `<div class="math">${code}</div>`;
+                }
+                return originalCodeRenderer(code, language);
+            };
+
+            // Set the custom renderer
+            marked.use({ renderer });
+
+            // Sample markdown content
+            const sampleMarkdown = `# Markdown Editor
+
+## Features
+- **Bold** and *Italic* text
+- [Links](https://example.com)
+- Images
+- Code blocks with syntax highlighting
+- Math formulas
+- Mermaid diagrams
+
+## Math Example
+$E = mc^2$
+
+Inline math: $\\sqrt{x^2 + y^2}$
+
+Block math:
+\`\`\`math
+\\frac{d}{dx}(\\int_{a}^{x} f(t) dt) = f(x)
+\`\`\`
+
+## Mermaid Example
+\`\`\`mermaid
+graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> B
+\`\`\`
+
+## Code Example
+\`\`\`javascript
+function greet(name) {
+    return \`Hello, \${name}!\`;
+}
+console.log(greet('World'));
+\`\`\`
+
+## Table Example
+| Name | Age | City |
+|------|-----|------|
+| John | 25  | NY   |
+| Jane | 30  | SF   |
+`;
+
+            // Set initial content
+            editor.value = sampleMarkdown;
+
+            // Update preview function
+            function updatePreview() {
+                const markdown = editor.value;
+                try {
+                    preview.innerHTML = marked.parse(markdown);
+                    
+                    // Process math expressions
+                    renderMathInElement(preview, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ],
+                        throwOnError: false
+                    });
+                    
+                    // Re-render mermaid diagrams
+                    mermaid.init({}, '.mermaid');
+                } catch (e) {
+                    console.error('Error rendering markdown:', e);
+                }
+            }
+
+            // Initial render
+            updatePreview();
+
+            // Update preview on input
+            editor.addEventListener('input', updatePreview);
+
+            // 导出功能
+            document.querySelectorAll('.dropdown-content[data-format]').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const format = e.target.dataset.format;
+                    const content = editor.value;
+                    const previewContent = preview.innerHTML;
+
+                    switch(format) {
+                        case 'markdown':
+                            exportUtils.exportMarkdown(content);
+                            break;
+                        case 'pdf':
+                            exportUtils.exportPDF(preview);
+                            break;
+                        case 'image':
+                            exportUtils.exportImage(preview);
+                            break;
+                        case 'html':
+                            exportUtils.exportHTML(previewContent);
+                            break;
+                    }
+                });
+            });
+
+            // Copy HTML
+            copyBtn.addEventListener('click', function() {
+                const htmlContent = preview.innerHTML;
+                navigator.clipboard.writeText(htmlContent)
+                    .then(() => alert('HTML已复制到剪贴板！'))
+                    .catch(err => console.error('复制HTML失败:', err));
+            });
+
+            // 数学公式模板选择
+            document.querySelectorAll('#btn-math + .dropdown-content a').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = e.target.dataset.category;
+                    const templates = mathTemplates[category];
+                    const template = Object.values(templates)[Math.floor(Math.random() * Object.keys(templates).length)];
+                    insertText('```math\n', '\n```', template);
+                });
+            });
+
+            // Mermaid图表模板选择
+            document.querySelectorAll('#btn-mermaid + .dropdown-content a').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = e.target.dataset.type;
+                    const templates = mermaidTemplates[type];
+                    const template = Object.values(templates)[Math.floor(Math.random() * Object.keys(templates).length)];
+                    insertText('```mermaid\n', '\n```', template);
+                });
+            });
+
+            // Toolbar buttons functionality
+            document.getElementById('btn-bold').addEventListener('click', function() {
+                insertText('**', '**', 'bold text');
+            });
+
+            document.getElementById('btn-italic').addEventListener('click', function() {
+                insertText('*', '*', 'italic text');
+            });
+
+            document.getElementById('btn-heading').addEventListener('click', function() {
+                insertText('## ', '', 'Heading');
+            });
+
+            document.getElementById('btn-link').addEventListener('click', function() {
+                insertText('[', '](url)', 'link text');
+            });
+
+            document.getElementById('btn-image').addEventListener('click', function() {
+                insertText('![', '](image-url)', 'alt text');
+            });
+
+            document.getElementById('btn-code').addEventListener('click', function() {
+                insertText('```\n', '\n```', 'code here');
+            });
+
+            document.getElementById('btn-list').addEventListener('click', function() {
+                insertText('- ', '', 'List item');
+            });
+
+            document.getElementById('btn-quote').addEventListener('click', function() {
+                insertText('> ', '', 'Quote');
+            });
+
+            document.getElementById('btn-hr').addEventListener('click', function() {
+                insertText('---\n', '', '');
+            });
+
+            document.getElementById('btn-table').addEventListener('click', function() {
+                insertText('', '', '| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |');
+            });
+
+            document.getElementById('btn-math').addEventListener('click', function() {
+                insertText('```math\n', '\n```', '\\frac{d}{dx}(\\int_{a}^{x} f(t) dt) = f(x)');
+            });
+
+            document.getElementById('btn-mermaid').addEventListener('click', function() {
+                insertText('```mermaid\n', '\n```', 'graph TD\n    A[Start] --> B{Decision}\n    B -->|Yes| C[Result]\n    B -->|No| D[Alternative]');
+            });
+
+            // Helper function to insert text at cursor position
+            function insertText(before, after, defaultText) {
+                const start = editor.selectionStart;
+                const end = editor.selectionEnd;
+                const selectedText = editor.value.substring(start, end);
+                const replacement = before + (selectedText || defaultText) + after;
+                editor.value = editor.value.substring(0, start) + replacement + editor.value.substring(end);
+                editor.focus();
+                editor.selectionStart = start + before.length;
+                editor.selectionEnd = start + before.length + (selectedText || defaultText).length;
+                updatePreview();
+            }
+        });
+    </script>
+</body>
+</html>
