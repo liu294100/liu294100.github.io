@@ -1,371 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown Editor</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f5f5;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 {
-            font-size: 1.5rem;
-        }
-        .container {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-        .editor-pane, .preview-pane {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        .editor-pane {
-            background-color: #ffffff;
-            border-right: 1px solid #ddd;
-        }
-        .preview-pane {
-            background-color: #ffffff;
-        }
-        #editor {
-            width: 100%;
-            height: 100%;
-            border: none;
-            outline: none;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-            font-size: 14px;
-            resize: none;
-            padding: 10px;
-            line-height: 1.5;
-        }
-        .toolbar {
-            background-color: #ecf0f1;
-            padding: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-        .toolbar button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .toolbar button:hover {
-            background-color: #2980b9;
-        }
-        .toolbar select {
-            padding: 5px;
-        }
-        .preview-pane img {
-            max-width: 100%;
-        }
-        .preview-pane table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 15px 0;
-        }
-        .preview-pane th, .preview-pane td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .preview-pane th {
-            background-color: #f2f2f2;
-        }
-        .preview-pane blockquote {
-            border-left: 5px solid #eee;
-            padding-left: 15px;
-            color: #666;
-        }
-        .preview-pane pre {
-            background-color: #f6f8fa;
-            padding: 15px;
-            border-radius: 3px;
-            overflow-x: auto;
-        }
-        .preview-pane code {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-            background-color: #f6f8fa;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
-        .footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 0.8rem;
-        }
-    </style>
+    <title>高级 Markdown 编辑器</title>
+
+        <!-- Font Awesome CSS (for icons) -->
+        <link rel="stylesheet" href="lib/css/all.min.css" />
+
+        <!-- CodeMirror CSS -->
+        <link rel="stylesheet" href="lib/css/codemirror.min.css" />
+        <link rel="stylesheet" href="lib/css/material-darker.min.css" />
+
+        <!-- KaTeX CSS -->
+        <link rel="stylesheet" href="lib/css/katex.min.css" >
+
+        <!-- highlight.js CSS (GitHub theme) -->
+        <link rel="stylesheet" href="lib/css/github.min.css" />
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Markdown Editor</h1>
-        <div>
-            <button id="download">Download</button>
-            <button id="copy">Copy HTML</button>
+    <header class="main-header">
+        <div class="top-bar">
+            <input type="text" id="doc-title" placeholder="输入文档标题...">
+            <div class="dropdown-container cloud-save">
+                <button id="save-export-button" class="icon-button" title="保存与导出">
+                    <i class="fas fa-cloud-arrow-down"></i>
+                </button>
+                <div class="dropdown-menu export-menu">
+                    <a href="#" id="export-png-menu"><i class="fa-regular fa-image fa-fw"></i> 导出图片</a>
+                    <a href="#" id="export-md-menu"><i class="fa-regular fa-file-code fa-fw"></i> 导出源文件</a>
+                    <a href="#" id="export-pdf-menu"><i class="fa-regular fa-file-pdf fa-fw"></i> 导出PDF文件</a>
+                    <a href="#" id="export-html-menu"><i class="fa-brands fa-html5 fa-fw"></i> 导出HTML文件</a>
+                </div>
+            </div>
+        </div>
+        <div class="main-toolbar">
+            <div class="toolbar-group format-buttons">
+                <button class="icon-button" id="btn-bold" title="加粗 (Ctrl+B)"><i class="fas fa-bold"></i></button>
+                <button class="icon-button" id="btn-italic" title="斜体 (Ctrl+I)"><i class="fas fa-italic"></i></button>
+                <button class="icon-button" id="btn-strikethrough" title="删除线"><i class="fas fa-strikethrough"></i></button>
+                <button class="icon-button" id="btn-link" title="链接 (Ctrl+L)"><i class="fas fa-link"></i></button>
+                <button class="icon-button" id="btn-quote" title="引用"><i class="fas fa-quote-left"></i></button>
+                <button class="icon-button" id="btn-code" title="行内代码"><i class="fas fa-code"></i></button>
+                <button class="icon-button" id="btn-code-block" title="代码块"><i class="fas fa-file-code"></i></button>
+                <button class="icon-button" id="btn-ul" title="无序列表"><i class="fas fa-list-ul"></i></button>
+                <button class="icon-button" id="btn-ol" title="有序列表"><i class="fas fa-list-ol"></i></button>
+                <button class="icon-button" id="btn-table" title="表格"><i class="fas fa-table"></i></button>
+
+                <!-- Formula Dropdown -->
+                <div class="dropdown-container formula-button">
+                    <button class="icon-button" title="插入公式">
+                        <i class="fa fa-calculator"></i>
+                      
+                    </button>
+                    <div class="dropdown-menu formula-menu">
+                        <a href="#" id="insert-inline-formula"><i class="fa-solid fa-calculator fa-fw"></i> 行内公式</a>
+                        <a href="#" id="insert-block-formula"><i class="fa-solid fa-calculator fa-fw"></i> 块级公式</a>
+                    </div>
+                </div>
+
+                <!-- Mermaid Dropdown -->
+                <div class="dropdown-container mermaid-button">
+                    <button class="icon-button" title="插入图表">
+                        <i class="fas fa-project-diagram"></i>
+                    </button>
+                    <div class="dropdown-menu mermaid-menu">
+                        <a href="#" data-mermaid-type="graph">流程图 (graph)</a>
+                        <a href="#" data-mermaid-type="sequenceDiagram">时序图 (sequence)</a>
+                        <a href="#" data-mermaid-type="classDiagram">类图 (class)</a>
+                        <a href="#" data-mermaid-type="stateDiagram">状态图 (state)</a>
+                        <a href="#" data-mermaid-type="erDiagram">关系图 (ER)</a>
+                        <a href="#" data-mermaid-type="journey">旅程图 (journey)</a>
+                        <a href="#" data-mermaid-type="gantt">甘特图 (gantt)</a>
+                        <a href="#" data-mermaid-type="pie">饼状图 (pie)</a>
+                        <a href="#" data-mermaid-type="mindmap">思维导图 (mindmap)</a>
+                        <a href="#" data-mermaid-type="timeline">时间轴 (timeline)</a>
+                    </div>
+                </div>
+            </div>
+            <div class="toolbar-group control-buttons">
+                <button class="icon-button" id="btn-toc" title="目录"><i class="fas fa-list"></i></button>
+                <button class="icon-button" id="btn-help" title="帮助 (未实现)"><i class="fas fa-question-circle"></i></button>
+                <button class="icon-button" id="btn-toggle-layout" title="切换布局"><i class="fas fa-columns"></i></button>
+                <button class="icon-button" id="btn-preview-only" title="仅预览区"><i class="fas fa-desktop"></i></button>
+                <button class="icon-button" id="btn-fullscreen" title="全屏"><i class="fas fa-expand"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="editor-container">
+        <div id="editor-pane" class="editor-pane">
+            <textarea id="editor"></textarea>
+        </div>
+        <div id="preview" class="preview-pane markdown-body">
+            <!-- Preview content will be generated here -->
         </div>
     </div>
-    <div class="toolbar">
-        <button id="btn-bold">Bold</button>
-        <button id="btn-italic">Italic</button>
-        <button id="btn-heading">Heading</button>
-        <button id="btn-link">Link</button>
-        <button id="btn-image">Image</button>
-        <button id="btn-code">Code</button>
-        <button id="btn-list">List</button>
-        <button id="btn-quote">Quote</button>
-        <button id="btn-hr">HR</button>
-        <button id="btn-table">Table</button>
-        <button id="btn-math">Math</button>
-        <button id="btn-mermaid">Mermaid</button>
-    </div>
-    <div class="container">
-        <div class="editor-pane">
-            <textarea id="editor" spellcheck="false" placeholder="Type your markdown here..."></textarea>
-        </div>
-        <div class="preview-pane">
-            <div id="preview"></div>
+
+     <!-- TOC Modal Structure (Initially Hidden) -->
+    <div id="toc-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close-button">×</span>
+            <h2>目录</h2>
+            <div id="toc-list-container">
+                <!-- TOC links will be inserted here -->
+            </div>
         </div>
     </div>
-    <div class="footer">
-        <p>Markdown Editor with math and mermaid support</p>
-    </div>
+    <!-- End TOC Modal -->
 
-    <!-- Required libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.2.4/mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const editor = document.getElementById('editor');
-            const preview = document.getElementById('preview');
-            const downloadBtn = document.getElementById('download');
-            const copyBtn = document.getElementById('copy');
+    <!-- Library Scripts -->
+    <script src="lib/js/codemirror.min.js"></script>
+    <script src="lib/js/markdown.min.js"></script>
+    <script src="lib/js/markdown-it.min.js"></script>
+    <script defer src="lib/js/katex.min.js"></script> <!-- Note: defer is usually fine here -->
+    <script src="lib/js/mermaid.min.js"></script>
+    <script src="lib/js/highlight.min.js"></script>
+    <script src="lib/js/html2canvas.min.js"></script>
+    <script src="lib/js/jspdf.umd.min.js"></script>
 
-            // Initialize mermaid
-            mermaid.initialize({ startOnLoad: true, theme: 'default' });
-
-            // Set up marked with syntax highlighting
-            marked.setOptions({
-                highlight: function(code, lang) {
-                    if (lang && hljs.getLanguage(lang)) {
-                        return hljs.highlight(code, { language: lang }).value;
-                    }
-                    return hljs.highlightAuto(code).value;
-                },
-                breaks: true
-            });
-
-            // Custom renderer for math and mermaid
-            const renderer = new marked.Renderer();
-            
-            // Original code renderer
-            const originalCodeRenderer = renderer.code.bind(renderer);
-            
-            // Override code renderer to handle mermaid diagrams
-            renderer.code = function(code, language) {
-                if (language === 'mermaid') {
-                    return `<div class="mermaid">${code}</div>`;
-                } else if (language === 'math' || language === 'tex') {
-                    return `<div class="math">${code}</div>`;
-                }
-                return originalCodeRenderer(code, language);
-            };
-
-            // Set the custom renderer
-            marked.use({ renderer });
-
-            // Sample markdown content
-            const sampleMarkdown = `# Markdown Editor
-
-## Features
-- **Bold** and *Italic* text
-- [Links](https://example.com)
-- Images
-- Code blocks with syntax highlighting
-- Math formulas
-- Mermaid diagrams
-
-## Math Example
-$E = mc^2$
-
-Inline math: $\\sqrt{x^2 + y^2}$
-
-Block math:
-\`\`\`math
-\\frac{d}{dx}(\\int_{a}^{x} f(t) dt) = f(x)
-\`\`\`
-
-## Mermaid Example
-\`\`\`mermaid
-graph TD
-    A[Start] --> B{Is it working?}
-    B -->|Yes| C[Great!]
-    B -->|No| D[Debug]
-    D --> B
-\`\`\`
-
-## Code Example
-\`\`\`javascript
-function greet(name) {
-    return \`Hello, \${name}!\`;
-}
-console.log(greet('World'));
-\`\`\`
-
-## Table Example
-| Name | Age | City |
-|------|-----|------|
-| John | 25  | NY   |
-| Jane | 30  | SF   |
-`;
-
-            // Set initial content
-            editor.value = sampleMarkdown;
-
-            // Update preview function
-            function updatePreview() {
-                const markdown = editor.value;
-                try {
-                    preview.innerHTML = marked.parse(markdown);
-                    
-                    // Process math expressions
-                    renderMathInElement(preview, {
-                        delimiters: [
-                            {left: "$$", right: "$$", display: true},
-                            {left: "$", right: "$", display: false}
-                        ],
-                        throwOnError: false
-                    });
-                    
-                    // Re-render mermaid diagrams
-                    mermaid.init({}, '.mermaid');
-                } catch (e) {
-                    console.error('Error rendering markdown:', e);
-                }
-            }
-
-            // Initial render
-            updatePreview();
-
-            // Update preview on input
-            editor.addEventListener('input', updatePreview);
-
-            // Download markdown file
-            downloadBtn.addEventListener('click', function() {
-                const text = editor.value;
-                const blob = new Blob([text], { type: 'text/markdown' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'document.md';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
-
-            // Copy HTML
-            copyBtn.addEventListener('click', function() {
-                const htmlContent = preview.innerHTML;
-                navigator.clipboard.writeText(htmlContent)
-                    .then(() => alert('HTML copied to clipboard!'))
-                    .catch(err => console.error('Failed to copy HTML:', err));
-            });
-
-            // Toolbar buttons functionality
-            document.getElementById('btn-bold').addEventListener('click', function() {
-                insertText('**', '**', 'bold text');
-            });
-
-            document.getElementById('btn-italic').addEventListener('click', function() {
-                insertText('*', '*', 'italic text');
-            });
-
-            document.getElementById('btn-heading').addEventListener('click', function() {
-                insertText('## ', '', 'Heading');
-            });
-
-            document.getElementById('btn-link').addEventListener('click', function() {
-                insertText('[', '](url)', 'link text');
-            });
-
-            document.getElementById('btn-image').addEventListener('click', function() {
-                insertText('![', '](image-url)', 'alt text');
-            });
-
-            document.getElementById('btn-code').addEventListener('click', function() {
-                insertText('```\n', '\n```', 'code here');
-            });
-
-            document.getElementById('btn-list').addEventListener('click', function() {
-                insertText('- ', '', 'List item');
-            });
-
-            document.getElementById('btn-quote').addEventListener('click', function() {
-                insertText('> ', '', 'Quote');
-            });
-
-            document.getElementById('btn-hr').addEventListener('click', function() {
-                insertText('---\n', '', '');
-            });
-
-            document.getElementById('btn-table').addEventListener('click', function() {
-                insertText('', '', '| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |');
-            });
-
-            document.getElementById('btn-math').addEventListener('click', function() {
-                insertText('```math\n', '\n```', '\\frac{d}{dx}(\\int_{a}^{x} f(t) dt) = f(x)');
-            });
-
-            document.getElementById('btn-mermaid').addEventListener('click', function() {
-                insertText('```mermaid\n', '\n```', 'graph TD\n    A[Start] --> B{Decision}\n    B -->|Yes| C[Result]\n    B -->|No| D[Alternative]');
-            });
-
-            // Helper function to insert text at cursor position
-            function insertText(before, after, defaultText) {
-                const start = editor.selectionStart;
-                const end = editor.selectionEnd;
-                const selectedText = editor.value.substring(start, end);
-                const replacement = before + (selectedText || defaultText) + after;
-                editor.value = editor.value.substring(0, start) + replacement + editor.value.substring(end);
-                editor.focus();
-                editor.selectionStart = start + before.length;
-                editor.selectionEnd = start + before.length + (selectedText || defaultText).length;
-                updatePreview();
-            }
-        });
-    </script>
+    <!-- Custom Script -->
+    <script src="js/script.js"></script>
 </body>
 </html>
