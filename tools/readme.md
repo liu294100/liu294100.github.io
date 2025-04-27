@@ -5,4 +5,6 @@ pip install python-pptx Pillow
 
 remarkd：
 "E:\Program Files\Python\Python313\python.exe" -m pip install python-pptx Pillow pyinstaller
-"E:\Program Files\Python\Python313\Scripts\pyinstaller.exe" --onefile --windowed --name SlidesRemoveBgCompressor start2.py
+
+
+"E:\Program Files\Python\Python313\Scripts\pyinstaller.exe" --onefile --windowed --name AdvancedSlidesUtilities run.py
