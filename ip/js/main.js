@@ -604,15 +604,34 @@ function getIPFromIPIP() {
         .then(response => response.text())
         .then(data => {
             // 解析HTML响应获取IP和位置信息
-            const ipMatch = data.match(/当前 IP：([\d\.]+)/);
-            const locationMatch = data.match(/来自于：(.+?)(?=\s*<|$)/);
+            const ipMatch = data.match(/当前 IP：([\d\.]+)/) || data.match(/([\d\.]+)/);
+            // 优化位置信息的正则表达式，支持多种格式
+            const locationMatch = data.match(/来自于：([^<\n\r]+)/) || 
+                                 data.match(/来自于：(.+?)(?=\s*<)/) || 
+                                 data.match(/地址：([^<\n\r]+)/) || 
+                                 data.match(/地址：(.+?)(?=\s*<)/) ||
+                                 data.match(/归属地：([^<\n\r]+)/);
             
             if (ipMatch) {
                 const ip = ipMatch[1];
-                const location = locationMatch ? locationMatch[1].trim() : '获取失败';
+                let location = '获取失败';
+                if (locationMatch) {
+                    // 清理位置信息，移除多余的空格和特殊字符
+                    location = locationMatch[1]
+                        .replace(/\s+/g, ' ')  // 将多个空格替换为单个空格
+                        .replace(/[\t\n\r]/g, '')  // 移除制表符和换行符
+                        .trim();
+                    if (!location) location = '获取失败';
+                }
                 updateIPInfo('ipip', ip, location);
             } else {
-                throw new Error('无法解析IPIP.net响应');
+                // 如果无法解析但有响应数据，尝试提取任何IP地址
+                const anyIpMatch = data.match(/([\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3})/);
+                if (anyIpMatch) {
+                    updateIPInfo('ipip', anyIpMatch[1], '解析部分成功');
+                } else {
+                    throw new Error('无法解析IPIP.net响应');
+                }
             }
         })
         .catch(error => {
@@ -645,15 +664,21 @@ function getIPFromIP138() {
         .then(response => response.text())
         .then(data => {
             // 解析HTML响应获取IP和位置信息
-            const ipMatch = data.match(/您的IP地址是：\[?([\d\.]+)\]?/);
-            const locationMatch = data.match(/来自：(.+?)(?=\s*<|$)/);
+            const ipMatch = data.match(/您的IP地址是：\[?([\d\.]+)\]?/) || data.match(/IP地址[：:][\s]*([\d\.]+)/) || data.match(/([\d\.]+)/);
+            const locationMatch = data.match(/来自：(.+?)(?=\s*<|$)/) || data.match(/地址[：:](.+?)(?=\s*<|$)/);
             
             if (ipMatch) {
                 const ip = ipMatch[1];
                 const location = locationMatch ? locationMatch[1].trim() : '获取失败';
                 updateIPInfo('ip138', ip, location);
             } else {
-                throw new Error('无法解析IP138响应');
+                // 如果无法解析但有响应数据，尝试提取任何IP地址
+                const anyIpMatch = data.match(/([\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3})/);
+                if (anyIpMatch) {
+                    updateIPInfo('ip138', anyIpMatch[1], '解析部分成功');
+                } else {
+                    throw new Error('无法解析IP138响应');
+                }
             }
         })
         .catch(error => {
@@ -692,15 +717,21 @@ function getIPFromIPChaxun() {
         .then(response => response.text())
         .then(data => {
             // 解析HTML响应获取IP和位置信息
-            const ipMatch = data.match(/您的IP地址是：([\d\.]+)/) || data.match(/IP地址：([\d\.]+)/);
-            const locationMatch = data.match(/来自：(.+?)(?=\s*<|$)/) || data.match(/归属地：(.+?)(?=\s*<|$)/);
+            const ipMatch = data.match(/您的IP地址是：([\d\.]+)/) || data.match(/IP地址[：:]([\d\.]+)/) || data.match(/([\d\.]+)/);
+            const locationMatch = data.match(/来自：(.+?)(?=\s*<|$)/) || data.match(/归属地[：:](.+?)(?=\s*<|$)/) || data.match(/地址[：:](.+?)(?=\s*<|$)/);
             
             if (ipMatch) {
                 const ip = ipMatch[1];
                 const location = locationMatch ? locationMatch[1].trim() : '获取失败';
                 updateIPInfo('ipchaxun', ip, location);
             } else {
-                throw new Error('无法解析IPChaxun响应');
+                // 如果无法解析但有响应数据，尝试提取任何IP地址
+                const anyIpMatch = data.match(/([\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3})/);
+                if (anyIpMatch) {
+                    updateIPInfo('ipchaxun', anyIpMatch[1], '解析部分成功');
+                } else {
+                    throw new Error('无法解析IPChaxun响应');
+                }
             }
         })
         .catch(error => {
@@ -834,24 +865,46 @@ function getIPFromSukkaIPDB() {
             if (data && data.ip) {
                 const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.organization || data.isp || ''}`;
                 updateIPInfo('sukka', data.ip, location.trim() || '获取失败');
+            } else if (data && typeof data === 'object') {
+                // 尝试从其他可能的字段提取IP
+                const possibleIp = data.query || data.clientIp || data.yourIp;
+                if (possibleIp && /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(possibleIp)) {
+                    const location = `${data.country || data.countryName || ''} ${data.region || data.regionName || ''} ${data.city || data.cityName || ''} ${data.org || data.isp || data.as || ''}`;
+                    updateIPInfo('sukka', possibleIp, location.trim() || '解析部分成功');
+                } else {
+                    throw new Error('无法解析Sukka IPDB响应');
+                }
             } else {
                 throw new Error('无法解析Sukka IPDB响应');
             }
         })
         .catch(error => {
-            // 备选方案：使用其他IP查询服务
+            // 备选方案1：使用ipwho.is
             fetch('https://ipwho.is/', { mode: 'cors' })
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.ip) {
-                        const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.connection?.isp || ''}`;
+                        const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.connection?.isp || data.connection?.org || ''}`;
                         updateIPInfo('sukka', data.ip, location.trim() || '获取失败');
                     } else {
-                        updateIPInfo('sukka', '获取失败', '获取失败');
+                        throw new Error('备选方案1失败');
                     }
                 })
                 .catch(err => {
-                    updateIPInfo('sukka', '获取失败', '获取失败');
+                    // 备选方案2：使用ip-api.com
+                    fetch('http://ip-api.com/json/', { mode: 'cors' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.query) {
+                                const location = `${data.country || ''} ${data.regionName || ''} ${data.city || ''} ${data.isp || data.org || ''}`;
+                                updateIPInfo('sukka', data.query, location.trim() || '获取失败');
+                            } else {
+                                updateIPInfo('sukka', '获取失败', '获取失败');
+                            }
+                        })
+                        .catch(finalErr => {
+                            updateIPInfo('sukka', '获取失败', '获取失败');
+                        });
                 });
         });
 }
