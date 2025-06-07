@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP 地址查询 | 查询本机IP地址及归属地 | 查看DNS出口IP</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标题区域 -->
+        <div class="header-section">
+            <div class="section-title">IP 地址查询</div>
+            <div class="section-title">CDN 命中节点测试</div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- IP地址查询区域 -->
+            <div class="ip-query-section">
+                <table class="ip-table">
+                    <tbody>
+                        <!-- 国内IP信息 -->
+                        <tr>
+                            <td class="source-type">国内</td>
+                            <td class="api-source">IPIP.net</td>
+                            <td class="ip-address" id="ipip-ip">---.---.---.---</td>
+                            <td class="location" id="ipip-location">获取中...</td>
+                        </tr>
+                        <tr>
+                            <td class="source-type">国内</td>
+                            <td class="api-source">IP138.com</td>
+                            <td class="ip-address" id="ip138-ip">---.---.---.---</td>
+                            <td class="location" id="ip138-location">获取中...</td>
+                        </tr>
+                        <tr>
+                            <td class="source-type">国内</td>
+                            <td class="api-source">ipchaxun.com</td>
+                            <td class="ip-address" id="ipchaxun-ip">---.---.---.---</td>
+                            <td class="location" id="ipchaxun-location">获取中...</td>
+                        </tr>
+                        <tr>
+                            <td class="source-type">国内</td>
+                            <td class="api-source">speedtest.cn</td>
+                            <td class="ip-address" id="speedtest-ip">---.---.---.---</td>
+                            <td class="location" id="speedtest-location">获取中...</td>
+                        </tr>
+                        
+                        <!-- 国外IP信息 -->
+                        <tr>
+                            <td class="source-type">国外</td>
+                            <td class="api-source">IP.SB</td>
+                            <td class="ip-address" id="ipsb-ip">---.---.---.---</td>
+                            <td class="location" id="ipsb-location">获取中...</td>
+                        </tr>
+                        <tr>
+                            <td class="source-type">国外</td>
+                            <td class="api-source">ip-api.com</td>
+                            <td class="ip-address" id="ipapi-ip">---.---.---.---</td>
+                            <td class="location" id="ipapi-location">获取中...</td>
+                        </tr>
+                        <tr>
+                            <td class="source-type">国外</td>
+                            <td class="api-source">Sukka IPDB</td>
+                            <td class="ip-address" id="sukka-ip">---.---.---.---</td>
+                            <td class="location" id="sukka-location">获取中...</td>
+                        </tr>
+                        <tr>
+                            <td class="source-type">国外</td>
+                            <td class="api-source">IPinfo.io</td>
+                            <td class="ip-address" id="ipinfo-ip">---.---.---.---</td>
+                            <td class="location" id="ipinfo-location">获取中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- 切换开关 -->
+                <div class="toggle-options">
+                    <label class="toggle">
+                        <input type="checkbox" id="hide-ip">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-text">隐藏 IP</span>
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" id="hide-domestic-location">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-text">隐藏国内地理位置</span>
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" id="hide-all-location">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-text">隐藏所有地理位置</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- CDN命中节点测试区域 -->
+            <div class="cdn-test-section">
+                <div class="cdn-grid">
+                    <!-- Cloudflare -->
+                    <div class="cdn-card" id="cloudflare">
+                        <div class="cdn-logo">
+                            <img src="img/cloudflare.png" alt="Cloudflare">
+                        </div>
+                        <div class="cdn-name">Cloudflare</div>
+                        <div class="cdn-node" id="cloudflare-node">获取中...</div>
+                    </div>
+                    
+                    <!-- Fastly -->
+                    <div class="cdn-card" id="fastly">
+                        <div class="cdn-logo">
+                            <img src="img/fastly.png" alt="Fastly">
+                        </div>
+                        <div class="cdn-name">Fastly</div>
+                        <div class="cdn-node" id="fastly-node">获取中...</div>
+                    </div>
+                    
+                    <!-- Google -->
+                    <div class="cdn-card" id="google">
+                        <div class="cdn-logo">
+                            <img src="img/google.png" alt="Google">
+                        </div>
+                        <div class="cdn-name">Google Cache</div>
+                        <div class="cdn-node" id="google-node">获取中...</div>
+                    </div>
+                    
+                    <!-- jsDelivr -->
+                    <div class="cdn-card" id="jsdelivr">
+                        <div class="cdn-logo">
+                            <img src="img/jsdelivr.png" alt="jsDelivr">
+                        </div>
+                        <div class="cdn-name">jsDelivr</div>
+                        <div class="cdn-node" id="jsdelivr-node">获取中...</div>
+                    </div>
+                    
+                    <!-- AWS CloudFront -->
+                    <div class="cdn-card" id="cloudfront">
+                        <div class="cdn-logo">
+                            <img src="img/aws.png" alt="AWS CloudFront">
+                        </div>
+                        <div class="cdn-name">AWS CloudFront</div>
+                        <div class="cdn-node" id="cloudfront-node">获取中...</div>
+                    </div>
+                    
+                    <!-- Bunny Standard -->
+                    <div class="cdn-card" id="bunny-standard">
+                        <div class="cdn-logo">
+                            <img src="img/bunny.png" alt="Bunny Standard">
+                        </div>
+                        <div class="cdn-name">Bunny Standard</div>
+                        <div class="cdn-node" id="bunny-standard-node">获取中...</div>
+                    </div>
+                    
+                    <!-- Bunny Volume -->
+                    <div class="cdn-card" id="bunny-volume">
+                        <div class="cdn-logo">
+                            <img src="img/bunny.png" alt="Bunny Volume">
+                        </div>
+                        <div class="cdn-name">Bunny Volume</div>
+                        <div class="cdn-node" id="bunny-volume-node">获取中...</div>
+                    </div>
+                    
+                    <!-- CDN77 -->
+                    <div class="cdn-card" id="cdn77">
+                        <div class="cdn-logo">
+                            <img src="img/cdn77.png" alt="CDN77">
+                        </div>
+                        <div class="cdn-name">CDN77</div>
+                        <div class="cdn-node" id="cdn77-node">获取中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 网络连通性检查区域 -->
+        <div class="section">
+            <div class="section-title">网络连通性检查</div>
+            <div class="connectivity-grid">
+                <!-- 百度 -->
+                <div class="connectivity-card">
+                    <div class="website-name">百度搜索</div>
+                    <div class="website-type">国内网站</div>
+                    <div class="response-time" id="baidu-time">获取中...</div>
+                </div>
+                
+                <!-- 网易云音乐 -->
+                <div class="connectivity-card">
+                    <div class="website-name">网易云音乐</div>
+                    <div class="website-type">国内网站</div>
+                    <div class="response-time" id="netease-time">获取中...</div>
+                </div>
+                
+                <!-- GitHub -->
+                <div class="connectivity-card">
+                    <div class="website-name">GitHub</div>
+                    <div class="website-type">国外网站</div>
+                    <div class="response-time" id="github-time">获取中...</div>
+                </div>
+                
+                <!-- YouTube -->
+                <div class="connectivity-card">
+                    <div class="website-name">YouTube</div>
+                    <div class="website-type">国外网站</div>
+                    <div class="response-time" id="youtube-time">获取中...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DNS出口查询区域 -->
+        <div class="section">
+            <div class="section-title">DNS 出口查询</div>
+            <table class="dns-table">
+                <thead>
+                    <tr>
+                        <th>服务商</th>
+                        <th>类型</th>
+                        <th>IP地址</th>
+                        <th>位置</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>IPAPI</td>
+                        <td>China Telecom</td>
+                        <td id="ipapi-dns-ip">---.---.---.---</td>
+                        <td id="ipapi-dns-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td>Shark</td>
+                        <td>China Telecom</td>
+                        <td id="shark1-dns-ip">---.---.---.---</td>
+                        <td id="shark1-dns-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td>Shark</td>
+                        <td>Chinanet SC</td>
+                        <td id="shark2-dns-ip">---.---.---.---</td>
+                        <td id="shark2-dns-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td>Shark</td>
+                        <td>Cloudflare WARP</td>
+                        <td id="shark3-dns-ip">---.---.---.---</td>
+                        <td id="shark3-dns-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td>AliYun</td>
+                        <td>Cloudflare WARP</td>
+                        <td id="aliyun-dns-ip">---.---.---.---</td>
+                        <td id="aliyun-dns-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td>Fastly</td>
+                        <td>Chinanet SC</td>
+                        <td id="fastly-dns-ip">---.---.---.---</td>
+                        <td id="fastly-dns-location">获取中...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 其他实用工具区域 -->
+        <div class="section">
+            <div class="section-title">其他实用工具</div>
+            <div class="tools-links">
+                <a href="#" class="tool-link" data-tool="multi-ip">多出口 IP 分流查询</a>
+                <a href="#" class="tool-link" data-tool="geo-ip">IP 地理位置查询</a>
+                <a href="#" class="tool-link" data-tool="domain-ip">域名分流 IP 查询</a>
+                <a href="#" class="tool-link" data-tool="udp-ip">UDP IP 查询</a>
+            </div>
+        </div>
+
+        <!-- 嵌入代码区域 -->
+        <div class="section">
+            <div class="section-title">在你的应用中使用</div>
+            <div class="embed-code-container">
+                <p>通过 &lt;iframe /&gt; 加载 Embed 版本到你的应用中:</p>
+                <pre class="code-block"><code class="embed-code">&lt;iframe src="https://ip.skk.moe/simple" style="width: 100%; border: 0"&gt;&lt;/iframe&gt;</code></pre>
+                <p>&lt;!-- 暗色模式 --&gt;</p>
+                <pre class="code-block"><code class="embed-code">&lt;iframe src="https://ip.skk.moe/simple-dark" style="width: 100%; border: 0"&gt;&lt;/iframe&gt;</code></pre>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer>
+            <p>Copyright © 2025 <a href="#" target="_blank">Apollo</a>. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
+
