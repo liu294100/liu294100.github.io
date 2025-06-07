@@ -762,9 +762,10 @@ function getIPFromSpeedtest() {
         mode: 'cors'
     })
         .then(response => response.json())
-        .then(data => {
-            if (data && data.ip) {
-                const location = `${data.province || ''} ${data.city || ''} ${data.district || ''} ${data.isp || ''}`;
+        .then(result => {
+            if (result && result.code === 0 && result.data && result.data.ip) {
+                const data = result.data;
+                const location = `${data.country || ''} ${data.province || ''} ${data.city || ''} ${data.isp || data.operator || ''}`;
                 updateIPInfo('speedtest', data.ip, location.trim() || '获取失败');
             } else {
                 throw new Error('无法解析Speedtest响应');
