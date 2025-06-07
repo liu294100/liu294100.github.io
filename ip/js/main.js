@@ -531,7 +531,7 @@ function analyzeProxyStatus(domesticIPs, foreignIPs, statusElement, infoElement)
              const foreignPrefix = foreignIP.split('.').slice(0, 2).join('.');
              const isSameRegion = domesticPrefix === foreignPrefix;
              
-             info = `🏠 国内: ${domesticIP} | 🌍 国外: ${foreignIP}`;
+             info = `🏠 国内: ${domesticIP} <br> 🌍 国外: ${foreignIP}`;
              
              if (isSameRegion) {
                  info += `<br><small style="color: #f39c12;">⚠️ IP前缀相同，可能为同一运营商</small>`;
