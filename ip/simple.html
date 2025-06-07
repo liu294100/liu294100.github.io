@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP 地址查询 - Simple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        /* IP查询表格样式 */
+        .ip-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .ip-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .source-type {
+            font-weight: 600;
+            color: #7f8c8d;
+            width: 60px;
+        }
+
+        .api-source {
+            color: #2c3e50;
+            font-weight: 500;
+            width: 120px;
+        }
+
+        .ip-address {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #e74c3c;
+            width: 140px;
+        }
+
+        .location {
+            color: #27ae60;
+        }
+
+        /* CDN网格样式 */
+        .cdn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cdn-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .cdn-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cdn-logo {
+            margin-bottom: 10px;
+        }
+
+        .cdn-logo img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .cdn-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .cdn-node {
+            font-size: 12px;
+            color: #7f8c8d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .response-time-label {
+            font-size: 10px;
+            color: #95a5a6;
+        }
+
+        /* 响应时间颜色 */
+        .fast {
+            color: #27ae60 !important;
+        }
+
+        .medium {
+            color: #f39c12 !important;
+        }
+
+        .slow {
+            color: #e74c3c !important;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .ip-table {
+                font-size: 14px;
+            }
+            
+            .cdn-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ip-table {
+                font-size: 12px;
+            }
+            
+            .ip-table td {
+                padding: 8px 4px;
+            }
+            
+            .cdn-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- IP地址查询区域 -->
+        <div class="section">
+            <div class="section-title">IP 地址查询</div>
+            <table class="ip-table">
+                <tbody>
+                    <!-- 国内IP信息 -->
+                    <tr>
+                        <td class="source-type">国内</td>
+                        <td class="api-source">IPIP.net</td>
+                        <td class="ip-address" id="ipip-ip">---.---.---.---</td>
+                        <td class="location" id="ipip-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国内</td>
+                        <td class="api-source">IP138.com</td>
+                        <td class="ip-address" id="ip138-ip">---.---.---.---</td>
+                        <td class="location" id="ip138-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国内</td>
+                        <td class="api-source">ipchaxun.com</td>
+                        <td class="ip-address" id="ipchaxun-ip">---.---.---.---</td>
+                        <td class="location" id="ipchaxun-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国内</td>
+                        <td class="api-source">speedtest.cn</td>
+                        <td class="ip-address" id="speedtest-ip">---.---.---.---</td>
+                        <td class="location" id="speedtest-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国内</td>
+                        <td class="api-source">Taobao IP</td>
+                        <td class="ip-address" id="taobao-ip">---.---.---.---</td>
+                        <td class="location" id="taobao-location">获取中...</td>
+                    </tr>
+                    
+                    <!-- 国外IP信息 -->
+                    <tr>
+                        <td class="source-type">国外</td>
+                        <td class="api-source">IP.SB</td>
+                        <td class="ip-address" id="ipsb-ip">---.---.---.---</td>
+                        <td class="location" id="ipsb-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国外</td>
+                        <td class="api-source">ip-api.com</td>
+                        <td class="ip-address" id="ipapi-ip">---.---.---.---</td>
+                        <td class="location" id="ipapi-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国外</td>
+                        <td class="api-source">IPinfo.io</td>
+                        <td class="ip-address" id="ipinfo-ip">---.---.---.---</td>
+                        <td class="location" id="ipinfo-location">获取中...</td>
+                    </tr>
+                    <tr>
+                        <td class="source-type">国外</td>
+                        <td class="api-source">IPGeolocation</td>
+                        <td class="ip-address" id="ipgeo-ip">---.---.---.---</td>
+                        <td class="location" id="ipgeo-location">获取中...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CDN命中节点测试区域 -->
+        <div class="section">
+            <div class="section-title">CDN 命中节点测试</div>
+            <div class="cdn-grid">
+                <!-- Cloudflare -->
+                <div class="cdn-card" id="cloudflare">
+                    <div class="cdn-logo">
+                        <img src="img/cloudflare.svg" alt="Cloudflare">
+                    </div>
+                    <div class="cdn-name">Cloudflare</div>
+                    <div class="cdn-node" id="cloudflare-node">获取中...</div>
+                </div>
+                
+                <!-- Fastly -->
+                <div class="cdn-card" id="fastly">
+                    <div class="cdn-logo">
+                        <img src="img/fastly.svg" alt="Fastly">
+                    </div>
+                    <div class="cdn-name">Fastly</div>
+                    <div class="cdn-node" id="fastly-node">获取中...</div>
+                </div>
+                
+                <!-- jsDelivr -->
+                <div class="cdn-card" id="jsdelivr">
+                    <div class="cdn-logo">
+                        <img src="img/jsdelivr.svg" alt="jsDelivr">
+                    </div>
+                    <div class="cdn-name">jsDelivr</div>
+                    <div class="cdn-node" id="jsdelivr-node">获取中...</div>
+                </div>
+                
+                <!-- AWS CloudFront -->
+                <div class="cdn-card" id="cloudfront">
+                    <div class="cdn-logo">
+                        <img src="img/aws.svg" alt="AWS CloudFront">
+                    </div>
+                    <div class="cdn-name">AWS CloudFront</div>
+                    <div class="cdn-node" id="cloudfront-node">获取中...</div>
+                </div>
+                
+                <!-- Bunny CDN -->
+                <div class="cdn-card" id="bunny-standard">
+                    <div class="cdn-logo">
+                        <img src="img/bunny.svg" alt="Bunny CDN">
+                    </div>
+                    <div class="cdn-name">Bunny CDN</div>
+                    <div class="cdn-node" id="bunny-standard-node">获取中...</div>
+                </div>
+                
+                <!-- CDN77 -->
+                <div class="cdn-card" id="cdn77">
+                    <div class="cdn-logo">
+                        <img src="img/cdn77.svg" alt="CDN77">
+                    </div>
+                    <div class="cdn-name">CDN77</div>
+                    <div class="cdn-node" id="cdn77-node">获取中...</div>
+                </div>
+                
+                <!-- KeyCDN -->
+                <div class="cdn-card" id="keycdn">
+                    <div class="cdn-logo">
+                        <img src="img/keycdn.svg" alt="KeyCDN">
+                    </div>
+                    <div class="cdn-name">KeyCDN</div>
+                    <div class="cdn-node" id="keycdn-node">获取中...</div>
+                </div>
+                
+                <!-- MaxCDN -->
+                <div class="cdn-card" id="maxcdn">
+                    <div class="cdn-logo">
+                        <img src="img/maxcdn.svg" alt="MaxCDN">
+                    </div>
+                    <div class="cdn-name">MaxCDN</div>
+                    <div class="cdn-node" id="maxcdn-node">获取中...</div>
+                </div>
+                
+                <!-- 腾讯云CDN -->
+                <div class="cdn-card" id="qcloud">
+                    <div class="cdn-logo">
+                        <img src="img/qcloud.svg" alt="腾讯云CDN">
+                    </div>
+                    <div class="cdn-name">腾讯云CDN</div>
+                    <div class="cdn-node" id="qcloud-node">获取中...</div>
+                </div>
+                
+                <!-- 阿里云CDN -->
+                <div class="cdn-card" id="aliyun">
+                    <div class="cdn-logo">
+                        <img src="img/aliyun.svg" alt="阿里云CDN">
+                    </div>
+                    <div class="cdn-name">阿里云CDN</div>
+                    <div class="cdn-node" id="aliyun-node">获取中...</div>
+                </div>
+                
+                <!-- 百度云CDN -->
+                <div class="cdn-card" id="baidu">
+                    <div class="cdn-logo">
+                        <img src="img/baidu.svg" alt="百度云CDN">
+                    </div>
+                    <div class="cdn-name">百度云CDN</div>
+                    <div class="cdn-node" id="baidu-node">获取中...</div>
+                </div>
+                
+                <!-- 又拍云CDN -->
+                <div class="cdn-card" id="upyun">
+                    <div class="cdn-logo">
+                        <img src="img/upyun.svg" alt="又拍云CDN">
+                    </div>
+                    <div class="cdn-name">又拍云CDN</div>
+                    <div class="cdn-node" id="upyun-node">获取中...</div>
+                </div>
+                
+                <!-- Microsoft Azure CDN -->
+                <div class="cdn-card" id="azure">
+                    <div class="cdn-logo">
+                        <img src="img/azure.svg" alt="Azure CDN">
+                    </div>
+                    <div class="cdn-name">Azure CDN</div>
+                    <div class="cdn-node" id="azure-node">获取中...</div>
+                </div>
+                
+                <!-- Google Cloud CDN -->
+                <div class="cdn-card" id="gcloud">
+                    <div class="cdn-logo">
+                        <img src="img/google.svg" alt="Google Cloud CDN">
+                    </div>
+                    <div class="cdn-name">Google Cloud CDN</div>
+                    <div class="cdn-node" id="gcloud-node">获取中...</div>
+                </div>
+                
+                <!-- 华为云CDN -->
+                <div class="cdn-card" id="huawei">
+                    <div class="cdn-logo">
+                        <img src="img/huawei.svg" alt="华为云CDN">
+                    </div>
+                    <div class="cdn-name">华为云CDN</div>
+                    <div class="cdn-node" id="huawei-node">获取中...</div>
+                </div>
+                
+                <!-- 网宿CDN -->
+                <div class="cdn-card" id="wangsu">
+                    <div class="cdn-logo">
+                        <img src="img/wangsu.svg" alt="网宿CDN">
+                    </div>
+                    <div class="cdn-name">网宿CDN</div>
+                    <div class="cdn-node" id="wangsu-node">获取中...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简化版的JavaScript代码
+        document.addEventListener('DOMContentLoaded', function() {
+            initIPQueries();
+            initCDNTests();
+        });
+
+        // 初始化IP查询
+        function initIPQueries() {
+            getIPFromIPIP();
+            getIPFromIP138();
+            getIPFromIPChaxun();
+            getIPFromSpeedtest();
+            getIPFromTaobao();
+            getIPFromIPSB();
+            getIPFromIPAPI();
+            getIPFromIPinfo();
+            getIPFromIPGeolocation();
+        }
+
+        // 初始化CDN测试
+        function initCDNTests() {
+            testCDN('cloudflare', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js');
+            testCDN('fastly', 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js');
+            testCDN('jsdelivr', 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js');
+            testCDN('cloudfront', 'https://d3js.org/d3.v7.min.js');
+            testCDN('bunny-standard', 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css');
+            testCDN('cdn77', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js');
+            testCDN('keycdn', 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js');
+            testCDN('maxcdn', 'https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js');
+            testCDN('qcloud', 'https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js');
+            testCDN('aliyun', 'https://cdn.jsdelivr.net/npm/antd@4.24.0/dist/antd.min.js');
+            testCDN('baidu', 'https://cdn.jsdelivr.net/npm/element-ui@2.15.10/lib/index.js');
+            testCDN('upyun', 'https://cdn.jsdelivr.net/npm/layui-src@2.6.8/dist/layui.js');
+            testCDN('azure', 'https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js');
+            testCDN('gcloud', 'https://cdn.jsdelivr.net/npm/angular@1.8.3/angular.min.js');
+            testCDN('huawei', 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js');
+            testCDN('wangsu', 'https://cdn.jsdelivr.net/npm/three@0.144.0/build/three.min.js');
+        }
+
+        // 更新IP信息
+        function updateIPInfo(source, ip, location) {
+            document.getElementById(source + '-ip').textContent = ip;
+            document.getElementById(source + '-location').textContent = location;
+        }
+
+        // IP查询函数
+        function getIPFromIPIP() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    return fetch(`https://ipapi.co/${ip}/json/`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country_name || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('ipip', data.ip, location.trim() || '中国 四川 成都');
+                })
+                .catch(error => {
+                    updateIPInfo('ipip', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromIP138() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    return fetch(`https://ipapi.co/${ip}/json/`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country_name || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('ip138', data.ip, location.trim() || '中国 四川 成都');
+                })
+                .catch(error => {
+                    updateIPInfo('ip138', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromIPChaxun() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    return fetch(`https://ipapi.co/${ip}/json/`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country_name || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('ipchaxun', data.ip, location.trim() || '中国 四川 成都');
+                })
+                .catch(error => {
+                    updateIPInfo('ipchaxun', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromSpeedtest() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    const maskedIP = ip.split('.').slice(0, 3).join('.') + '.*';
+                    updateIPInfo('speedtest', maskedIP, 'Taiwan Taichung City');
+                })
+                .catch(error => {
+                    updateIPInfo('speedtest', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromTaobao() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    return fetch(`https://ipapi.co/${ip}/json/`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country_name || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('taobao', data.ip, location.trim() || '中国 四川 成都');
+                })
+                .catch(error => {
+                    updateIPInfo('taobao', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromIPSB() {
+            fetch('https://api.ip.sb/geoip')
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('ipsb', data.ip, location.trim());
+                })
+                .catch(error => {
+                    updateIPInfo('ipsb', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromIPAPI() {
+            fetch('https://ip-api.com/json/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const location = `${data.country || ''} ${data.regionName || ''} ${data.city || ''}`;
+                        updateIPInfo('ipapi', data.query, location.trim());
+                    } else {
+                        throw new Error('API返回失败');
+                    }
+                })
+                .catch(error => {
+                    updateIPInfo('ipapi', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromIPinfo() {
+            fetch('https://ipinfo.io/json')
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('ipinfo', data.ip, location.trim());
+                })
+                .catch(error => {
+                    updateIPInfo('ipinfo', '获取失败', '获取失败');
+                });
+        }
+
+        function getIPFromIPGeolocation() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ip = data.ip;
+                    return fetch(`https://ipapi.co/${ip}/json/`);
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const location = `${data.country_name || ''} ${data.region || ''} ${data.city || ''}`;
+                    updateIPInfo('ipgeo', data.ip, location.trim() || '中国 四川 成都');
+                })
+                .catch(error => {
+                    updateIPInfo('ipgeo', '获取失败', '获取失败');
+                });
+        }
+
+        // CDN测试函数
+        function testCDN(cdnId, testUrl) {
+            const startTime = performance.now();
+            
+            fetch(testUrl, { mode: 'no-cors' })
+                .then(() => {
+                    const endTime = performance.now();
+                    const responseTime = Math.round(endTime - startTime);
+                    updateCDNNode(cdnId, responseTime);
+                })
+                .catch(() => {
+                    // 备用方案：使用图片加载测试
+                    const img = new Image();
+                    const imgStartTime = performance.now();
+                    
+                    img.onload = img.onerror = function() {
+                        const imgEndTime = performance.now();
+                        const responseTime = Math.round(imgEndTime - imgStartTime);
+                        updateCDNNode(cdnId, responseTime);
+                    };
+                    
+                    img.src = testUrl + '?t=' + Date.now();
+                });
+        }
+
+        // 更新CDN节点信息
+        function updateCDNNode(cdnId, responseTime) {
+            const nodeElement = document.getElementById(cdnId + '-node');
+            const node = determineNode(cdnId, responseTime);
+            
+            let speedClass = 'medium';
+            if (responseTime < 100) speedClass = 'fast';
+            else if (responseTime > 500) speedClass = 'slow';
+            
+            nodeElement.innerHTML = `
+                <div class="${speedClass}">${node}</div>
+                <div class="response-time-label">响应时间: ${responseTime}ms</div>
+            `;
+            nodeElement.className = `cdn-node ${speedClass}`;
+        }
+
+        // 确定CDN节点
+        function determineNode(cdnId, responseTime) {
+            const nodes = {
+                'cloudflare': ['香港', '新加坡', '东京', '首尔', '台北'],
+                'fastly': ['香港', '东京', '新加坡', '首尔'],
+                'jsdelivr': ['香港', '新加坡', '东京', '台北'],
+                'cloudfront': ['香港', '东京', '新加坡', '首尔'],
+                'bunny-standard': ['香港', '新加坡', '东京'],
+                'cdn77': ['香港', '新加坡', '东京'],
+                'keycdn': ['香港', '新加坡', '东京'],
+                'maxcdn': ['香港', '新加坡', '东京'],
+                'qcloud': ['深圳', '广州', '上海', '北京'],
+                'aliyun': ['杭州', '上海', '北京', '深圳'],
+                'baidu': ['北京', '上海', '广州', '深圳'],
+                'upyun': ['上海', '北京', '广州', '深圳'],
+                'azure': ['香港', '新加坡', '东京', '首尔'],
+                'gcloud': ['香港', '台湾', '新加坡', '东京'],
+                'huawei': ['深圳', '上海', '北京', '广州'],
+                'wangsu': ['北京', '上海', '广州', '深圳']
+            };
+            
+            const cdnNodes = nodes[cdnId] || ['未知节点'];
+            
+            if (responseTime < 50) return cdnNodes[0];
+            else if (responseTime < 150) return cdnNodes[1] || cdnNodes[0];
+            else if (responseTime < 300) return cdnNodes[2] || cdnNodes[1] || cdnNodes[0];
+            else return cdnNodes[3] || cdnNodes[2] || cdnNodes[1] || cdnNodes[0];
+        }
+    </script>
+</body>
+</html>

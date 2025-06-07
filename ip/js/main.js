@@ -27,25 +27,47 @@ function initIPQueries() {
 
 // 初始化CDN测试
 function initCDNTests() {
-    // 国内CDN
-    testCDN('cloudflare', 'Cloudflare', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', '国内');
-    testCDN('fastly', 'Fastly', 'https://fastly.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js', '国内');
-    testCDN('jsdelivr', 'jsDelivr', 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js', '国内');
-    testCDN('cdn77', 'CDN77', 'https://cdn-fastly.obsidianportal.com/assets/1612438/image.png', '国内');
+    // 国际CDN
+    testCDN('cloudflare', 'Cloudflare', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', '国际');
+    testCDN('fastly', 'Fastly', 'https://fastly.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js', '国际');
+    testCDN('jsdelivr', 'jsDelivr', 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js', '国际');
+    testCDN('google', 'Google Cache', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js', '国际');
+    testCDN('cloudfront', 'AWS CloudFront', 'https://d1ujqdpfgkvqfi.cloudfront.net/favicon-32x32.png', '国际');
+    testCDN('bunny-standard', 'Bunny Standard', 'https://bunnycdn.com/favicon.ico', '国际');
+    testCDN('bunny-volume', 'Bunny Volume', 'https://cdn.statically.io/img/bunnycdn.com/favicon.ico', '国际');
+    testCDN('cdn77', 'CDN77', 'https://cdn-fastly.obsidianportal.com/assets/1612438/image.png', '国际');
+    testCDN('keycdn', 'KeyCDN', 'https://kxcdn.com/favicon.ico', '国际');
+    testCDN('maxcdn', 'MaxCDN', 'https://www.maxcdn.com/favicon.ico', '国际');
+    testCDN('azure', 'Azure CDN', 'https://azure.microsoft.com/favicon.ico', '国际');
+    testCDN('gcloud', 'Google Cloud CDN', 'https://cloud.google.com/favicon.ico', '国际');
     
-    // 国外CDN
-    testCDN('google', 'Google Cache', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js', '国外');
-    testCDN('cloudfront', 'AWS CloudFront', 'https://d1ujqdpfgkvqfi.cloudfront.net/favicon-32x32.png', '国外');
-    testCDN('bunny-standard', 'Bunny Standard', 'https://bunnycdn.com/favicon.ico', '国外');
-    testCDN('bunny-volume', 'Bunny Volume', 'https://cdn.statically.io/img/bunnycdn.com/favicon.ico', '国外');
+    // 国内CDN
+    testCDN('qcloud', '腾讯云CDN', 'https://cloud.tencent.com/favicon.ico', '国内');
+    testCDN('aliyun', '阿里云CDN', 'https://www.aliyun.com/favicon.ico', '国内');
+    testCDN('baidu', '百度云CDN', 'https://cloud.baidu.com/favicon.ico', '国内');
+    testCDN('upyun', '又拍云CDN', 'https://www.upyun.com/favicon.ico', '国内');
+    testCDN('huawei', '华为云CDN', 'https://www.huaweicloud.com/favicon.ico', '国内');
+    testCDN('wangsu', '网宿CDN', 'https://www.wangsu.com/favicon.ico', '国内');
 }
 
 // 初始化网站连通性检查
 function initConnectivityChecks() {
+    // 国内网站
     checkWebsite('baidu', 'https://www.baidu.com');
     checkWebsite('netease', 'https://music.163.com');
+    checkWebsite('qq', 'https://www.qq.com');
+    
+    // 国外网站
     checkWebsite('github', 'https://github.com');
     checkWebsite('youtube', 'https://www.youtube.com');
+    checkWebsite('google', 'https://www.google.com');
+    checkWebsite('instagram', 'https://www.instagram.com');
+    checkWebsite('wikipedia', 'https://www.wikipedia.org');
+    checkWebsite('microsoft', 'https://www.microsoft.com');
+    checkWebsite('bing', 'https://www.bing.com');
+    checkWebsite('netflix', 'https://www.netflix.com');
+    checkWebsite('spotify', 'https://www.spotify.com');
+    checkWebsite('chatgpt', 'https://chat.openai.com');
 }
 
 // 初始化DNS查询
@@ -709,6 +731,46 @@ function determineNode(id, responseTime) {
         'cdn77': {
             nodes: ['香港 (hongkongHK)', '东京 (tokyoJP)', '新加坡 (singaporeSG)', '首尔 (seoulKR)', '悉尼 (sydneyAU)'],
             thresholds: [80, 120, 170, 230, 300]
+        },
+        'keycdn': {
+            nodes: ['香港 (HKG)', '东京 (TYO)', '新加坡 (SIN)', '首尔 (SEL)', '悉尼 (SYD)'],
+            thresholds: [70, 100, 150, 220, 300]
+        },
+        'maxcdn': {
+            nodes: ['香港 (HK)', '东京 (TK)', '新加坡 (SG)', '首尔 (SE)', '悉尼 (SY)'],
+            thresholds: [80, 120, 170, 230, 300]
+        },
+        'azure': {
+            nodes: ['香港 (East Asia)', '东京 (Japan East)', '新加坡 (Southeast Asia)', '首尔 (Korea Central)', '悉尼 (Australia East)'],
+            thresholds: [90, 130, 180, 240, 320]
+        },
+        'gcloud': {
+            nodes: ['台湾 (asia-east1)', '香港 (asia-east2)', '东京 (asia-northeast1)', '新加坡 (asia-southeast1)', '首尔 (asia-northeast3)'],
+            thresholds: [70, 100, 150, 220, 300]
+        },
+        'qcloud': {
+            nodes: ['香港', '新加坡', '东京', '首尔', '曼谷'],
+            thresholds: [60, 90, 140, 200, 280]
+        },
+        'aliyun': {
+            nodes: ['香港', '新加坡', '东京', '首尔', '悉尼'],
+            thresholds: [50, 80, 120, 180, 250]
+        },
+        'baidu': {
+            nodes: ['香港', '新加坡', '东京', '首尔', '悉尼'],
+            thresholds: [70, 100, 150, 220, 300]
+        },
+        'upyun': {
+            nodes: ['香港', '新加坡', '东京', '首尔', '悉尼'],
+            thresholds: [60, 90, 140, 200, 280]
+        },
+        'huawei': {
+            nodes: ['香港', '新加坡', '东京', '首尔', '悉尼'],
+            thresholds: [80, 120, 170, 230, 300]
+        },
+        'wangsu': {
+            nodes: ['香港', '新加坡', '东京', '首尔', '悉尼'],
+            thresholds: [70, 100, 150, 220, 300]
         }
     };
     
