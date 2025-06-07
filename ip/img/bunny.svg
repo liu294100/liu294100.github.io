@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
+  <defs>
+    <linearGradient id="bunnyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="45" fill="url(#bunnyGradient)" stroke="#fff" stroke-width="2"/>
+  <!-- Bunny ears -->
+  <ellipse cx="40" cy="30" rx="6" ry="12" fill="white" transform="rotate(-20 40 30)"/>
+  <ellipse cx="60" cy="30" rx="6" ry="12" fill="white" transform="rotate(20 60 30)"/>
+  <!-- Bunny face -->
+  <circle cx="50" cy="50" r="18" fill="white"/>
+  <!-- Eyes -->
+  <circle cx="45" cy="45" r="2" fill="black"/>
+  <circle cx="55" cy="45" r="2" fill="black"/>
+  <!-- Nose -->
+  <path d="M50 50 L48 53 L52 53 Z" fill="pink"/>
+  <!-- Mouth -->
+  <path d="M47 57 Q50 60 53 57" stroke="black" stroke-width="1" fill="none"/>
+  <text x="50" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="white" font-weight="bold">BUNNY</text>
+</svg>
