@@ -23,6 +23,11 @@ function initIPQueries() {
     getIPFromIPAPI();
     getIPFromSukkaIPDB();
     getIPFromIPInfo();
+    
+    // 代理分流检测
+    setTimeout(() => {
+        detectProxyStatus();
+    }, 3000); // 等待其他IP查询完成后再检测
 }
 
 // 初始化CDN测试
@@ -410,100 +415,347 @@ function updateEmbedCode() {
     });
 }
 
+// 代理分流检测
+function detectProxyStatus() {
+    const proxyStatusElement = document.getElementById('proxy-status');
+    const proxyInfoElement = document.getElementById('proxy-info');
+    
+    if (!proxyStatusElement || !proxyInfoElement) {
+        console.warn('代理检测元素未找到');
+        return;
+    }
+    
+    // 显示检测中状态
+    proxyStatusElement.textContent = '🔍 检测中...';
+    proxyStatusElement.style.color = '#6c757d';
+    proxyInfoElement.innerHTML = '正在分析网络路由和代理分流情况...';
+    
+    // 收集已获取的IP信息
+    const domesticIPs = {
+        ipip: document.getElementById('ipip-ip')?.textContent || '',
+        ip138: document.getElementById('ip138-ip')?.textContent || '',
+        ipchaxun: document.getElementById('ipchaxun-ip')?.textContent || '',
+        speedtest: document.getElementById('speedtest-ip')?.textContent || ''
+    };
+    
+    const foreignIPs = {
+        ipsb: document.getElementById('ipsb-ip')?.textContent || '',
+        ipapi: document.getElementById('ipapi-ip')?.textContent || '',
+        sukka: document.getElementById('sukka-ip')?.textContent || '',
+        ipinfo: document.getElementById('ipinfo-ip')?.textContent || ''
+    };
+    
+    // 添加延迟以确保所有IP都已加载
+    setTimeout(() => {
+        // 重新收集IP信息（可能在延迟期间更新了）
+        const updatedDomesticIPs = {
+            ipip: document.getElementById('ipip-ip')?.textContent || '',
+            ip138: document.getElementById('ip138-ip')?.textContent || '',
+            ipchaxun: document.getElementById('ipchaxun-ip')?.textContent || '',
+            speedtest: document.getElementById('speedtest-ip')?.textContent || ''
+        };
+        
+        const updatedForeignIPs = {
+            ipsb: document.getElementById('ipsb-ip')?.textContent || '',
+            ipapi: document.getElementById('ipapi-ip')?.textContent || '',
+            sukka: document.getElementById('sukka-ip')?.textContent || '',
+            ipinfo: document.getElementById('ipinfo-ip')?.textContent || ''
+        };
+        
+        // 分析代理状态
+        analyzeProxyStatus(updatedDomesticIPs, updatedForeignIPs, proxyStatusElement, proxyInfoElement);
+    }, 500);
+}
+
+// 分析代理状态
+function analyzeProxyStatus(domesticIPs, foreignIPs, statusElement, infoElement) {
+    // 过滤掉获取失败的IP
+    const validDomesticIPs = Object.entries(domesticIPs)
+        .filter(([source, ip]) => ip && ip !== '获取失败' && ip !== '---.---.---.---' && !ip.includes('获取中') && !ip.includes('*'))
+        .map(([source, ip]) => ({ source, ip }));
+    
+    const validForeignIPs = Object.entries(foreignIPs)
+        .filter(([source, ip]) => ip && ip !== '获取失败' && ip !== '---.---.---.---' && !ip.includes('获取中') && !ip.includes('*'))
+        .map(([source, ip]) => ({ source, ip }));
+    
+    // 如果没有足够的有效IP数据
+    if (validDomesticIPs.length === 0 && validForeignIPs.length === 0) {
+        statusElement.textContent = '检测失败';
+        statusElement.style.color = '#e74c3c';
+        infoElement.innerHTML = '无法获取足够的IP数据进行分析 <span style="color: #007bff; cursor: pointer; text-decoration: underline;" onclick="refreshProxyDetection()">🔄 重试</span>';
+        return;
+    }
+    
+    // 获取唯一IP地址
+    const domesticUniqueIPs = [...new Set(validDomesticIPs.map(item => item.ip))];
+    const foreignUniqueIPs = [...new Set(validForeignIPs.map(item => item.ip))];
+    const allUniqueIPs = [...new Set([...domesticUniqueIPs, ...foreignUniqueIPs])];
+    
+    // 分析结果
+    let status = '';
+    let info = '';
+    let statusColor = '#27ae60';
+    
+    if (validDomesticIPs.length === 0) {
+        // 只有国外IP可访问
+        status = '🌍 全局代理';
+        statusColor = '#f39c12';
+        info = `仅国外API可访问 (${validForeignIPs.length}个)，当前使用全局代理模式`;
+        if (foreignUniqueIPs.length > 1) {
+            info += `<br><small>检测到${foreignUniqueIPs.length}个不同代理IP</small>`;
+        }
+    } else if (validForeignIPs.length === 0) {
+        // 只有国内IP可访问
+        status = '🏠 直连模式';
+        statusColor = '#3498db';
+        info = `仅国内API可访问 (${validDomesticIPs.length}个)，当前为直连模式`;
+        if (domesticUniqueIPs.length > 1) {
+            info += `<br><small>检测到${domesticUniqueIPs.length}个不同出口IP</small>`;
+        }
+    } else {
+        // 国内外都有IP
+        const hasCommonIP = domesticUniqueIPs.some(ip => foreignUniqueIPs.includes(ip));
+        
+        // 检查是否有真正的分流（国内外IP完全不同）
+         const isDifferentIPs = !hasCommonIP && domesticUniqueIPs.length > 0 && foreignUniqueIPs.length > 0;
+         
+         if (isDifferentIPs) {
+             // 完全分流 - 国内外IP完全不同
+             status = '✅ 分流生效';
+             statusColor = '#27ae60';
+             const domesticIP = domesticUniqueIPs[0];
+             const foreignIP = foreignUniqueIPs[0];
+             
+             // 计算IP前缀相似度
+             const domesticPrefix = domesticIP.split('.').slice(0, 2).join('.');
+             const foreignPrefix = foreignIP.split('.').slice(0, 2).join('.');
+             const isSameRegion = domesticPrefix === foreignPrefix;
+             
+             info = `🏠 国内: ${domesticIP} | 🌍 国外: ${foreignIP}`;
+             
+             if (isSameRegion) {
+                 info += `<br><small style="color: #f39c12;">⚠️ IP前缀相同，可能为同一运营商</small>`;
+             } else {
+                 info += `<br><small style="color: #27ae60;">✓ 分流正常，使用不同网络路径</small>`;
+             }
+             
+             // 显示更多IP信息
+             if (domesticUniqueIPs.length > 1 || foreignUniqueIPs.length > 1) {
+                 info += `<br><small>国内${domesticUniqueIPs.length}个IP，国外${foreignUniqueIPs.length}个IP</small>`;
+             }
+         } else if (hasCommonIP && allUniqueIPs.length === 1) {
+             // 所有IP相同
+             status = '❌ 未分流';
+             statusColor = '#e74c3c';
+             info = `国内外使用相同IP: ${allUniqueIPs[0]}<br><small>可能未启用分流或分流规则未生效</small>`;
+         } else {
+             // 部分分流或混合情况
+             status = '⚠️ 部分分流';
+             statusColor = '#f39c12';
+             info = `检测到${allUniqueIPs.length}个不同IP，部分API可能使用不同路由`;
+             
+             if (domesticUniqueIPs.length > 0) {
+                 info += `<br><small>国内: ${domesticUniqueIPs.join(', ')}</small>`;
+             }
+             if (foreignUniqueIPs.length > 0) {
+                 info += `<br><small>国外: ${foreignUniqueIPs.join(', ')}</small>`;
+             }
+         }
+    }
+    
+    // 更新显示
+    statusElement.textContent = status;
+    statusElement.style.color = statusColor;
+    
+    // 添加详细信息和刷新按钮
+    const refreshButton = '<span style="color: #007bff; cursor: pointer; text-decoration: underline; margin-left: 10px;" onclick="refreshProxyDetection()">🔄 重新检测</span>';
+    infoElement.innerHTML = info + refreshButton;
+    
+    // 添加成功检测的动画效果
+    if (status.includes('分流生效')) {
+        statusElement.style.animation = 'pulse 2s ease-in-out';
+        setTimeout(() => {
+            statusElement.style.animation = '';
+        }, 2000);
+    }
+}
+
+// 刷新代理检测
+function refreshProxyDetection() {
+    const proxyStatusElement = document.getElementById('proxy-status');
+    const proxyInfoElement = document.getElementById('proxy-info');
+    
+    proxyStatusElement.textContent = '重新检测中...';
+    proxyInfoElement.textContent = '正在分析代理分流情况...';
+    
+    // 重新执行检测
+    setTimeout(() => {
+        detectProxyStatus();
+    }, 1000);
+}
+
 // 从IPIP.net获取IP
 function getIPFromIPIP() {
-    // 使用支持CORS的API
-    fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
+    // 使用真实的IPIP.net API
+    fetch('https://myip.ipip.net/', {
+        method: 'GET',
+        mode: 'cors'
+    })
+        .then(response => response.text())
         .then(data => {
-            if (data && data.ip) {
-                // 获取IP后查询位置信息
-                return fetch(`https://ipapi.co/${data.ip}/json/`);
+            // 解析HTML响应获取IP和位置信息
+            const ipMatch = data.match(/当前 IP：([\d\.]+)/);
+            const locationMatch = data.match(/来自于：(.+?)(?=\s*<|$)/);
+            
+            if (ipMatch) {
+                const ip = ipMatch[1];
+                const location = locationMatch ? locationMatch[1].trim() : '获取失败';
+                updateIPInfo('ipip', ip, location);
             } else {
-                throw new Error('无法获取IP');
+                throw new Error('无法解析IPIP.net响应');
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            const location = `${data.country_name || ''} ${data.region || ''} ${data.city || ''} ${data.org || ''}`;
-            updateIPInfo('ipip', data.ip, location.trim() || '中国四川成都 电信');
-        })
         .catch(error => {
-            // 使用备选API
-            fetch('https://httpbin.org/ip')
+            // 备选方案：使用IPIP.net的JSON API
+            fetch('https://api.ipip.net/find?ip=myip', {
+                method: 'GET',
+                mode: 'cors'
+            })
                 .then(response => response.json())
                 .then(data => {
-                    updateIPInfo('ipip', data.origin, '中国四川成都 电信');
+                    if (data && data.ret === 'ok') {
+                        updateIPInfo('ipip', data.data[0], data.data.slice(1).join(' '));
+                    } else {
+                        updateIPInfo('ipip', '获取失败', '获取失败');
+                    }
                 })
                 .catch(err => {
-                    updateIPInfo('ipip', '171.221.144.13', '中国四川成都 电信');
+                    updateIPInfo('ipip', '获取失败', '获取失败');
                 });
         });
 }
 
 // 从IP138获取IP
 function getIPFromIP138() {
-    // 先获取IP地址
-    fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
+    // 使用真实的IP138 API
+    fetch('https://2025.ip138.com/', {
+        method: 'GET',
+        mode: 'cors'
+    })
+        .then(response => response.text())
         .then(data => {
-            const ip = data.ip;
-            // 然后获取地理位置信息
-            return fetch(`https://ipapi.co/${ip}/json/`)
-                .then(response => response.json())
-                .then(locationData => {
-                    const location = `${locationData.country_name || ''}-${locationData.region || ''}${locationData.city || ''} ${locationData.org || ''}`;
-                    updateIPInfo('ip138', ip, location.trim() || '中国-四川成都 电信');
-                })
-                .catch(err => {
-                    updateIPInfo('ip138', ip, '中国-四川成都 电信');
-                });
+            // 解析HTML响应获取IP和位置信息
+            const ipMatch = data.match(/您的IP地址是：\[?([\d\.]+)\]?/);
+            const locationMatch = data.match(/来自：(.+?)(?=\s*<|$)/);
+            
+            if (ipMatch) {
+                const ip = ipMatch[1];
+                const location = locationMatch ? locationMatch[1].trim() : '获取失败';
+                updateIPInfo('ip138', ip, location);
+            } else {
+                throw new Error('无法解析IP138响应');
+            }
         })
         .catch(error => {
-            // 显示模拟数据
-            updateIPInfo('ip138', '获取失败', '获取失败');
+            // 备选方案：使用IP138的其他接口
+            fetch('https://api.ip138.com/query/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ip: 'myip'
+                }),
+                mode: 'cors'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.ret === 'ok') {
+                        updateIPInfo('ip138', data.data[0], data.data.slice(1).join(' '));
+                    } else {
+                        updateIPInfo('ip138', '获取失败', '获取失败');
+                    }
+                })
+                .catch(err => {
+                    updateIPInfo('ip138', '获取失败', '获取失败');
+                });
         });
 }
 
 // 从IPChaxun获取IP
 function getIPFromIPChaxun() {
-    // 先获取IP地址
-    fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
+    // 使用真实的IPChaxun API
+    fetch('https://2024.ipchaxun.com/', {
+        method: 'GET',
+        mode: 'cors'
+    })
+        .then(response => response.text())
         .then(data => {
-            const ip = data.ip;
-            // 然后获取地理位置信息
-            return fetch(`https://ipapi.co/${ip}/json/`)
-                .then(response => response.json())
-                .then(locationData => {
-                    const location = `${locationData.country_name || ''} ${locationData.region || ''} ${locationData.city || ''}`;
-                    updateIPInfo('ipchaxun', ip, location.trim() || '获取失败');
-                })
-                .catch(err => {
-                    updateIPInfo('ipchaxun', ip, '获取失败');
-                });
+            // 解析HTML响应获取IP和位置信息
+            const ipMatch = data.match(/您的IP地址是：([\d\.]+)/) || data.match(/IP地址：([\d\.]+)/);
+            const locationMatch = data.match(/来自：(.+?)(?=\s*<|$)/) || data.match(/归属地：(.+?)(?=\s*<|$)/);
+            
+            if (ipMatch) {
+                const ip = ipMatch[1];
+                const location = locationMatch ? locationMatch[1].trim() : '获取失败';
+                updateIPInfo('ipchaxun', ip, location);
+            } else {
+                throw new Error('无法解析IPChaxun响应');
+            }
         })
         .catch(error => {
-            updateIPInfo('ipchaxun', '获取失败', '获取失败');
+            // 备选方案：使用其他IP查询接口
+            fetch('https://ipchaxun.com/api', {
+                method: 'GET',
+                mode: 'cors'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.ip) {
+                        updateIPInfo('ipchaxun', data.ip, data.addr || '获取失败');
+                    } else {
+                        updateIPInfo('ipchaxun', '获取失败', '获取失败');
+                    }
+                })
+                .catch(err => {
+                    updateIPInfo('ipchaxun', '获取失败', '获取失败');
+                });
         });
 }
 
 // 从Speedtest获取IP
 function getIPFromSpeedtest() {
-    // 模拟Speedtest的响应
-    fetch('https://api.ipify.org?format=json')
+    // 使用真实的Speedtest API
+    fetch('https://api-v3.speedtest.cn/ip', {
+        method: 'GET',
+        mode: 'cors'
+    })
         .then(response => response.json())
         .then(data => {
             if (data && data.ip) {
-                // 隐藏IP的最后一段
-                const ip = data.ip.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, '$1.$2.$3.*');
-                updateIPInfo('speedtest', ip, 'Taiwan Taichung City Taichung Chunghwa Telecom');
+                const location = `${data.province || ''} ${data.city || ''} ${data.district || ''} ${data.isp || ''}`;
+                updateIPInfo('speedtest', data.ip, location.trim() || '获取失败');
             } else {
-                throw new Error('无法获取IP');
+                throw new Error('无法解析Speedtest响应');
             }
         })
         .catch(error => {
-            updateIPInfo('speedtest', '211.23.142.*', 'Taiwan Taichung City Taichung Chunghwa Telecom');
+            // 备选方案：使用Speedtest的其他接口
+            fetch('https://www.speedtest.cn/api/location/info', {
+                method: 'GET',
+                mode: 'cors'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.ip) {
+                        updateIPInfo('speedtest', data.ip, data.addr || '获取失败');
+                    } else {
+                        updateIPInfo('speedtest', '获取失败', '获取失败');
+                    }
+                })
+                .catch(err => {
+                    updateIPInfo('speedtest', '获取失败', '获取失败');
+                });
         });
 }
 
@@ -534,7 +786,8 @@ function getIPFromIPSB() {
 
 // 从IP-API获取IP
 function getIPFromIPAPI() {
-    fetch('https://ipapi.co/json/', { mode: 'cors' })
+    // 使用真实的pro.ip-api.com接口（带API Key）
+    fetch('https://pro.ip-api.com/json/?fields=16985625&key=EEKS6bLi6D91G1p', { mode: 'cors' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('网络响应不正常');
@@ -542,14 +795,24 @@ function getIPFromIPAPI() {
             return response.json();
         })
         .then(data => {
-            updateIPInfo('ipapi', data.ip, `${data.country_name} ${data.region} ${data.city} ${data.org}`);
+            if (data && data.query) {
+                const location = `${data.country || ''} ${data.regionName || ''} ${data.city || ''} ${data.org || data.isp || ''}`;
+                updateIPInfo('ipapi', data.query, location.trim() || '获取失败');
+            } else {
+                throw new Error('无法解析IP-API响应');
+            }
         })
         .catch(error => {
-            // 如果API请求失败，使用备选API
-            fetch('https://api.ipdata.co?api-key=test', { mode: 'cors' })
+            // 备选方案：使用免费版本的ip-api.com
+            fetch('http://ip-api.com/json/', { mode: 'cors' })
                 .then(response => response.json())
                 .then(data => {
-                    updateIPInfo('ipapi', data.ip, `${data.country_name} ${data.region} ${data.city} ${data.asn.name}`);
+                    if (data && data.query) {
+                        const location = `${data.country || ''} ${data.regionName || ''} ${data.city || ''} ${data.org || data.isp || ''}`;
+                        updateIPInfo('ipapi', data.query, location.trim() || '获取失败');
+                    } else {
+                        updateIPInfo('ipapi', '获取失败', '获取失败');
+                    }
                 })
                 .catch(err => {
                     updateIPInfo('ipapi', '获取失败', '获取失败');
@@ -559,20 +822,8 @@ function getIPFromIPAPI() {
 
 // 从Sukka IPDB获取IP
 function getIPFromSukkaIPDB() {
-    // Sukka IPDB不提供公开API，使用备选API
-    fetch('https://ipwho.is/', { mode: 'cors' })
-        .then(response => response.json())
-        .then(data => {
-            updateIPInfo('sukka', data.ip, `${data.country} ${data.region} ${data.city} ${data.connection.isp}`);
-        })
-        .catch(error => {
-            updateIPInfo('sukka', '获取失败', '获取失败');
-        });
-}
-
-// 从IPInfo获取IP
-function getIPFromIPInfo() {
-    fetch('https://ipinfo.io/json', { mode: 'cors' })
+    // 使用Sukka的IP数据库API
+    fetch('https://api.skk.moe/ip', { mode: 'cors' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('网络响应不正常');
@@ -580,14 +831,60 @@ function getIPFromIPInfo() {
             return response.json();
         })
         .then(data => {
-            updateIPInfo('ipinfo', data.ip, `${data.country} ${data.region} ${data.city} ${data.org}`);
+            if (data && data.ip) {
+                const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.organization || data.isp || ''}`;
+                updateIPInfo('sukka', data.ip, location.trim() || '获取失败');
+            } else {
+                throw new Error('无法解析Sukka IPDB响应');
+            }
         })
         .catch(error => {
-            // 如果API请求失败，使用备选API
-            fetch('https://extreme-ip-lookup.com/json/', { mode: 'cors' })
+            // 备选方案：使用其他IP查询服务
+            fetch('https://ipwho.is/', { mode: 'cors' })
                 .then(response => response.json())
                 .then(data => {
-                    updateIPInfo('ipinfo', data.query, `${data.country} ${data.region} ${data.city} ${data.isp}`);
+                    if (data && data.ip) {
+                        const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.connection?.isp || ''}`;
+                        updateIPInfo('sukka', data.ip, location.trim() || '获取失败');
+                    } else {
+                        updateIPInfo('sukka', '获取失败', '获取失败');
+                    }
+                })
+                .catch(err => {
+                    updateIPInfo('sukka', '获取失败', '获取失败');
+                });
+        });
+}
+
+// 从IPInfo获取IP
+function getIPFromIPInfo() {
+    // 使用真实的ipinfo.io接口（带token）
+    fetch('https://ipinfo.io/json?token=c31843916e5fd7', { mode: 'cors' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应不正常');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.ip) {
+                const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.org || ''}`;
+                updateIPInfo('ipinfo', data.ip, location.trim() || '获取失败');
+            } else {
+                throw new Error('无法解析IPInfo响应');
+            }
+        })
+        .catch(error => {
+            // 备选方案：使用免费版本的ipinfo.io
+            fetch('https://ipinfo.io/json', { mode: 'cors' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.ip) {
+                        const location = `${data.country || ''} ${data.region || ''} ${data.city || ''} ${data.org || ''}`;
+                        updateIPInfo('ipinfo', data.ip, location.trim() || '获取失败');
+                    } else {
+                        updateIPInfo('ipinfo', '获取失败', '获取失败');
+                    }
                 })
                 .catch(err => {
                     updateIPInfo('ipinfo', '获取失败', '获取失败');
