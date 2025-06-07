@@ -383,7 +383,7 @@ function updateEmbedCode() {
     
     embedCodeElements.forEach(element => {
         const originalCode = element.textContent;
-        const updatedCode = originalCode.replace(/https:\/\/ip\.skk\.moe/g, currentDomain);
+        const updatedCode = originalCode.replace(/https:\/\/domain/g, currentDomain);
         element.textContent = updatedCode;
     });
 }
