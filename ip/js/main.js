@@ -2097,7 +2097,8 @@ function toggleIPDisplay(hide) {
     ipElements.forEach(element => {
         if (hide) {
             element.dataset.originalText = element.textContent;
-            element.textContent = '*.*.*.* (已隐藏)';
+            //element.textContent = '*.*.*.* (已隐藏)';
+            element.textContent = '*.*.*.*';
         } else {
             if (element.dataset.originalText) {
                 element.textContent = element.dataset.originalText;
