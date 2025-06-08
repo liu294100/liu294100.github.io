@@ -108,39 +108,36 @@ window.addEventListener('DOMContentLoaded', (event) => {
     window.addEventListener('resize', adjustEditorHeight);
 
 
-    // --- Initial Content ---
-    const initialContent = `# 高级 Markdown 编辑器
-
-欢迎使用!
-
-## 特性
-
-*   实时预览 (GitHub 风格)
-*   **格式化工具栏**
-*   数学公式 (KaTeX): $E=mc^2$ 和 $$ \\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2} $$
-*   图表绘制 (Mermaid):
-    \`\`\`mermaid
-    graph LR
-        A[编辑区] --> B(实时渲染);
-        B --> C{预览区};
-        C -- TOC --> D[目录];
-        C -- 导出 --> E(MD/HTML);
-        C -- 导出 --> F(PNG/PDF);
-    \`\`\`
-*   代码高亮:
-    \`\`\`javascript
-    function hello(who = 'world') {
-      console.log(\`Hello, \${who}!\`);
+    // --- Load Initial Content from introduce.md ---
+    async function loadIntroduceContent() {
+        const INTRODUCE_FILE = 'introduce.md';
+        const FALLBACK_CONTENT = '# Markdown 编辑器\n\n欢迎使用！请开始编写您的 Markdown 内容。';
+        
+        try {
+            const response = await fetch(INTRODUCE_FILE);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const content = await response.text();
+            if (editor && content.trim()) {
+                editor.setValue(content);
+                console.log(`Successfully loaded ${INTRODUCE_FILE}`);
+                return;
+            }
+        } catch (error) {
+            console.warn(`Failed to load ${INTRODUCE_FILE}:`, error.message);
+        }
+        
+        // Fallback to simple default content
+        if (editor) {
+            editor.setValue(FALLBACK_CONTENT);
+            console.log('Using fallback content');
+        }
     }
-    hello();
-    \`\`\`
-*   目录生成
-*   布局切换
-*   导出功能
-
----
-`;
-    if (editor) editor.setValue(initialContent);
+    
+    // Load content after editor is initialized
+    loadIntroduceContent();
 
     // --- Render Preview Logic ---
     let mermaidRenderPending = false;
@@ -451,46 +448,88 @@ window.addEventListener('DOMContentLoaded', (event) => {
     function exportPng() {
         if (!previewElement) return;
         console.log("Exporting PNG...");
-        // Ensure the element's scroll dimensions are used if content overflows
-        const options = {
-             useCORS: true,
-             logging: false, // Disable excessive logging in production
-             scale: window.devicePixelRatio * 1.5, // Adjust scale for quality vs size
-             backgroundColor: '#ffffff',
-             width: previewElement.scrollWidth,
-             height: previewElement.scrollHeight,
-             windowWidth: previewElement.scrollWidth,
-             windowHeight: previewElement.scrollHeight
-        };
-        html2canvas(previewElement, options).then(canvas => {
-             const dataUrl = canvas.toDataURL('image/png');
-              // Create a temporary link to download
-             const link = document.createElement('a');
-             link.download = (document.getElementById('doc-title')?.value || 'document') + '.png';
-             link.href = dataUrl;
-             link.click(); // Trigger download
-             link.remove(); // Clean up link
-         }).catch(err => {
-             console.error("Export PNG failed:", err);
-             alert(`导出 PNG 失败: ${err.message}\n请检查浏览器控制台获取详细信息。`);
-         });
+        
+        // Ensure preview is visible and properly rendered before export
+        const wasHidden = editorPane?.classList.contains('hidden');
+        const wasFullWidth = previewElement?.classList.contains('full-width');
+        
+        // Temporarily show preview in full width for better export
+        if (!wasHidden) {
+            editorPane?.classList.add('hidden');
+            previewElement?.classList.add('full-width');
+        }
+        
+        // Wait a moment for layout to settle
+        setTimeout(() => {
+            const options = {
+                 useCORS: true,
+                 logging: false,
+                 scale: window.devicePixelRatio * 1.5,
+                 backgroundColor: '#ffffff',
+                 width: previewElement.scrollWidth,
+                 height: previewElement.scrollHeight,
+                 windowWidth: previewElement.scrollWidth,
+                 windowHeight: previewElement.scrollHeight
+            };
+            
+            html2canvas(previewElement, options).then(canvas => {
+                 const dataUrl = canvas.toDataURL('image/png');
+                 const link = document.createElement('a');
+                 link.download = (document.getElementById('doc-title')?.value || 'document') + '.png';
+                 link.href = dataUrl;
+                 link.click();
+                 link.remove();
+                 
+                 // Restore original layout
+                 if (!wasHidden) {
+                     editorPane?.classList.remove('hidden');
+                 }
+                 if (!wasFullWidth) {
+                     previewElement?.classList.remove('full-width');
+                 }
+                 if (editor) editor.refresh();
+             }).catch(err => {
+                 console.error("Export PNG failed:", err);
+                 alert(`导出 PNG 失败: ${err.message}\n请检查浏览器控制台获取详细信息。`);
+                 
+                 // Restore layout even on error
+                 if (!wasHidden) {
+                     editorPane?.classList.remove('hidden');
+                 }
+                 if (!wasFullWidth) {
+                     previewElement?.classList.remove('full-width');
+                 }
+                 if (editor) editor.refresh();
+             });
+        }, 100);
     }
 
     function exportPdf() {
         if (!previewElement) return;
-        alert("注意：客户端 PDF 导出是实验性的，复杂或过长的内容可能导致问题或不准确分页。推荐使用浏览器的“打印 -> 另存为 PDF”功能。");
+        //alert("注意：客户端 PDF 导出是实验性的，复杂或过长的内容可能导致问题或不准确分页。推荐使用浏览器的"打印 -> 另存为 PDF"功能。");
         console.log("Exporting PDF...");
-        const { jsPDF } = window.jspdf;
-        const options = {
-             useCORS: true,
-             logging: false,
-             scale: window.devicePixelRatio * 1.5, // Higher scale for PDF
-             backgroundColor: '#ffffff',
-             width: previewElement.scrollWidth,
-             height: previewElement.scrollHeight,
-             windowWidth: previewElement.scrollWidth,
-             windowHeight: previewElement.scrollHeight
-        };
+        
+        // Ensure preview is visible and properly rendered before export
+        const wasHidden = editorPane?.classList.contains('hidden');
+        const wasFullWidth = previewElement?.classList.contains('full-width');
+        
+        if (!wasHidden) {
+            editorPane?.classList.add('hidden');
+            previewElement?.classList.add('full-width');
+        }
+        
+        setTimeout(() => {
+            const { jsPDF } = window.jspdf;
+            const options = {
+                 useCORS: true,
+                 logging: false,
+                 scale: window.devicePixelRatio * 1.5,
+                 backgroundColor: '#ffffff',
+                 width: previewElement.scrollWidth,
+                 height: previewElement.scrollHeight,
+                 windowWidth: previewElement.scrollWidth,
+                 windowHeight: previewElement.scrollHeight
+            };
 
         html2canvas(previewElement, options).then(canvas => {
             const imgData = canvas.toDataURL('image/jpeg', 0.85); // JPEG for smaller size
@@ -554,10 +593,67 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 
             pdf.save( (document.getElementById('doc-title')?.value || 'document') + '.pdf');
+            
+            // Restore original layout
+            if (!wasHidden) {
+                editorPane?.classList.remove('hidden');
+            }
+            if (!wasFullWidth) {
+                previewElement?.classList.remove('full-width');
+            }
+            if (editor) editor.refresh();
         }).catch(err => {
              console.error("Export PDF failed:", err);
              alert(`导出 PDF 失败: ${err.message}\n请检查控制台。`);
+             
+             // Restore layout even on error
+             if (!wasHidden) {
+                 editorPane?.classList.remove('hidden');
+             }
+             if (!wasFullWidth) {
+                 previewElement?.classList.remove('full-width');
+             }
+             if (editor) editor.refresh();
         });
+        }, 100);
+    }
+
+    // Copy functions
+    async function copyToClipboard(text, type) {
+        try {
+            await navigator.clipboard.writeText(text);
+            alert(`${type} 已复制到剪贴板！`);
+        } catch (err) {
+            console.error('复制失败:', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert(`${type} 已复制到剪贴板！`);
+            } catch (err2) {
+                alert(`复制失败: ${err2.message}`);
+            }
+            document.body.removeChild(textArea);
+        }
+    }
+
+    function copyMarkdown() {
+        if (!editor) return;
+        const markdownText = editor.getValue();
+        copyToClipboard(markdownText, 'Markdown源码');
+    }
+
+    function copyHtml() {
+        if (!previewElement) return;
+        const htmlContent = previewElement.innerHTML;
+        copyToClipboard(htmlContent, 'HTML代码');
     }
 
     // Connect export dropdown items to functions
@@ -570,6 +666,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('export-html-menu')?.addEventListener('click', (e) => { e.preventDefault(); exportHtml(); closeAllDropdowns(); });
     document.getElementById('export-png-menu')?.addEventListener('click', (e) => { e.preventDefault(); exportPng(); closeAllDropdowns(); });
     document.getElementById('export-pdf-menu')?.addEventListener('click', (e) => { e.preventDefault(); exportPdf(); closeAllDropdowns(); });
+    document.getElementById('copy-md-menu')?.addEventListener('click', (e) => { e.preventDefault(); copyMarkdown(); closeAllDropdowns(); });
+    document.getElementById('copy-html-menu')?.addEventListener('click', (e) => { e.preventDefault(); copyHtml(); closeAllDropdowns(); });
 
      // Helper for direct download trigger (used for MD)
     function triggerDownload(type, content, mime) {
