@@ -78,7 +78,9 @@ function initConnectivityChecks() {
 // 初始化DNS查询
 function initDNSQueries() {
     // 使用真实的DNS查询API
-    fetchDNSInfo();
+    setTimeout(() => {
+        fetchDNSInfo();
+    }, 100); // 延迟执行确保DOM完全加载
 }
 
 // 初始化切换开关
@@ -1150,7 +1152,7 @@ function determineNode(id, responseTime) {
     };
 }
 
-// 检查网站可访问性
+// 检查网站可访问性 - 优化ping准确性
 function checkWebsite(id, url) {
     const timeElement = document.getElementById(`${id}-time`);
     
@@ -1161,15 +1163,20 @@ function checkWebsite(id, url) {
     // 添加加载动画
     timeElement.innerHTML = '<span class="loading-spinner"></span> 检查中...';
     
-    // 使用fetch API进行网络连通性测试
+    // 使用多种方法进行更准确的连通性测试
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 增加超时时间到10秒
     
+    // 优先使用fetch API，但使用更精确的测试方法
     fetch(url, {
-        method: 'HEAD',
+        method: 'GET', // 改为GET方法获取更准确的响应时间
         mode: 'no-cors',
-        cache: 'no-store',
-        signal: controller.signal
+        cache: 'no-cache', // 禁用缓存确保真实网络延迟
+        signal: controller.signal,
+        headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+        }
     })
     .then(() => {
         clearTimeout(timeoutId);
@@ -1180,8 +1187,8 @@ function checkWebsite(id, url) {
         timeElement.classList.remove('error');
         timeElement.classList.add('success');
         
-        // 根据响应时间设置颜色
-        if (responseTime < 100) {
+        // 根据响应时间设置颜色 - 200ms以下为绿色
+        if (responseTime < 200) {
             timeElement.style.color = '#27ae60';
         } else if (responseTime < 500) {
             timeElement.style.color = '#f39c12';
@@ -1213,7 +1220,8 @@ function checkWebsite(id, url) {
             timeElement.classList.remove('error');
             timeElement.classList.add('success');
             
-            if (responseTime < 100) {
+            // 根据响应时间设置颜色 - 200ms以下为绿色
+            if (responseTime < 200) {
                 timeElement.style.color = '#27ae60';
             } else if (responseTime < 500) {
                 timeElement.style.color = '#f39c12';
@@ -1236,53 +1244,448 @@ function checkWebsite(id, url) {
     });
 }
 
-// 获取DNS信息
+// 获取DNS信息 - 动态表格行数 - Updated 20250608-2
 function fetchDNSInfo() {
-    // 使用公共DNS查询API
-    const dnsProviders = [
-        { id: 'ipapi', type: 'China Telecom', api: 'https://api.ipify.org?format=json' },
-        { id: 'shark1', type: 'China Telecom', api: 'https://api.ipify.org?format=json' },
-        { id: 'shark2', type: 'Chinanet SC', api: 'https://api.ipify.org?format=json' },
-        { id: 'shark3', type: 'Cloudflare WARP', api: 'https://api.ipify.org?format=json' },
-        { id: 'aliyun', type: 'Cloudflare WARP', api: 'https://api.ipify.org?format=json' },
-        { id: 'fastly', type: 'Chinanet SC', api: 'https://api.ipify.org?format=json' }
+    console.log('=== DNS出口查询开始 ===');
+    
+    // 清空现有表格内容
+    const tableBody = document.querySelector('.dns-table tbody');
+    if (tableBody) {
+        tableBody.innerHTML = '';
+        console.log('表格内容已清空');
+    } else {
+        console.error('未找到DNS表格tbody元素');
+        return;
+    }
+    
+    // DNS查询配置 - 一对多关系
+    const dnsConfigs = [
+        {
+            providerName: 'IPAPI',
+            apis: [
+                {
+                    id: 'ipapi-edns',
+                    type: 'China Telecom',
+                    url: 'https://17493553120584vi4bnjl3qssukkawww.edns.ip-api.com/json?lang=zh-CN',
+                    format: 'ip-api'
+                }
+            ]
+        },
+        {
+            providerName: 'Surfshark DNS',
+            apis: [
+                {
+                    id: 'shark1',
+                    type: 'Chinanet SC',
+                    url: 'https://zsctrp65me.ipv4.surfsharkdns.com/',
+                    format: 'surfshark'
+                },
+                {
+                    id: 'shark2',
+                    type: 'China Telecom',
+                    url: 'https://ojd00lvce8f.ipv4.surfsharkdns.com/',
+                    format: 'surfshark'
+                },
+                {
+                    id: 'shark3',
+                    type: 'Chinanet SC',
+                    url: 'https://dh3svnsaqu.ipv4.surfsharkdns.com/',
+                    format: 'surfshark'
+                }
+            ]
+        }
     ];
     
-    // 为每个DNS提供商获取IP信息
-    dnsProviders.forEach(provider => {
-        fetch(provider.api)
+    // 处理每个DNS提供商的多个API
+    console.log('DNS配置:', dnsConfigs);
+    
+    dnsConfigs.forEach(config => {
+        console.log(`处理提供商: ${config.providerName}`);
+        config.apis.forEach((api, index) => {
+            // 第一个API显示提供商名称，后续API留空
+            const displayName = index === 0 ? config.providerName : '';
+            console.log(`创建表格行: ${api.id}, 显示名称: ${displayName}`);
+            createDNSTableRowForAPI(api, displayName);
+            console.log(`开始获取数据: ${api.id}`);
+            fetchDNSDataFromAPI(api);
+        });
+    });
+    
+    console.log('=== DNS出口查询初始化完成 ===');
+}
+
+// 为单个API创建DNS表格行
+function createDNSTableRowForAPI(api, displayName) {
+    const tableBody = document.querySelector('.dns-table tbody');
+    if (!tableBody) return;
+    
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${displayName}</td>
+        <td>${api.type}</td>
+        <td id="${api.id}-dns-ip" class="ip-address">获取中...</td>
+        <td id="${api.id}-dns-location" class="location">获取中...</td>
+    `;
+    
+    tableBody.appendChild(row);
+}
+
+// 处理多个IP的情况（保留原有函数以兼容其他地方的调用）
+function handleMultipleIPs(provider, ips, originalData) {
+    const tableBody = document.querySelector('.dns-table tbody');
+    if (!tableBody) return;
+    
+    // 移除原来的行
+    const existingRow = document.querySelector(`#${provider.id}-dns-ip`);
+    if (existingRow) {
+        existingRow.closest('tr').remove();
+    }
+    
+    // 为每个IP创建一行
+    ips.forEach((ip, index) => {
+        const row = document.createElement('tr');
+        const displayName = index === 0 ? provider.name : '';
+        const displayType = index === 0 ? provider.type : '';
+        
+        row.innerHTML = `
+            <td>${displayName}</td>
+            <td>${displayType}</td>
+            <td id="${provider.id}-${index}-dns-ip" class="ip-address">${ip}</td>
+            <td id="${provider.id}-${index}-dns-location" class="location">获取中...</td>
+        `;
+        
+        tableBody.appendChild(row);
+        
+        // 获取每个IP的地理位置信息
+        fetchLocationInfoForMultiIP(provider.id, index, ip, originalData);
+    });
+}
+
+// 为多IP情况获取地理位置信息
+function fetchLocationInfoForMultiIP(providerId, index, ip, originalData) {
+    // 首先尝试从原始数据中获取位置信息
+    if (originalData && typeof originalData === 'object' && originalData[ip]) {
+        const ipInfo = originalData[ip];
+        let location = '未知位置';
+        
+        if (ipInfo.Country || ipInfo.City || ipInfo.ISP) {
+            const country = ipInfo.Country || '';
+            const city = ipInfo.City || '';
+            const isp = ipInfo.ISP || '';
+            location = `${country} ${city} ${isp}`.trim();
+        }
+        
+        updateMultiIPDNSInfo(providerId, index, ip, location);
+        return;
+    }
+    
+    // 如果原始数据中没有位置信息，则调用外部API
+    const locationAPIs = [
+        `https://ipapi.co/${ip}/json/`,
+        `https://ip-api.com/json/${ip}`,
+        `https://ipinfo.io/${ip}/json`
+    ];
+    
+    let locationIndex = 0;
+    
+    function tryLocationAPI() {
+        if (locationIndex >= locationAPIs.length) {
+            updateMultiIPDNSInfo(providerId, index, ip, '位置获取失败');
+            return;
+        }
+        
+        fetch(locationAPIs[locationIndex])
             .then(response => response.json())
-            .then(data => {
-                if (data.ip) {
-                    // 获取IP后，查询位置信息
-                    return fetch(`https://ipapi.co/${data.ip}/json/`)
-                        .then(response => response.json())
-                        .then(locationData => {
-                            const location = `${locationData.country_name} ${locationData.region} ${locationData.city} ${locationData.org || ''}`;
-                            updateDNSInfo(provider.id, data.ip, location);
-                        });
-                } else {
-                    throw new Error('无法获取IP');
+            .then(locationData => {
+                let location = '未知位置';
+                
+                if (locationData.country_name || locationData.country) {
+                    const country = locationData.country_name || locationData.country;
+                    const region = locationData.region || locationData.regionName || '';
+                    const city = locationData.city || '';
+                    const org = locationData.org || locationData.isp || '';
+                    location = `${country} ${region} ${city} ${org}`.trim();
+                } else if (locationData.loc) {
+                    location = `${locationData.city || ''} ${locationData.region || ''} ${locationData.country || ''}`;
                 }
+                
+                updateMultiIPDNSInfo(providerId, index, ip, location);
             })
             .catch(error => {
-                // 如果API请求失败，使用模拟数据
-                const mockData = {
-                    'ipapi': { ip: '125.64.134.134', location: '中国 · China Telecom' },
-                    'shark1': { ip: '125.64.134.133', location: 'China Yibin ChinaNet Sichuan Province Network' },
-                    'shark2': { ip: '171.214.23.6', location: 'China Chengdu ChinaNet Sichuan Province Network' },
-                    'shark3': { ip: '172.71.209.163', location: 'Hong Kong Hong Kong CloudFlare Inc.' },
-                    'aliyun': { ip: '172.71.213.229', location: 'Hong Kong Central and Western District' },
-                    'fastly': { ip: '171.214.23.4', location: 'China Sichuan Muping' }
-                };
-                
-                if (mockData[provider.id]) {
-                    updateDNSInfo(provider.id, mockData[provider.id].ip, mockData[provider.id].location);
+                locationIndex++;
+                if (locationIndex < locationAPIs.length) {
+                    setTimeout(tryLocationAPI, 500);
                 } else {
-                    updateDNSInfo(provider.id, '获取失败', '获取失败');
+                    updateMultiIPDNSInfo(providerId, index, ip, '位置获取失败');
                 }
             });
-    });
+    }
+    
+    tryLocationAPI();
+}
+
+// 更新多IP情况下的DNS信息显示
+function updateMultiIPDNSInfo(providerId, index, ip, location) {
+    const ipElement = document.getElementById(`${providerId}-${index}-dns-ip`);
+    const locationElement = document.getElementById(`${providerId}-${index}-dns-location`);
+    
+    if (ipElement) {
+        ipElement.textContent = ip;
+        ipElement.classList.add('success');
+    }
+    
+    if (locationElement) {
+        locationElement.textContent = location;
+        locationElement.classList.add('success');
+    }
+}
+
+// 从单个API获取DNS信息
+function fetchDNSDataFromAPI(api) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    
+    console.log(`开始获取 ${api.id} 的DNS数据...`);
+    console.log(`请求URL: ${api.url}`);
+    
+    // 尝试多个代理服务
+    const proxyServices = [
+        `https://${api.url}`,
+        `https://api.allorigins.win/get?url=${encodeURIComponent(api.url)}`,
+        `https://cors-anywhere.herokuapp.com/${api.url}`,
+        `https://thingproxy.freeboard.io/fetch/${api.url}`
+    ];
+    
+    let currentProxyIndex = 0;
+    
+    function tryNextProxy() {
+        if (currentProxyIndex >= proxyServices.length) {
+            // 所有代理都失败，尝试直接请求
+            tryDirectRequest();
+            return;
+        }
+        
+        const proxyURL = proxyServices[currentProxyIndex];
+        console.log(`${api.id} 尝试代理 ${currentProxyIndex + 1}: ${proxyURL}`);
+        
+        fetch(proxyURL, {
+            method: 'GET',
+            signal: controller.signal,
+            headers: {
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(proxyData => {
+            console.log(`${api.id} 代理 ${currentProxyIndex + 1} 响应:`, proxyData);
+            
+            // 解析代理返回的数据
+            let data;
+            try {
+                // allorigins.win 返回 {contents: "..."}
+                if (proxyData.contents) {
+                    data = JSON.parse(proxyData.contents);
+                } else {
+                    // 其他代理可能直接返回数据
+                    data = proxyData;
+                }
+                console.log(`${api.id} 解析后的数据:`, data);
+                
+                // 根据API格式处理数据
+                if (api.format === 'surfshark') {
+                    handleSurfsharkData(api, data);
+                } else if (api.format === 'ip-api') {
+                    handleIPAPIDataSingle(api, data);
+                } else {
+                    throw new Error('未知的API格式');
+                }
+                
+                clearTimeout(timeoutId);
+            } catch (e) {
+                console.error(`${api.id} 代理 ${currentProxyIndex + 1} JSON解析失败:`, e);
+                currentProxyIndex++;
+                tryNextProxy();
+            }
+        })
+        .catch(error => {
+            console.error(`${api.id} 代理 ${currentProxyIndex + 1} 失败:`, error.message);
+            currentProxyIndex++;
+            tryNextProxy();
+        });
+    }
+    
+    function tryDirectRequest() {
+        console.log(`${api.id} 尝试直接请求...`);
+        
+        fetch(api.url, {
+            method: 'GET',
+            signal: controller.signal,
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            console.log(`${api.id} 直接请求成功:`, data);
+            
+            // 根据API格式处理数据
+            if (api.format === 'surfshark') {
+                handleSurfsharkData(api, data);
+            } else if (api.format === 'ip-api') {
+                handleIPAPIDataSingle(api, data);
+            } else {
+                throw new Error('未知的API格式');
+            }
+            
+            clearTimeout(timeoutId);
+        })
+        .catch(error => {
+            clearTimeout(timeoutId);
+            console.error(`${api.id} 所有请求方式都失败:`, error.message);
+            updateDNSInfoSingle(api.id, '获取失败', '网络错误');
+        });
+    }
+    
+    // 开始尝试第一个代理
+    tryNextProxy();
+}
+
+// 处理Surfshark DNS数据
+function handleSurfsharkData(api, data) {
+    console.log(`处理Surfshark数据 (${api.id}):`, data);
+    
+    // Surfshark DNS格式: {"125.64.134.133": {"ISP": "...", "Country": "...", "City": "..."}}
+    const ipKeys = Object.keys(data).filter(key => key.match(/^\d+\.\d+\.\d+\.\d+$/));
+    
+    if (ipKeys.length > 0) {
+        // 取第一个IP作为主要显示
+        const mainIP = ipKeys[0];
+        const ipInfo = data[mainIP];
+        
+        // 构建位置信息
+        let location = '未知位置';
+        if (ipInfo.Country || ipInfo.City || ipInfo.ISP) {
+            const parts = [];
+            if (ipInfo.Country) parts.push(ipInfo.Country);
+            if (ipInfo.City) parts.push(ipInfo.City);
+            if (ipInfo.ISP) parts.push(ipInfo.ISP);
+            location = parts.join(' ');
+        }
+        
+        updateDNSInfoSingle(api.id, mainIP, location);
+        
+        // 如果有多个IP，在控制台显示所有IP
+        if (ipKeys.length > 1) {
+            console.log(`${api.id} 检测到多个IP:`, ipKeys);
+        }
+    } else {
+        console.error(`${api.id} 未返回有效IP数据`);
+        updateDNSInfoSingle(api.id, '无IP数据', '获取失败');
+    }
+}
+
+// 处理ip-api数据
+function handleIPAPIDataSingle(api, data) {
+    console.log(`处理ip-api数据 (${api.id}):`, data);
+    
+    // ip-api格式: {"dns": {"geo": "中国 - China Telecom", "ip": "125.64.134.134"}}
+    if (data.dns && data.dns.ip) {
+        updateDNSInfoSingle(api.id, data.dns.ip, data.dns.geo || '未知位置');
+    } else {
+        console.error(`${api.id} 未返回有效DNS数据`);
+        updateDNSInfoSingle(api.id, '无DNS数据', '获取失败');
+    }
+}
+
+// 更新单个API的DNS信息显示
+function updateDNSInfoSingle(apiId, ip, location) {
+    const ipElement = document.getElementById(`${apiId}-dns-ip`);
+    const locationElement = document.getElementById(`${apiId}-dns-location`);
+    
+    if (ipElement) {
+        ipElement.textContent = ip;
+        ipElement.classList.add('success');
+    }
+    
+    if (locationElement) {
+        locationElement.textContent = location;
+        locationElement.classList.add('success');
+    }
+    
+    console.log(`${apiId} 更新完成: IP=${ip}, 位置=${location}`);
+}
+
+// 获取IP地理位置信息
+function fetchLocationInfo(providerId, ip) {
+    const locationAPIs = [
+        `https://ipapi.co/${ip}/json/`,
+        `https://ip-api.com/json/${ip}`,
+        `https://ipinfo.io/${ip}/json`
+    ];
+    
+    let locationIndex = 0;
+    
+    function tryLocationAPI() {
+        if (locationIndex >= locationAPIs.length) {
+            updateDNSInfo(providerId, ip, '位置获取失败');
+            return;
+        }
+        
+        fetch(locationAPIs[locationIndex])
+            .then(response => response.json())
+            .then(locationData => {
+                let location = '未知位置';
+                
+                if (locationData.country_name || locationData.country) {
+                    const country = locationData.country_name || locationData.country;
+                    const region = locationData.region || locationData.regionName || '';
+                    const city = locationData.city || '';
+                    const org = locationData.org || locationData.isp || '';
+                    location = `${country} ${region} ${city} ${org}`.trim();
+                } else if (locationData.loc) {
+                    location = `${locationData.city || ''} ${locationData.region || ''} ${locationData.country || ''}`;
+                }
+                
+                updateDNSInfo(providerId, ip, location);
+            })
+            .catch(error => {
+                locationIndex++;
+                if (locationIndex < locationAPIs.length) {
+                    setTimeout(tryLocationAPI, 500);
+                } else {
+                    updateDNSInfo(providerId, ip, '位置获取失败');
+                }
+            });
+    }
+    
+    tryLocationAPI();
+}
+
+// 备用DNS数据
+function useFallbackDNSData(providerId) {
+    const fallbackData = {
+        'ipapi': { ip: '125.64.134.134', location: '中国 四川 成都 · China Telecom' },
+        'shark1': { ip: '104.18.6.1', location: 'United States California San Francisco · Cloudflare' },
+        'shark2': { ip: '104.18.7.1', location: 'United States California San Francisco · Cloudflare' },
+        'shark3': { ip: '104.18.8.1', location: 'United States California San Francisco · Cloudflare' },
+        'aliyun': { ip: '47.246.50.1', location: 'Singapore · Alibaba Cloud' },
+        'fastly': { ip: '151.101.1.1', location: 'United States California San Francisco · Fastly' }
+    };
+    
+    if (fallbackData[providerId]) {
+        updateDNSInfo(providerId, fallbackData[providerId].ip, fallbackData[providerId].location);
+    } else {
+        updateDNSInfo(providerId, '获取失败', '获取失败');
+    }
 }
 
 // 更新DNS信息
