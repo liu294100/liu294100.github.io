@@ -77,10 +77,8 @@ function initConnectivityChecks() {
 
 // 初始化DNS查询
 function initDNSQueries() {
-    // 使用真实的DNS查询API
-    setTimeout(() => {
-        fetchDNSInfo();
-    }, 100); // 延迟执行确保DOM完全加载
+    // DNS查询现在通过弹窗按钮触发，不需要自动执行
+    console.log('DNS查询功能已移至弹窗中');
 }
 
 // 初始化切换开关
@@ -128,6 +126,9 @@ function openToolPage(tool) {
             break;
         case 'udp-ip':
             showUDPIPQuery();
+            break;
+        case 'dns-query':
+            showDNSQuery();
             break;
         default:
             alert('该功能正在开发中，敬请期待！');
@@ -213,6 +214,386 @@ function showUDPIPQuery() {
     
     // 执行UDP IP检测
     detectUDPIP();
+}
+
+// DNS出口查询
+function showDNSQuery() {
+    const modal = createModal('DNS 出口查询', `
+        <div class="tool-content">
+            <p>检测不同DNS服务商的出口IP地址和位置信息：</p>
+            <table class="dns-table" style="width: 100%; margin-top: 15px;">
+                <thead>
+                    <tr>
+                        <th>服务商</th>
+                        <th>类型</th>
+                        <th>IP地址</th>
+                        <th>位置</th>
+                    </tr>
+                </thead>
+                <tbody id="dns-modal-tbody">
+                    <!-- 表格行将由JavaScript动态生成 -->
+                </tbody>
+            </table>
+            <button onclick="refreshDNSQuery()" class="refresh-btn" style="margin-top: 15px;">刷新检测</button>
+        </div>
+    `);
+    
+    // 执行DNS出口查询
+    fetchDNSInfoModal();
+}
+
+// 弹窗中的DNS出口查询
+function fetchDNSInfoModal() {
+    console.log('=== 弹窗DNS出口查询开始 ===');
+    
+    // 清空现有表格内容
+    const tableBody = document.querySelector('#dns-modal-tbody');
+    if (tableBody) {
+        tableBody.innerHTML = '';
+        console.log('弹窗表格内容已清空');
+    } else {
+        console.error('未找到弹窗DNS表格tbody元素');
+        return;
+    }
+    
+    // DNS查询配置 - 一对多关系
+    const dnsConfigs = [
+        {
+            providerName: 'IPAPI',
+            apis: [
+                {
+                    id: 'ipapi-edns',
+                    type: 'IPAPI Service',
+                    url: 'https://17493553120584vi4bnjl3qssukkawww.edns.ip-api.com/json?lang=zh-CN',
+                    format: 'ip-api'
+                }
+            ]
+        },
+        {
+            providerName: 'Surfshark DNS',
+            apis: [
+                {
+                    id: 'shark1',
+                    type: 'Surfshark DNS #1',
+                    url: 'https://zsctrp65me.ipv4.surfsharkdns.com/',
+                    format: 'surfshark'
+                },
+                {
+                    id: 'shark2',
+                    type: 'Surfshark DNS #2',
+                    url: 'https://ojd00lvce8f.ipv4.surfsharkdns.com/',
+                    format: 'surfshark'
+                },
+                {
+                    id: 'shark3',
+                    type: 'Surfshark DNS #3',
+                    url: 'https://oj8ggdlvce8f.ipv4.surfsharkdns.com/',
+                    format: 'surfshark'
+                }
+            ]
+        }
+    ];
+    
+    console.log('DNS配置:', dnsConfigs);
+    
+    // 处理每个DNS提供商的多个API
+    dnsConfigs.forEach((provider, providerIndex) => {
+        console.log(`处理提供商: ${provider.providerName}`);
+        
+        provider.apis.forEach((api, apiIndex) => {
+            console.log(`开始获取数据 - API ID: ${api.id}`);
+            // 获取数据，表格行将在数据返回后创建
+            fetchDNSDataFromAPIModal(api.id, api.url, api.format, provider.providerName, api.type);
+        });
+    });
+}
+
+// 为弹窗中的API创建表格行
+function createDNSTableRowForAPIModal(apiId, providerName, apiType) {
+    const tableBody = document.querySelector('#dns-modal-tbody');
+    if (!tableBody) {
+        console.error('未找到弹窗DNS表格tbody元素');
+        return;
+    }
+    
+    const row = document.createElement('tr');
+    row.id = `dns-row-${apiId}`;
+    row.innerHTML = `
+        <td>${providerName}</td>
+        <td>${apiType}</td>
+        <td id="ip-${apiId}">获取失败</td>
+        <td id="location-${apiId}">获取失败</td>
+    `;
+    
+    tableBody.appendChild(row);
+}
+
+// 从弹窗中的API获取DNS数据
+function fetchDNSDataFromAPIModal(apiId, apiUrl, format, providerName, apiType) {
+    // 优先尝试直连请求
+    console.log(`${apiId}: 优先尝试直连请求`);
+    
+    function tryDirectRequest() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
+        fetch(apiUrl, {
+            signal: controller.signal,
+            mode: 'cors',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(`${apiId}: 直连请求成功`, data);
+            if (format === 'surfshark') {
+                processSurfsharkDataModal(apiId, data, providerName, apiType);
+            } else if (format === 'ip-api') {
+                processIPAPIDataModal(apiId, data, providerName, apiType);
+            }
+        })
+        .catch(error => {
+            console.log(`${apiId}: 直连失败，尝试代理服务:`, error.message);
+            // 直连失败后尝试代理服务
+            tryProxyServices();
+        });
+    }
+    
+    // 代理服务备选方案
+    function tryProxyServices() {
+        const proxies = [
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://thingproxy.freeboard.io/fetch/'
+        ];
+        
+        let proxyIndex = 0;
+        
+        function tryNextProxy() {
+            if (proxyIndex >= proxies.length) {
+                // 所有方式都失败
+                console.error(`${apiId}: 所有请求方式都失败`);
+                updateDNSInfoSingleModal(apiId, '获取失败', '网络错误');
+                return;
+            }
+            
+            const proxyUrl = proxies[proxyIndex] + encodeURIComponent(apiUrl);
+            console.log(`${apiId}: 尝试代理 ${proxyIndex + 1}: ${proxies[proxyIndex]}`);
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+            
+            fetch(proxyUrl, {
+                signal: controller.signal,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+            })
+            .then(response => {
+                clearTimeout(timeoutId);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(text => {
+                let data;
+                try {
+                    // 处理不同代理的返回格式
+                    if (proxies[proxyIndex].includes('allorigins')) {
+                        data = JSON.parse(text);
+                    } else {
+                        data = JSON.parse(text);
+                    }
+                } catch (e) {
+                    throw new Error('JSON解析失败');
+                }
+                
+                console.log(`${apiId}: 代理请求成功`, data);
+                
+                if (format === 'surfshark') {
+                    processSurfsharkDataModal(apiId, data, providerName, apiType);
+                } else if (format === 'ip-api') {
+                    processIPAPIDataModal(apiId, data, providerName, apiType);
+                }
+            })
+            .catch(error => {
+                clearTimeout(timeoutId);
+                console.log(`${apiId}: 代理 ${proxyIndex + 1} 失败:`, error.message);
+                proxyIndex++;
+                tryNextProxy();
+            });
+        }
+        
+        tryNextProxy();
+    }
+    
+    // 开始直连请求
+    tryDirectRequest();
+}
+
+
+
+// 处理Surfshark数据（弹窗版本）
+function processSurfsharkDataModal(apiId, data, providerName, apiType) {
+    // 遍历所有 IP
+    let ipIndex = 0;
+    for (const ip in data) {
+        if (data.hasOwnProperty(ip)) {
+            const info = data[ip];
+            console.log(`IP地址: ${ip}`);
+            console.log(`  所属运营商: ${info.ISP}`);
+            console.log(`  国家: ${info.Country} (${info.CountryCode})`);
+            console.log(`  城市: ${info.City}`);
+            console.log(`  是否泄露: ${info.Leak ? '是' : '否'}`);
+            console.log('');
+            
+            // 为每个IP创建表格行
+            const rowId = `${apiId}-${ipIndex}`;
+            const displayProviderName = ipIndex === 0 ? providerName : '';
+            const displayApiType = `${apiType} - IP${ipIndex + 1}`;
+            
+            createDNSTableRowForAPIModal(rowId, displayProviderName, displayApiType);
+            
+            // 构建位置信息
+            const location = `${info.Country}, ${info.City}`;
+            
+            // 更新表格行数据
+            updateDNSInfoSingleModal(rowId, ip, location);
+            
+            ipIndex++;
+        }
+    }
+    // if (data && data.ip) {       
+    //     console.log(`${apiId}: Surfshark数据处理成功`, data);
+    //     updateDNSInfoSingleModal(apiId, data.ip, '查询中...');
+        
+    //     // 获取位置信息
+    //     fetchLocationInfoModal(apiId, data.ip);
+    // } else {
+    //     console.error(`${apiId}: Surfshark数据格式错误`, data);
+    //     updateDNSInfoSingleModal(apiId, '获取失败', '获取失败');
+    // }
+}
+
+// 处理IP-API数据（弹窗版本）
+function processIPAPIDataModal(apiId, data, providerName, apiType) {
+    if (data && data.dns) {
+        console.log(`${apiId}: IP-API数据处理成功`, data);
+        
+        // 创建表格行
+        createDNSTableRowForAPIModal(apiId, providerName, apiType);
+        
+        // 构建位置信息
+        //const location = data.country && data.regionName && data.city ? 
+        //    `${data.country}, ${data.regionName}, ${data.city}` : '位置未知';
+        const location = `${data.dns.geo}`;
+            
+        // 更新表格行数据
+        updateDNSInfoSingleModal(apiId, data.dns.ip, location);
+    } else {
+        console.error(`${apiId}: IP-API数据格式错误`, data);
+        
+        // 创建表格行（即使失败也要显示）
+        createDNSTableRowForAPIModal(apiId, providerName, apiType);
+        updateDNSInfoSingleModal(apiId, '获取失败', '获取失败');
+    }
+}
+
+
+
+// 获取位置信息（弹窗版本）
+function fetchLocationInfoModal(apiId, ip) {
+    const locationAPIs = [
+        `https://ipapi.co/${ip}/json/`,
+        `https://ip-api.com/json/${ip}?lang=zh-CN`,
+        `https://ipinfo.io/${ip}/json`
+    ];
+    
+    let apiIndex = 0;
+    
+    function tryNextLocationAPI() {
+        if (apiIndex >= locationAPIs.length) {
+            console.error(`${apiId}: 所有位置API都失败`);
+            updateDNSInfoSingleModal(apiId, ip, '位置获取失败');
+            return;
+        }
+        
+        const locationAPI = locationAPIs[apiIndex];
+        console.log(`${apiId}: 尝试位置API ${apiIndex + 1}: ${locationAPI}`);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
+        fetch(locationAPI, {
+            signal: controller.signal
+        })
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(`${apiId}: 位置API ${apiIndex + 1} 成功`, data);
+            
+            let location = '位置未知';
+            
+            if (apiIndex === 0) { // ipapi.co
+                if (data.country_name && data.region && data.city) {
+                    location = `${data.country_name}, ${data.region}, ${data.city}`;
+                }
+            } else if (apiIndex === 1) { // ip-api.com
+                if (data.country && data.regionName && data.city) {
+                    location = `${data.country}, ${data.regionName}, ${data.city}`;
+                }
+            } else if (apiIndex === 2) { // ipinfo.io
+                if (data.country && data.region && data.city) {
+                    location = `${data.country}, ${data.region}, ${data.city}`;
+                }
+            }
+            
+            updateDNSInfoSingleModal(apiId, ip, location);
+        })
+        .catch(error => {
+            clearTimeout(timeoutId);
+            console.log(`${apiId}: 位置API ${apiIndex + 1} 失败:`, error.message);
+            apiIndex++;
+            tryNextLocationAPI();
+        });
+    }
+    
+    tryNextLocationAPI();
+}
+
+// 更新单个DNS信息（弹窗版本）
+function updateDNSInfoSingleModal(apiId, ip, location) {
+    const ipElement = document.getElementById(`ip-${apiId}`);
+    const locationElement = document.getElementById(`location-${apiId}`);
+    
+    if (ipElement) {
+        ipElement.textContent = ip;
+        ipElement.style.color = ip === '获取失败' ? '#e74c3c' : '#27ae60';
+    }
+    
+    if (locationElement) {
+        locationElement.textContent = location;
+        locationElement.style.color = location === '获取失败' || location === '位置获取失败' ? '#e74c3c' : '#2c3e50';
+    }
+}
+
+// 刷新DNS查询（弹窗版本）
+function refreshDNSQuery() {
+    console.log('刷新DNS查询');
+    fetchDNSInfoModal();
 }
 
 // 创建模态框
@@ -1448,29 +1829,14 @@ function fetchDNSDataFromAPI(api) {
     console.log(`开始获取 ${api.id} 的DNS数据...`);
     console.log(`请求URL: ${api.url}`);
     
-    // 尝试多个代理服务
-    const proxyServices = [
-        `https://${api.url}`,
-        `https://api.allorigins.win/get?url=${encodeURIComponent(api.url)}`,
-        `https://cors-anywhere.herokuapp.com/${api.url}`,
-        `https://thingproxy.freeboard.io/fetch/${api.url}`
-    ];
-    
-    let currentProxyIndex = 0;
-    
-    function tryNextProxy() {
-        if (currentProxyIndex >= proxyServices.length) {
-            // 所有代理都失败，尝试直接请求
-            tryDirectRequest();
-            return;
-        }
+    // 优先尝试直连请求
+    function tryDirectRequest() {
+        console.log(`${api.id} 尝试直接请求...`);
         
-        const proxyURL = proxyServices[currentProxyIndex];
-        console.log(`${api.id} 尝试代理 ${currentProxyIndex + 1}: ${proxyURL}`);
-        
-        fetch(proxyURL, {
+        fetch(api.url, {
             method: 'GET',
             signal: controller.signal,
+            mode: 'cors',
             headers: {
                 'Accept': 'application/json',
                 'Cache-Control': 'no-cache'
@@ -1480,8 +1846,63 @@ function fetchDNSDataFromAPI(api) {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return response.json();
         })
-        .then(proxyData => {
-            console.log(`${api.id} 代理 ${currentProxyIndex + 1} 响应:`, proxyData);
+        .then(data => {
+            console.log(`${api.id} 直接请求成功:`, data);
+            
+            // 根据API格式处理数据
+            if (api.format === 'surfshark') {
+                handleSurfsharkData(api, data);
+            } else if (api.format === 'ip-api') {
+                handleIPAPIDataSingle(api, data);
+            } else {
+                throw new Error('未知的API格式');
+            }
+            
+            clearTimeout(timeoutId);
+        })
+        .catch(error => {
+            console.error(`${api.id} 直接请求失败，尝试代理服务:`, error.message);
+            // 直连失败后尝试代理服务
+            tryProxyServices();
+        });
+    }
+    
+    // 尝试多个代理服务
+    const proxyServices = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(api.url)}`,
+        `https://cors-anywhere.herokuapp.com/${api.url}`,
+        `https://thingproxy.freeboard.io/fetch/${api.url}`
+    ];
+    
+    let currentProxyIndex = 0;
+    
+    function tryProxyServices() {
+        function tryNextProxy() {
+            if (currentProxyIndex >= proxyServices.length) {
+                // 所有方式都失败
+                clearTimeout(timeoutId);
+                console.error(`${api.id} 所有请求方式都失败`);
+                updateDNSInfoSingle(api.id, '获取失败', '网络错误');
+                return;
+            }
+            
+            const proxyURL = proxyServices[currentProxyIndex];
+            console.log(`${api.id} 尝试代理 ${currentProxyIndex + 1}: ${proxyURL}`);
+            
+            fetch(proxyURL, {
+                method: 'GET',
+                signal: controller.signal,
+                headers: {
+                    'Accept': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
+            .then(proxyData => {
+                console.log(`${api.id} 代理 ${currentProxyIndex + 1} 响应:`, proxyData);
             
             // 解析代理返回的数据
             let data;
@@ -1516,47 +1937,14 @@ function fetchDNSDataFromAPI(api) {
             currentProxyIndex++;
             tryNextProxy();
         });
-    }
-    
-    function tryDirectRequest() {
-        console.log(`${api.id} 尝试直接请求...`);
+        }
         
-        fetch(api.url, {
-            method: 'GET',
-            signal: controller.signal,
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-                'Cache-Control': 'no-cache'
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.json();
-        })
-        .then(data => {
-            console.log(`${api.id} 直接请求成功:`, data);
-            
-            // 根据API格式处理数据
-            if (api.format === 'surfshark') {
-                handleSurfsharkData(api, data);
-            } else if (api.format === 'ip-api') {
-                handleIPAPIDataSingle(api, data);
-            } else {
-                throw new Error('未知的API格式');
-            }
-            
-            clearTimeout(timeoutId);
-        })
-        .catch(error => {
-            clearTimeout(timeoutId);
-            console.error(`${api.id} 所有请求方式都失败:`, error.message);
-            updateDNSInfoSingle(api.id, '获取失败', '网络错误');
-        });
+        // 开始尝试第一个代理
+        tryNextProxy();
     }
     
-    // 开始尝试第一个代理
-    tryNextProxy();
+    // 优先开始直连请求
+    tryDirectRequest();
 }
 
 // 处理Surfshark DNS数据
