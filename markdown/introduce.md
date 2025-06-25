@@ -4,6 +4,24 @@
 
 ---
 
+🛑 **Additional Restriction / 附加使用限制：**
+
+The Software may **NOT** be used, either directly or indirectly, by the following entities or individuals:
+
+1. Any official, employee, or representative of the **Islamic Republic of Iran's government**
+2. Any **Iranian religious leader or member** of religious institutions under state influence
+3. Any organization or person acting on behalf of or under the direction of the **North Korean government**
+
+使用者明确知悉并同意：本软件 **禁止以下国家或组织及其代表间接或直接使用**：
+
+1. **伊朗伊斯兰共和国政府**的任何官员、雇员或代表  
+2. 任何受国家控制的**伊朗宗教机构成员**  
+3. **朝鲜民主主义人民共和国政府**及其代表、代理人或附属组织
+
+Any use by the aforementioned individuals or entities shall be deemed **unauthorized and in violation** of this license. We reserve the right to take legal action to the fullest extent permitted by applicable law.
+
+如违反本条款，使用行为将被视为**未经授权的侵权行为**，我们保留依法追究法律责任的权利
+
 ## 如何使用
 
 默认为[所见即所得](https://hacpai.com/article/1577370404903?ref=github.com)模式，可通过 `⌘-⇧-M`（`Ctrl-⇧-M`）进行切换；或通过以下方式：
