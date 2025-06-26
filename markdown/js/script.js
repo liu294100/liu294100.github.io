@@ -164,7 +164,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
             // Block Mode $$...$$
              html = html.replace(/\$\$([\s\S]*?)\$\$/g, (match, expression) => {
                  try {
-                     const cleanExpression = expression.trim();
+                     // 清理表达式中的<br>标签和HTML实体
+                     let cleanExpression = expression.trim()
+                         .replace(/<br\s*\/?>/gi, '')
+                         .replace(/&lt;br\s*\/?&gt;/gi, '')
+                         .replace(/&lt;\s*br\s*\/?\s*&gt;/gi, '')
+                         .replace(/\s+/g, ' ');
                      if (!cleanExpression) return match;
                      return katex.renderToString(cleanExpression, { displayMode: true, throwOnError: true, output: "html" });
                  } catch (e) {
@@ -176,7 +181,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
              // Inline Mode $...$ (Refined Regex)
              html = html.replace(/(?<!\\|\$)\$((?:\\.|[^\$\\])+)\$(?!\$)/g, (match, expression) => {
                 try {
-                    const cleanExpression = expression.trim();
+                    // 清理表达式中的<br>标签和HTML实体
+                    let cleanExpression = expression.trim()
+                        .replace(/<br\s*\/?>/gi, '')
+                        .replace(/&lt;br\s*\/?&gt;/gi, '')
+                        .replace(/&lt;\s*br\s*\/?\s*&gt;/gi, '')
+                        .replace(/\s+/g, ' ');
                     if (!cleanExpression) return match;
                     const finalExpression = cleanExpression.replace(/\\\$/g, '$');
                     return katex.renderToString(finalExpression, { displayMode: false, throwOnError: true, output: "html" });
@@ -656,6 +666,200 @@ window.addEventListener('DOMContentLoaded', (event) => {
         copyToClipboard(htmlContent, 'HTML代码');
     }
 
+    function copyWechatFormat() {
+        if (!previewElement) return;
+        
+        // 创建一个临时容器来处理内容
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = previewElement.innerHTML;
+        
+        // 首先全局移除所有br标签（特别是数学公式中的）
+        const allBrTags = tempDiv.querySelectorAll('br');
+        allBrTags.forEach(br => br.remove());
+        
+        // 更彻底地清理HTML内容中的br标签（包括文本形式的）
+        let htmlContent = tempDiv.innerHTML;
+        
+        // 多轮清理，确保所有形式的br标签都被移除
+        const brPatterns = [
+            /<br\s*\/?>/gi,           // 标准br标签
+            /&lt;br\s*\/?&gt;/gi,      // HTML实体形式的br
+            /&lt;\s*br\s*&gt;/gi,       // 带空格的HTML实体br
+            /&lt;\s*br\s*\/\s*&gt;/gi, // 自闭合的HTML实体br
+            /<\s*br\s*>/gi,          // 带空格的br标签
+            /<\s*br\s*\/\s*>/gi,    // 带空格的自闭合br标签
+        ];
+        
+        brPatterns.forEach(pattern => {
+            htmlContent = htmlContent.replace(pattern, ' ');
+        });
+        
+        // 规范化空白字符
+        htmlContent = htmlContent.replace(/\s+/g, ' ');
+        
+        tempDiv.innerHTML = htmlContent;
+        
+        // 处理数学公式 - 完全转换为纯文本
+        const mathElements = tempDiv.querySelectorAll('.katex, .katex-display');
+        mathElements.forEach(mathEl => {
+            try {
+                // 尝试获取原始LaTeX代码
+                const annotation = mathEl.querySelector('annotation[encoding="application/x-tex"]');
+                let mathText = '';
+                
+                if (annotation && annotation.textContent) {
+                    // 使用原始LaTeX代码，但也需要清理
+                    mathText = annotation.textContent
+                        .replace(/&lt;/g, '<')  // 解码HTML实体
+                        .replace(/&gt;/g, '>')  // 解码HTML实体
+                        .replace(/&amp;/g, '&') // 解码HTML实体
+                        .replace(/<br\s*\/?>/gi, ' ')  // 移除br标签
+                        .replace(/[\r\n\t]+/g, ' ')
+                        .replace(/\s+/g, ' ')
+                        .trim();
+                } else {
+                    // 降级：提取可见文本并清理
+                    mathText = (mathEl.textContent || mathEl.innerText || '')
+                        .replace(/&lt;/g, '<')  // 解码HTML实体
+                        .replace(/&gt;/g, '>')  // 解码HTML实体
+                        .replace(/&amp;/g, '&') // 解码HTML实体
+                        .replace(/<br\s*\/?>/gi, ' ')  // 移除br标签
+                        .replace(/[\r\n\t]+/g, ' ')
+                        .replace(/\s+/g, ' ')
+                        .trim();
+                }
+                
+                if (mathText) {
+                    // 判断是否为块级数学公式
+                    const isDisplayMath = mathEl.classList.contains('katex-display');
+                    
+                    // 创建纯文本替换
+                    const replacement = document.createTextNode(mathText);
+                    
+                    if (isDisplayMath) {
+                        // 块级公式：创建带样式的div
+                        const mathDiv = document.createElement('div');
+                        mathDiv.style.cssText = `
+                            text-align: center;
+                            margin: 16px 0;
+                            font-size: 1.2em;
+                            font-style: italic;
+                            color: #2c3e50;
+                            font-weight: bold;
+                            padding: 8px;
+                            background-color: #f8f9fa;
+                            border-radius: 4px;
+                        `;
+                        mathDiv.appendChild(replacement);
+                        mathEl.replaceWith(mathDiv);
+                    } else {
+                        // 行内公式：创建带样式的span
+                        const mathSpan = document.createElement('span');
+                        mathSpan.style.cssText = `
+                            font-style: italic;
+                            color: #2c3e50;
+                            font-weight: bold;
+                            background-color: #f8f9fa;
+                            padding: 2px 4px;
+                            border-radius: 3px;
+                            margin: 0 2px;
+                        `;
+                        mathSpan.appendChild(replacement);
+                        mathEl.replaceWith(mathSpan);
+                    }
+                }
+            } catch (e) {
+                console.warn('处理数学公式时出错:', e);
+                // 最终降级：直接移除元素或替换为空文本
+                mathEl.replaceWith(document.createTextNode('[数学公式]'));
+            }
+        });
+        
+        // 处理剩余的br标签（防止遗漏）
+        const remainingBrTags = tempDiv.querySelectorAll('br');
+        remainingBrTags.forEach(br => {
+            const mathParent = br.closest('span[style*="italic"], .katex, .katex-display');
+            if (mathParent) {
+                br.remove();
+            }
+        });
+        
+        // 处理代码块 - 转换为纯文本格式
+        const codeBlocks = tempDiv.querySelectorAll('pre code');
+        codeBlocks.forEach(codeBlock => {
+            const codeText = codeBlock.textContent || codeBlock.innerText;
+            const newCodeBlock = document.createElement('div');
+            newCodeBlock.innerHTML = `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; border-left: 4px solid #42b983; overflow-x: auto; font-family: Consolas, Monaco, monospace; font-size: 14px; line-height: 1.5; white-space: pre-wrap;">${codeText}</pre>`;
+            codeBlock.parentNode.replaceWith(newCodeBlock.firstChild);
+        });
+        
+        // 处理引用块
+        const blockquotes = tempDiv.querySelectorAll('blockquote');
+        blockquotes.forEach(bq => {
+            bq.style.cssText = 'border-left: 4px solid #ddd; margin: 0; padding: 0 15px; color: #777;';
+        });
+        
+        // 处理标题
+        const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        headings.forEach(heading => {
+            const level = heading.tagName.toLowerCase();
+            if (level === 'h1') {
+                heading.style.cssText = 'color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;';
+            } else if (level === 'h2') {
+                heading.style.cssText = 'color: #2c3e50; border-bottom: 1px solid #bdc3c7; padding-bottom: 8px;';
+            } else {
+                heading.style.cssText = 'color: #34495e;';
+            }
+        });
+        
+        // 处理段落
+        const paragraphs = tempDiv.querySelectorAll('p');
+        paragraphs.forEach(p => {
+            p.style.cssText = 'line-height: 1.8; margin: 1em 0;';
+        });
+        
+        // 处理列表
+        const lists = tempDiv.querySelectorAll('ul, ol');
+        lists.forEach(list => {
+            list.style.cssText = 'line-height: 1.8;';
+        });
+        
+        // 处理链接
+        const links = tempDiv.querySelectorAll('a');
+        links.forEach(link => {
+            link.style.cssText = 'color: #3498db; text-decoration: none;';
+        });
+        
+        // 处理强调文本
+        const strongs = tempDiv.querySelectorAll('strong');
+        strongs.forEach(strong => {
+            strong.style.cssText = 'color: #e74c3c;';
+        });
+        
+        const ems = tempDiv.querySelectorAll('em');
+        ems.forEach(em => {
+            em.style.cssText = 'color: #9b59b6;';
+        });
+        
+        // 移除Mermaid图表
+        const mermaidDivs = tempDiv.querySelectorAll('div[class*="mermaid"]');
+        mermaidDivs.forEach(div => {
+            const placeholder = document.createElement('p');
+            placeholder.style.cssText = 'color: #e67e22; font-style: italic;';
+            placeholder.textContent = '[此处包含图表，请在原文中查看]';
+            div.replaceWith(placeholder);
+        });
+        
+        // 移除所有class和id属性
+        const allElements = tempDiv.querySelectorAll('*');
+        allElements.forEach(el => {
+            el.removeAttribute('class');
+            el.removeAttribute('id');
+        });
+        
+        copyToClipboard(tempDiv.innerHTML, '公众号格式');
+    }
+
     // Connect export dropdown items to functions
     document.getElementById('export-md-menu')?.addEventListener('click', (e) => {
          e.preventDefault();
@@ -668,6 +872,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('export-pdf-menu')?.addEventListener('click', (e) => { e.preventDefault(); exportPdf(); closeAllDropdowns(); });
     document.getElementById('copy-md-menu')?.addEventListener('click', (e) => { e.preventDefault(); copyMarkdown(); closeAllDropdowns(); });
     document.getElementById('copy-html-menu')?.addEventListener('click', (e) => { e.preventDefault(); copyHtml(); closeAllDropdowns(); });
+    document.getElementById('copy-wechat-menu')?.addEventListener('click', (e) => { e.preventDefault(); copyWechatFormat(); closeAllDropdowns(); });
 
      // Helper for direct download trigger (used for MD)
     function triggerDownload(type, content, mime) {
