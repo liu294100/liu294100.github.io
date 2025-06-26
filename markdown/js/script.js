@@ -159,27 +159,47 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
 
 
-        // 2. Post-process for KaTeX
+        // 2. Post-process for KaTeX (避免在代码块内渲染)
         try {
+            // 创建一个临时DOM来解析HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            
+            // 获取所有代码块元素
+            const codeBlocks = tempDiv.querySelectorAll('pre code, code');
+            const codeBlockContents = [];
+            const placeholders = [];
+            
+            // 保存代码块内容并用占位符替换
+            codeBlocks.forEach((block, index) => {
+                const placeholder = `__CODE_BLOCK_${index}__`;
+                codeBlockContents.push(block.innerHTML);
+                placeholders.push(placeholder);
+                block.innerHTML = placeholder;
+            });
+            
+            // 获取处理后的HTML
+            let processedHtml = tempDiv.innerHTML;
+            
             // Block Mode $$...$$
-             html = html.replace(/\$\$([\s\S]*?)\$\$/g, (match, expression) => {
-                 try {
-                     // 清理表达式中的<br>标签和HTML实体
-                     let cleanExpression = expression.trim()
-                         .replace(/<br\s*\/?>/gi, '')
-                         .replace(/&lt;br\s*\/?&gt;/gi, '')
-                         .replace(/&lt;\s*br\s*\/?\s*&gt;/gi, '')
-                         .replace(/\s+/g, ' ');
-                     if (!cleanExpression) return match;
-                     return katex.renderToString(cleanExpression, { displayMode: true, throwOnError: true, output: "html" });
-                 } catch (e) {
-                     console.warn("KaTeX Block Error:", e.message, "Input:", expression);
-                     return `<div class="katex-error" title="${md.utils.escapeHtml(e.toString())}">[KaTeX Block Error]<br>${md.utils.escapeHtml(e.message)}</div>`;
-                 }
-             });
+            processedHtml = processedHtml.replace(/\$\$([\s\S]*?)\$\$/g, (match, expression) => {
+                try {
+                    // 清理表达式中的<br>标签和HTML实体
+                    let cleanExpression = expression.trim()
+                        .replace(/<br\s*\/?>/gi, '')
+                        .replace(/&lt;br\s*\/?&gt;/gi, '')
+                        .replace(/&lt;\s*br\s*\/?\s*&gt;/gi, '')
+                        .replace(/\s+/g, ' ');
+                    if (!cleanExpression) return match;
+                    return katex.renderToString(cleanExpression, { displayMode: true, throwOnError: true, output: "html" });
+                } catch (e) {
+                    console.warn("KaTeX Block Error:", e.message, "Input:", expression);
+                    return `<div class="katex-error" title="${md.utils.escapeHtml(e.toString())}">[KaTeX Block Error]<br>${md.utils.escapeHtml(e.message)}</div>`;
+                }
+            });
 
-             // Inline Mode $...$ (Refined Regex)
-             html = html.replace(/(?<!\\|\$)\$((?:\\.|[^\$\\])+)\$(?!\$)/g, (match, expression) => {
+            // Inline Mode $...$ (Refined Regex)
+            processedHtml = processedHtml.replace(/(?<!\\|\$)\$((?:\\.|[^\$\\])+)\$(?!\$)/g, (match, expression) => {
                 try {
                     // 清理表达式中的<br>标签和HTML实体
                     let cleanExpression = expression.trim()
@@ -195,6 +215,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     return `<span class="katex-error" title="${md.utils.escapeHtml(e.toString())}">[KaTeX Inline Error]</span>`;
                 }
             });
+            
+            // 恢复代码块内容
+            placeholders.forEach((placeholder, index) => {
+                processedHtml = processedHtml.replace(placeholder, codeBlockContents[index]);
+            });
+            
+            html = processedHtml;
         } catch(e) {
             console.error("KaTeX Global Error during processing:", e);
         }
@@ -516,93 +543,236 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     function exportPdf() {
         if (!previewElement) return;
-        //alert("注意：客户端 PDF 导出是实验性的，复杂或过长的内容可能导致问题或不准确分页。推荐使用浏览器的"打印 -> 另存为 PDF"功能。");
         console.log("Exporting PDF...");
         
         // Ensure preview is visible and properly rendered before export
         const wasHidden = editorPane?.classList.contains('hidden');
         const wasFullWidth = previewElement?.classList.contains('full-width');
         
+        // Temporarily show preview in full width for better export
         if (!wasHidden) {
             editorPane?.classList.add('hidden');
             previewElement?.classList.add('full-width');
         }
         
+        // Wait a moment for layout to settle
         setTimeout(() => {
+        // Create a temporary container for PDF export with proper styling
+         const exportContainer = document.createElement('div');
+         // Use a wider container for better PDF layout
+         exportContainer.style.cssText = `
+             position: absolute;
+             top: -9999px;
+             left: -9999px;
+             width: 1200px;
+             padding: 35px;
+             background: white;
+             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+             line-height: 1.7;
+             color: #24292e;
+             font-size: 16px;
+             box-sizing: border-box;
+         `;
+        
+        // Clone the preview content
+        const clonedContent = previewElement.cloneNode(true);
+        
+        // Apply PDF-specific styles to the cloned content
+        const pdfStyles = document.createElement('style');
+        pdfStyles.textContent = `
+            .markdown-body {
+                line-height: 1.6 !important;
+                color: #24292e !important;
+                font-size: 14px !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .markdown-body h1 {
+                font-size: 24px !important;
+                margin: 20px 0 16px 0 !important;
+                padding-bottom: 8px !important;
+                border-bottom: 2px solid #eaecef !important;
+                page-break-after: avoid !important;
+            }
+            .markdown-body h2 {
+                font-size: 20px !important;
+                margin: 18px 0 14px 0 !important;
+                padding-bottom: 6px !important;
+                border-bottom: 1px solid #eaecef !important;
+                page-break-after: avoid !important;
+            }
+            .markdown-body h3 {
+                font-size: 18px !important;
+                margin: 16px 0 12px 0 !important;
+                page-break-after: avoid !important;
+            }
+            .markdown-body h4, .markdown-body h5, .markdown-body h6 {
+                font-size: 16px !important;
+                margin: 14px 0 10px 0 !important;
+                page-break-after: avoid !important;
+            }
+            .markdown-body p {
+                margin: 0 0 12px 0 !important;
+                orphans: 3 !important;
+                widows: 3 !important;
+            }
+            .markdown-body pre {
+                background-color: #f6f8fa !important;
+                border: 1px solid #e1e4e8 !important;
+                border-radius: 6px !important;
+                padding: 12px !important;
+                margin: 12px 0 !important;
+                overflow: visible !important;
+                page-break-inside: avoid !important;
+                font-size: 12px !important;
+                line-height: 1.4 !important;
+            }
+            .markdown-body code {
+                background-color: rgba(27,31,35,0.05) !important;
+                padding: 2px 4px !important;
+                border-radius: 3px !important;
+                font-size: 12px !important;
+            }
+            .markdown-body blockquote {
+                border-left: 4px solid #dfe2e5 !important;
+                padding: 0 16px !important;
+                margin: 12px 0 !important;
+                color: #6a737d !important;
+            }
+            .markdown-body table {
+                border-collapse: collapse !important;
+                margin: 12px 0 !important;
+                width: 100% !important;
+                page-break-inside: avoid !important;
+            }
+            .markdown-body th, .markdown-body td {
+                border: 1px solid #dfe2e5 !important;
+                padding: 8px 12px !important;
+                text-align: left !important;
+            }
+            .markdown-body th {
+                background-color: #f6f8fa !important;
+                font-weight: 600 !important;
+            }
+            .markdown-body ul, .markdown-body ol {
+                margin: 12px 0 !important;
+                padding-left: 24px !important;
+            }
+            .markdown-body li {
+                margin-bottom: 4px !important;
+            }
+            .katex-display {
+                margin: 16px 0 !important;
+                text-align: center !important;
+                page-break-inside: avoid !important;
+            }
+            .mermaid {
+                margin: 16px 0 !important;
+                text-align: center !important;
+                page-break-inside: avoid !important;
+            }
+            .mermaid svg {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            @media print {
+                .markdown-body {
+                    -webkit-print-color-adjust: exact !important;
+                    color-adjust: exact !important;
+                }
+            }
+        `;
+        
+        exportContainer.appendChild(pdfStyles);
+        exportContainer.appendChild(clonedContent);
+        document.body.appendChild(exportContainer);
+        
+        // Use html2canvas with optimized settings for PDF
+        const options = {
+            useCORS: true,
+            logging: false,
+            scale: 1, // Keep original scale to maintain font size
+            backgroundColor: '#ffffff',
+            width: exportContainer.scrollWidth,
+            height: exportContainer.scrollHeight,
+            windowWidth: exportContainer.scrollWidth,
+            windowHeight: exportContainer.scrollHeight,
+            removeContainer: true
+        };
+        
+        html2canvas(exportContainer, options).then(canvas => {
             const { jsPDF } = window.jspdf;
-            const options = {
-                 useCORS: true,
-                 logging: false,
-                 scale: window.devicePixelRatio * 1.5,
-                 backgroundColor: '#ffffff',
-                 width: previewElement.scrollWidth,
-                 height: previewElement.scrollHeight,
-                 windowWidth: previewElement.scrollWidth,
-                 windowHeight: previewElement.scrollHeight
-            };
-
-        html2canvas(previewElement, options).then(canvas => {
-            const imgData = canvas.toDataURL('image/jpeg', 0.85); // JPEG for smaller size
-            const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
-
+            const pdf = new jsPDF({ 
+                orientation: 'p', 
+                unit: 'mm', 
+                format: 'a4',
+                compress: true
+            });
+            
             const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            const margin = 30; // Points
-            const usableWidth = pdfWidth - 2 * margin;
-            const usableHeight = pdfHeight - 2 * margin;
-
-            const imgWidth = canvas.width / (window.devicePixelRatio * 1.5); // Convert canvas px back to logical px
-            const imgHeight = canvas.height / (window.devicePixelRatio * 1.5);
-            const aspectRatio = imgWidth / imgHeight;
-
-            let finalImgWidth = usableWidth;
-            let finalImgHeight = finalImgWidth / aspectRatio;
-
-            // Simple single-page handling (shrink to fit if too large)
-            if (finalImgHeight > usableHeight) {
-                finalImgHeight = usableHeight;
-                finalImgWidth = finalImgHeight * aspectRatio;
-                 console.warn("Content taller than PDF page, shrinking to fit. Pagination not fully implemented.");
-            }
-
-            let xPos = margin + (usableWidth - finalImgWidth) / 2; // Center horizontally
-            let yPos = margin;
-
-             // Rudimentary pagination attempt (image splitting) - often imperfect
-            if (imgHeight * (usableWidth / imgWidth) > usableHeight) { // Check if scaled height exceeds usable page height
-                console.log("Attempting basic pagination by splitting image...");
-                 let currentY = 0;
-                 const pageHeightInCanvasPx = (usableHeight / usableWidth) * canvas.width; // Approximate canvas pixels per PDF page height
-
-                 while (currentY < canvas.height) {
-                    let sliceHeight = Math.min(pageHeightInCanvasPx, canvas.height - currentY);
-                    let pageCanvas = document.createElement('canvas');
-                    pageCanvas.width = canvas.width;
+             const pdfHeight = pdf.internal.pageSize.getHeight();
+             const margin = 5; // mm - 进一步减小边距以最大化内容区域
+             const usableWidth = pdfWidth - 2 * margin;
+             const usableHeight = pdfHeight - 2 * margin;
+            
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            
+            // Calculate width ratio to fill PDF width while maintaining proportions
+            const widthRatio = usableWidth / (imgWidth * 0.264583);
+            
+            const finalWidth = usableWidth; // Use full PDF width
+            const finalHeight = imgHeight * 0.264583 * widthRatio;
+            
+            // Position content at margin
+            const xPos = margin;
+            const yPos = margin;
+            
+            // Smart pagination for better content splitting
+            if (finalHeight > usableHeight) {
+                console.log("Content requires pagination...");
+                const pageHeight = usableHeight / widthRatio / 0.264583; // Convert back to canvas pixels
+                let currentY = 0;
+                let pageNum = 0;
+                
+                while (currentY < imgHeight) {
+                    if (pageNum > 0) {
+                        pdf.addPage();
+                    }
+                    
+                    const remainingHeight = imgHeight - currentY;
+                    const sliceHeight = Math.min(pageHeight, remainingHeight);
+                    
+                    // Create a canvas for this page
+                    const pageCanvas = document.createElement('canvas');
+                    pageCanvas.width = imgWidth;
                     pageCanvas.height = sliceHeight;
-                    let pageCtx = pageCanvas.getContext('2d');
-
-                    pageCtx.drawImage(canvas, 0, currentY, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight);
-                    let pageImgData = pageCanvas.toDataURL('image/jpeg', 0.85);
-
-                    let pageFinalImgWidth = usableWidth;
-                    let pageFinalImgHeight = (sliceHeight/canvas.width) * pageFinalImgWidth;
-
-                     pdf.addImage(pageImgData, 'JPEG', margin, margin, pageFinalImgWidth, pageFinalImgHeight);
-                     currentY += sliceHeight;
-
-                     if (currentY < canvas.height) {
-                         pdf.addPage();
-                     }
-                      pageCanvas = null; // Clean up
-                 }
-
+                    const pageCtx = pageCanvas.getContext('2d');
+                    
+                    // Draw the slice
+                    pageCtx.drawImage(canvas, 0, currentY, imgWidth, sliceHeight, 0, 0, imgWidth, sliceHeight);
+                    
+                    const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.9);
+                    const pageImgHeight = sliceHeight * 0.264583 * widthRatio;
+                    
+                    pdf.addImage(pageImgData, 'JPEG', xPos, margin, finalWidth, pageImgHeight);
+                    
+                    currentY += sliceHeight;
+                    pageNum++;
+                }
             } else {
-                 // Add image to the first page if it fits
-                 pdf.addImage(imgData, 'JPEG', xPos, yPos, finalImgWidth, finalImgHeight);
+                // Single page
+                const imgData = canvas.toDataURL('image/jpeg', 0.9);
+                pdf.addImage(imgData, 'JPEG', xPos, yPos, finalWidth, finalHeight);
             }
-
-
-            pdf.save( (document.getElementById('doc-title')?.value || 'document') + '.pdf');
+            
+            // Save the PDF
+            const filename = (document.getElementById('doc-title')?.value || 'document') + '.pdf';
+            pdf.save(filename);
+            
+            // Clean up
+            document.body.removeChild(exportContainer);
             
             // Restore original layout
             if (!wasHidden) {
@@ -612,18 +782,24 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 previewElement?.classList.remove('full-width');
             }
             if (editor) editor.refresh();
+            
         }).catch(err => {
-             console.error("Export PDF failed:", err);
-             alert(`导出 PDF 失败: ${err.message}\n请检查控制台。`);
-             
-             // Restore layout even on error
-             if (!wasHidden) {
-                 editorPane?.classList.remove('hidden');
-             }
-             if (!wasFullWidth) {
-                 previewElement?.classList.remove('full-width');
-             }
-             if (editor) editor.refresh();
+            console.error("Export PDF failed:", err);
+            alert(`导出 PDF 失败: ${err.message}\n建议使用浏览器的"打印 -> 另存为 PDF"功能作为替代方案。`);
+            
+            // Clean up on error
+            if (document.body.contains(exportContainer)) {
+                document.body.removeChild(exportContainer);
+            }
+            
+            // Restore layout even on error
+            if (!wasHidden) {
+                editorPane?.classList.remove('hidden');
+            }
+            if (!wasFullWidth) {
+                previewElement?.classList.remove('full-width');
+            }
+            if (editor) editor.refresh();
         });
         }, 100);
     }
