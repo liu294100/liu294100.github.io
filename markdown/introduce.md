@@ -1,7 +1,7 @@
 # 欢迎使用Markdown 编辑器
 
 为未来而构建的在线 Markdown 编辑器；轻量且强大：内置粘贴 HTML 自动转换为 Markdown，支持流程图、甘特图、时序图、任务列表，可导出携带样式的图片、PDF、微信公众号特制的 HTML 等等。
-
+高级版：[https://apollo.abcworld.cloudns.org/markdown/index2.html](https://apollo.abcworld.cloudns.org/markdown/index2.html)
 ---
 
 🛑 **Additional Restriction / 附加使用限制：**
@@ -265,7 +265,7 @@ gantt
 
 想要查看更详细的语法说明，可以参考这份 [Markdown 资源列表](https://github.com/nicejade/nice-front-end-tutorial/blob/master/tutorial/markdown-tutorial.md)，涵盖入门至进阶教程，以及资源、平台等信息，能让您对她有更深的认知。
 
-高级版：[https://apollo.abcworld.cloudns.org/markdown/index2.html](https://apollo.abcworld.cloudns.org/arkdown/index2.html)
+高级版：[https://apollo.abcworld.cloudns.org/markdown/index2.html](https://apollo.abcworld.cloudns.org/markdown/index2.html)
 
 总而言之，不同于其它**所见即所得**的编辑器：你只需使用键盘专注于书写文本内容，就可以生成印刷级的排版格式，省却在键盘和工具栏之间来回切换，调整内容和格式的麻烦。**Markdown 在流畅的书写和印刷级的阅读体验之间找到了平衡。** 目前它已经成为世界上最大的技术分享网站 `GitHub` 和 技术问答网站 `StackOverFlow` 的御用书写格式，而且越发流行，正在在向各行业渗透。
 
