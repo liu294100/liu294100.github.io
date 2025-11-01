@@ -298,18 +298,42 @@
                         return null;
                     }
                 },
-                after: () => {
+                after: async () => {
                     console.log('Vditor 初始化完成');
-                    // 设置默认内容
-                    if (!vditor.getValue()) {
-                        vditor.setValue(getDefaultContent());
+                    // 检查是否有保存的内容，如果没有则加载 introduce.md
+                    const savedContent = localStorage.getItem('vditor-content');
+                    if (!savedContent) {
+                        try {
+                            const defaultContent = await getDefaultContent();
+                            vditor.setValue(defaultContent);
+                            console.log('已加载 introduce.md 内容');
+                        } catch (error) {
+                            console.error('设置默认内容失败:', error);
+                            vditor.setValue(getFallbackContent());
+                        }
                     }
                 }
             });
         }
         
-        // 获取默认内容
-        function getDefaultContent() {
+        // 异步加载 introduce.md 文件内容
+        async function loadIntroduceContent() {
+            try {
+                const response = await fetch('./introduce.md');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const content = await response.text();
+                console.log('成功加载 introduce.md 文件');
+                return content;
+            } catch (error) {
+                console.warn('加载 introduce.md 文件失败，使用默认内容:', error);
+                return getFallbackContent();
+            }
+        }
+        
+        // 获取回退的默认内容
+        function getFallbackContent() {
             return `# 🚀 欢迎使用 Vditor Markdown 编辑器
 
 > 这是一个基于 [Vditor](https://github.com/Vanessa219/vditor) 构建的现代化 Markdown 编辑器
@@ -362,6 +386,11 @@ function hello() {
 ---
 
 **开始你的创作之旅吧！** 🎉`;
+        }
+        
+        // 获取默认内容（现在异步加载 introduce.md）
+        async function getDefaultContent() {
+            return await loadIntroduceContent();
         }
         
         // 模式切换
@@ -460,17 +489,18 @@ ${html}
         }
         
         // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             initVditor('wysiwyg');
             
-            // 尝试恢复保存的内容
+            // 如果有保存的内容，延迟恢复（让 Vditor 的 after 回调先执行）
             const savedContent = localStorage.getItem('vditor-content');
             if (savedContent) {
                 setTimeout(() => {
                     if (vditor) {
                         vditor.setValue(savedContent);
+                        console.log('已恢复保存的内容');
                     }
-                }, 500);
+                }, 800);
             }
         });
         
