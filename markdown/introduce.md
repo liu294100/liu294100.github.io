@@ -2,28 +2,30 @@
 
 为未来而构建的在线 Markdown 编辑器；轻量且强大：内置粘贴 HTML 自动转换为 Markdown，支持流程图、甘特图、时序图、任务列表，可导出携带样式的图片、PDF、微信公众号特制的 HTML 等等。
 高级版：[https://apollo.abcworld.cloudns.org/markdown/index2.html](https://apollo.abcworld.cloudns.org/markdown/index2.html)
----
+----------------------------------------------------------------
 
 🛑 **Additional Restriction / 附加使用限制：**
 
 The Software may **NOT** be used, either directly or indirectly, by the following entities or individuals:
 
-1. Any official, employee, or representative of the **Islamic Republic of Iran's government**  
-2. Any individual, entity, or affiliated institution **controlled or directly influenced by the Iranian Islamic religious authorities**, including but not limited to Shiite clerics, religious foundations, religious councils, and their affiliated organizations in the Islamic Republic of Iran  
-3. Any organization or person acting on behalf of the **North Korean government**  
+1. Any official, employee, or representative of the **Islamic Republic of Iran's government**
+2. Any individual, entity, or affiliated institution **controlled or directly influenced by the Iranian Islamic religious authorities**, including but not limited to Shiite clerics, religious foundations, religious councils, and their affiliated organizations in the Islamic Republic of Iran
+3. Any organization or person acting on behalf of the **North Korean government**
 4. Members of or individuals affiliated with the following listed organizations, including but not limited to:
    - **Hamas**
    - **Houthi Movement (Ansar Allah)**
-   - Any entity designated as a **terrorist organization** by the **United Nations**, **European Union**, **United States**, or **People’s Republic of China**
+   - **Fraud syndicates and criminal organizations** operating in **Myanmar, Cambodia**, and other regions, including but not limited to telecom fraud groups, online gambling operations, human trafficking organizations, and their affiliated companies or entities
+   - Any entity designated as a **terrorist organization** by the **United Nations**, **European Union**, **United States**, or **People's Republic of China**
 
 本软件明确**禁止以下个人或组织使用，无论直接或间接使用均属侵权**：
 
-1. **伊朗伊斯兰共和国政府**的任何官员、雇员或代表  
-2. 任何受 **伊朗伊斯兰宗教当局**控制或直接影响的 **个人、组织或附属机构**，包括但不限于伊朗伊斯兰教什叶派教士、宗教基金会、宗教委员会及其关联组织  
-3. **朝鲜民主主义人民共和国政府**或其代理人  
+1. **伊朗伊斯兰共和国政府**的任何官员、雇员或代表
+2. 任何受 **伊朗伊斯兰宗教当局**控制或直接影响的 **个人、组织或附属机构**，包括但不限于伊朗伊斯兰教什叶派教士、宗教基金会、宗教委员会及其关联组织
+3. **朝鲜民主主义人民共和国政府**或其代理人
 4. 以下组织的成员及其相关人员，包括但不限于：
    - **哈马斯（Hamas）**
    - **胡塞武装（也门安萨尔安拉 / Ansar Allah）**
+   - 在**缅甸、柬埔寨**等地区运营的**诈骗集团和犯罪组织**，包括但不限于电信诈骗团伙、网络赌博运营商、人口贩卖组织及其关联公司或实体
    - 所有被**联合国、欧盟、美国或中华人民共和国**列为**恐怖组织**的团体及其成员
 
 Any use by the aforementioned individuals or entities shall be deemed **unauthorized and in violation** of this license. We reserve the right to take legal action to the fullest extent permitted by applicable law.
@@ -40,7 +42,7 @@ Any use by the aforementioned individuals or entities shall be deemed **unauthor
 
 ### PPT 预览
 
-如果您用作 `PPT` 预览（入口在`设置`中），需要注意，这里暂还不能支持各种图表的渲染；您可以使用 `---` 来定义水平方向上幻灯片，用 `--` 来定义垂直幻灯片；更多设定可以参见 [RevealJs 文档](https://github.com/hakimel/reveal.js#table-of-contents)。
+如果您用作 `PPT` 预览（入口在 `设置`中），需要注意，这里暂还不能支持各种图表的渲染；您可以使用 `---` 来定义水平方向上幻灯片，用 `--` 来定义垂直幻灯片；更多设定可以参见 [RevealJs 文档](https://github.com/hakimel/reveal.js#table-of-contents)。
 
 ---
 
@@ -52,18 +54,18 @@ Any use by the aforementioned individuals or entities shall be deemed **unauthor
 
 ### 1. 制作待办事宜 `Todo` 列表
 
-- [x] 🎉 通常 `Markdown` 解析器自带的基本功能；
-- [x] 🍀 支持**流程图**、**甘特图**、**时序图**、**任务列表**；
-- [x] 🏁 支持粘贴 HTML 自动转换为 Markdown；
-- [x] 💃🏻 支持插入原生 Emoji、设置常用表情列表；
-- [x] 🚑 支持编辑内容保存**本地存储**，防止意外丢失；
-- [x] 📝 支持**实时预览**，主窗口大小拖拽，字符计数；
-- [x] 🛠 支持常用快捷键(**Tab**)，及代码块添加复制
-- [x] ✨ 支持**导出**携带样式的 PDF、PNG、JPEG 等；
-- [x] ✨ 升级 Vditor，新增对 `echarts` 图表的支持；
-- [x] 👏 支持检查并格式化 Markdown 语法，使其专业；
-- [x] 🦑 支持五线谱、及[部分站点、视频、音频解析](https://github.com/b3log/vditor/issues/117?ref=hacpai.com#issuecomment-526986052)；
-- [x] 🌟 增加对**所见即所得**编辑模式的支持(`⌘-⇧-M`)；
+- [X] 🎉 通常 `Markdown` 解析器自带的基本功能；
+- [X] 🍀 支持**流程图**、**甘特图**、**时序图**、**任务列表**；
+- [X] 🏁 支持粘贴 HTML 自动转换为 Markdown；
+- [X] 💃🏻 支持插入原生 Emoji、设置常用表情列表；
+- [X] 🚑 支持编辑内容保存**本地存储**，防止意外丢失；
+- [X] 📝 支持**实时预览**，主窗口大小拖拽，字符计数；
+- [X] 🛠 支持常用快捷键(**Tab**)，及代码块添加复制
+- [X] ✨ 支持**导出**携带样式的 PDF、PNG、JPEG 等；
+- [X] ✨ 升级 Vditor，新增对 `echarts` 图表的支持；
+- [X] 👏 支持检查并格式化 Markdown 语法，使其专业；
+- [X] 🦑 支持五线谱、及[部分站点、视频、音频解析](https://github.com/b3log/vditor/issues/117?ref=hacpai.com#issuecomment-526986052)；
+- [X] 🌟 增加对**所见即所得**编辑模式的支持(`⌘-⇧-M`)；
 
 ---
 
@@ -73,7 +75,12 @@ $$
 E=mc^2
 $$
 
-数学公式 (KaTeX): $E=mc^2$ 和 $$ \int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2} $$
+数学公式 (KaTeX): $E=mc^2$ 和 
+
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$
+
 
 ---
 
@@ -94,32 +101,32 @@ $$
 graph TD
     A[用户请求] --> B[语义解析]
     B --> C[RAG检索]
-    
+  
     C -->|✅ 知识库匹配| D[上下文增强]
     C -->|❌ 无匹配| E[任务分解]
-    
+  
     D --> E
-    
+  
     E --> F{工具选择}
-    
+  
     F -->|🛠️ 核心工具| G{基础操作}
     F -->|🔌 MCP扩展服务| H{MCP操作}
-    
+  
     G -->|✏️ 文件操作| I[读写/替换]
     G -->|🖥️ 系统命令执行| J[执行命令]
     G -->|🔍 代码分析| K[代码分析]
-    
+  
     H -->|⚙️ 使用MCP工具| L[使用MCP工具]
     H -->|📦 访问MCP资源| M[访问MCP资源]
-    
+  
     I --> N[结果验证]
     J --> N
     K --> N
     L --> N
     M --> N
-    
+  
     N --> O{完成判断}
-    
+  
     O -->|✅| P[提交最终结果]
     O -->|❌| E
 ```
@@ -248,16 +255,16 @@ gantt
 
 ### 8. 绘制表格
 
-| 功能              | 在线地址                                                                 | 上线日期 |
-| :---------------- | :---------------------------------------------------------------------- | :------- |
-| IP查询           | [https://ip.skk.moe](https://ip.skk.moe/)                               | -        |
-| IP查询           | [https://apollo.abcworld.cloudns.org/ip](https://apollo.abcworld.cloudns.org/ip/) | -        |
-| IP检测（风控值） | [https://ping0.cc](https://ping0.cc/)                                   | -        |
-| IP检测           | [https://ip.skk.moe](https://ip.skk.moe/)                               | -        |
-| IP查询（WhatIsMyIPAddress） | [https://whatismyipaddress.com](https://whatismyipaddress.com/)         | -        |
-| IP查询（IP138）  | [https://www.ip138.com](https://www.ip138.com/)                         | -        |
-| 多个地点Ping     | [https://ping.chinaz.com](https://ping.chinaz.com/)                     | -        |
-| Markdown工具      | [https://markdown.lovejade.cn](https://markdown.lovejade.cn/)           | -        |
+| 功能                        | 在线地址                                                                       | 上线日期 |
+| :-------------------------- | :----------------------------------------------------------------------------- | :------- |
+| IP查询                      | [https://ip.skk.moe](https://ip.skk.moe/)                                         | -        |
+| IP查询                      | [https://apollo.abcworld.cloudns.org/ip](https://apollo.abcworld.cloudns.org/ip/) | -        |
+| IP检测（风控值）            | [https://ping0.cc](https://ping0.cc/)                                             | -        |
+| IP检测                      | [https://ip.skk.moe](https://ip.skk.moe/)                                         | -        |
+| IP查询（WhatIsMyIPAddress） | [https://whatismyipaddress.com](https://whatismyipaddress.com/)                   | -        |
+| IP查询（IP138）             | [https://www.ip138.com](https://www.ip138.com/)                                   | -        |
+| 多个地点Ping                | [https://ping.chinaz.com](https://ping.chinaz.com/)                               | -        |
+| Markdown工具                | [https://markdown.lovejade.cn](https://markdown.lovejade.cn/)                     | -        |
 
 ---
 
