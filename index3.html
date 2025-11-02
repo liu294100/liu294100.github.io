@@ -176,67 +176,81 @@
             font-size: 0.9rem;
         }
 
-        /* 分类网格 */
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            animation: fadeInUp 1s ease-out 0.7s both;
-        }
-
-        .category-card {
+        /* 树形目录结构 */
+        .tree-container {
+            max-width: 800px;
+            margin: 0 auto;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            padding: 25px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            padding: 20px;
+            animation: fadeInUp 1s ease-out 0.7s both;
+        }
+
+        .tree-node {
+            margin-bottom: 8px;
+        }
+
+        .category-node {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-bottom: 12px;
             overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .category-card:hover::before {
-            left: 100%;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
+        .category-node:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
         }
 
         .category-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            padding: 15px 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .category-header:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .expand-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
         }
 
         .category-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 18px;
-            margin-right: 15px;
+            font-size: 14px;
+            margin-right: 12px;
         }
 
         .category-title {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: white;
             flex: 1;
@@ -245,57 +259,78 @@
         .category-count {
             background: rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
             font-weight: 500;
         }
 
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
+        .links-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .links-container.expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
         }
 
         .link-item {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 15px 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            padding: 12px 20px 12px 60px;
             text-decoration: none;
-            color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
-            overflow: hidden;
+        }
+
+        .link-item:last-child {
+            border-bottom: none;
         }
 
         .link-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding-left: 70px;
+        }
+
+        .link-item::before {
+            content: '';
+            position: absolute;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
         }
 
         .link-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            margin-bottom: 8px;
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            font-size: 16px;
+            color: #4ecdc4;
+            font-size: 14px;
         }
 
         .link-title {
-            font-size: 0.85rem;
-            text-align: center;
-            line-height: 1.3;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 400;
+            flex: 1;
+        }
+
+        .link-domain {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: 10px;
         }
 
         /* 响应式设计 */
@@ -310,12 +345,28 @@
                 gap: 15px;
             }
             
-            .categories-grid {
-                grid-template-columns: 1fr;
+            .tree-container {
+                padding: 15px;
             }
             
-            .links-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            .category-header {
+                padding: 12px 15px;
+            }
+            
+            .link-item {
+                padding: 10px 15px 10px 50px;
+            }
+            
+            .link-item:hover {
+                padding-left: 55px;
+            }
+            
+            .link-item::before {
+                left: 35px;
+            }
+            
+            .link-domain {
+                display: none;
             }
         }
 
@@ -363,6 +414,14 @@
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" class="search-input" id="searchInput" placeholder="搜索网站名称或网址...">
             </div>
+            <div class="tree-controls" style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+                <button onclick="expandAllCategories()" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
+                    <i class="fas fa-expand-arrows-alt"></i> 展开全部
+                </button>
+                <button onclick="collapseAllCategories()" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">
+                    <i class="fas fa-compress-arrows-alt"></i> 折叠全部
+                </button>
+            </div>
         </div>
 
         <div class="stats" id="stats">
@@ -380,8 +439,8 @@
             </div>
         </div>
 
-        <div class="categories-grid" id="categoriesContainer">
-            <!-- 动态生成内容 -->
+        <div class="tree-container" id="treeContainer">
+            <!-- 动态生成树形目录内容 -->
         </div>
 
         <div class="empty-state hidden" id="emptyState">
@@ -499,9 +558,9 @@
             return 'fas fa-folder';
         }
 
-        // 渲染分类
-        function renderCategories(categories = categoriesData) {
-            const container = document.getElementById('categoriesContainer');
+        // 渲染树形目录
+        function renderTreeStructure(categories = categoriesData) {
+            const container = document.getElementById('treeContainer');
             const emptyState = document.getElementById('emptyState');
             
             if (categories.length === 0) {
@@ -512,29 +571,69 @@
             
             emptyState.classList.add('hidden');
             
-            container.innerHTML = categories.map(category => `
-                <div class="category-card" data-category="${category.name}">
-                    <div class="category-header">
-                        <div class="category-icon">
-                            <i class="${getCategoryIcon(category.name)}"></i>
+            container.innerHTML = categories.map((category, index) => `
+                <div class="tree-node">
+                    <div class="category-node" data-category="${category.name}">
+                        <div class="category-header" onclick="toggleCategory(${index})">
+                            <div class="expand-icon" id="expand-${index}">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="category-icon">
+                                <i class="${getCategoryIcon(category.name)}"></i>
+                            </div>
+                            <h3 class="category-title">${category.name}</h3>
+                            <span class="category-count">${category.links.length}</span>
                         </div>
-                        <h3 class="category-title">${category.name}</h3>
-                        <span class="category-count">${category.links.length}</span>
-                    </div>
-                    <div class="links-grid">
-                        ${category.links.map(link => `
-                            <a href="${link.url}" class="link-item" target="_blank" 
-                               data-title="${link.title.toLowerCase()}" 
-                               data-url="${link.url.toLowerCase()}">
-                                <div class="link-icon">
-                                    <i class="${getWebsiteIcon(link.domain)}"></i>
-                                </div>
-                                <span class="link-title">${link.title}</span>
-                            </a>
-                        `).join('')}
+                        <div class="links-container" id="links-${index}">
+                            ${category.links.map(link => `
+                                <a href="${link.url}" class="link-item" target="_blank" 
+                                   data-title="${link.title.toLowerCase()}" 
+                                   data-url="${link.url.toLowerCase()}">
+                                    <div class="link-icon">
+                                        <i class="${getWebsiteIcon(link.domain)}"></i>
+                                    </div>
+                                    <span class="link-title">${link.title}</span>
+                                    <span class="link-domain">${link.domain}</span>
+                                </a>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
             `).join('');
+        }
+
+        // 切换分类展开/折叠状态
+        function toggleCategory(index) {
+            const expandIcon = document.getElementById(`expand-${index}`);
+            const linksContainer = document.getElementById(`links-${index}`);
+            
+            if (linksContainer.classList.contains('expanded')) {
+                linksContainer.classList.remove('expanded');
+                expandIcon.classList.remove('expanded');
+            } else {
+                linksContainer.classList.add('expanded');
+                expandIcon.classList.add('expanded');
+            }
+        }
+
+        // 展开所有分类
+        function expandAllCategories() {
+            document.querySelectorAll('.links-container').forEach(container => {
+                container.classList.add('expanded');
+            });
+            document.querySelectorAll('.expand-icon').forEach(icon => {
+                icon.classList.add('expanded');
+            });
+        }
+
+        // 折叠所有分类
+        function collapseAllCategories() {
+            document.querySelectorAll('.links-container').forEach(container => {
+                container.classList.remove('expanded');
+            });
+            document.querySelectorAll('.expand-icon').forEach(icon => {
+                icon.classList.remove('expanded');
+            });
         }
 
         // 更新统计信息
@@ -565,9 +664,9 @@
         function filterContent(query) {
             if (!query) {
                 // 显示所有内容
-                document.querySelectorAll('.category-card').forEach(card => {
-                    card.classList.remove('hidden');
-                    card.querySelectorAll('.link-item').forEach(link => {
+                document.querySelectorAll('.category-node').forEach(node => {
+                    node.classList.remove('hidden');
+                    node.querySelectorAll('.link-item').forEach(link => {
                         link.classList.remove('hidden');
                     });
                 });
@@ -575,17 +674,17 @@
                 return;
             }
 
-            const categories = document.querySelectorAll('.category-card');
+            const categories = document.querySelectorAll('.category-node');
             let hasVisibleContent = false;
 
-            categories.forEach(categoryCard => {
-                const links = categoryCard.querySelectorAll('.link-item');
+            categories.forEach(categoryNode => {
+                const links = categoryNode.querySelectorAll('.link-item');
                 let hasVisibleLinks = false;
 
                 links.forEach(link => {
                     const title = link.dataset.title;
                     const url = link.dataset.url;
-                    const categoryName = categoryCard.dataset.category.toLowerCase();
+                    const categoryName = categoryNode.dataset.category.toLowerCase();
 
                     if (title.includes(query) || url.includes(query) || categoryName.includes(query)) {
                         link.classList.remove('hidden');
@@ -597,9 +696,16 @@
                 });
 
                 if (hasVisibleLinks) {
-                    categoryCard.classList.remove('hidden');
+                    categoryNode.classList.remove('hidden');
+                    // 自动展开有匹配结果的分类
+                    const linksContainer = categoryNode.querySelector('.links-container');
+                    const expandIcon = categoryNode.querySelector('.expand-icon');
+                    if (linksContainer && expandIcon) {
+                        linksContainer.classList.add('expanded');
+                        expandIcon.classList.add('expanded');
+                    }
                 } else {
-                    categoryCard.classList.add('hidden');
+                    categoryNode.classList.add('hidden');
                 }
             });
 
@@ -639,16 +745,16 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
-            renderCategories();
+            renderTreeStructure();
             updateStats();
             setupSearch();
             createParticles();
             
             // 添加入场动画
             setTimeout(() => {
-                document.querySelectorAll('.category-card').forEach((card, index) => {
-                    card.style.animationDelay = (index * 0.1) + 's';
-                    card.classList.add('fadeInUp');
+                document.querySelectorAll('.category-node').forEach((node, index) => {
+                    node.style.animationDelay = (index * 0.1) + 's';
+                    node.classList.add('fadeInUp');
                 });
             }, 1000);
         });

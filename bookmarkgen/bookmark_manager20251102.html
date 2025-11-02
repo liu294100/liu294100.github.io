@@ -386,7 +386,7 @@
 
             async loadBookmarks() {
                 try {
-                    const response = await fetch('bookmarkgen/bookmarks_data.json');
+                    const response = await fetch('bookmarks_data.json');
                     const data = await response.json();
                     this.bookmarks = data.bookmarks;
                     this.filteredBookmarks = [...this.bookmarks];
