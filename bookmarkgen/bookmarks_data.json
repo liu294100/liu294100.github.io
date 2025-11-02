@@ -793,30 +793,6 @@
       "domain": "logosystem.co"
     },
     {
-      "url": "https://www.scpta.com.cn/",
-      "title": "四川省人力资源和社会保障厅人事考试专栏",
-      "icon": "",
-      "original_category": "test",
-      "smart_category": "test",
-      "domain": "www.scpta.com.cn"
-    },
-    {
-      "url": "http://gypta.e21cn.com/index.html",
-      "title": "广元人事考试网",
-      "icon": "",
-      "original_category": "test",
-      "smart_category": "test",
-      "domain": "gypta.e21cn.com"
-    },
-    {
-      "url": "http://www.offcn.com/scgwy/",
-      "title": "中公教育网-四川",
-      "icon": "",
-      "original_category": "test",
-      "smart_category": "test",
-      "domain": "www.offcn.com"
-    },
-    {
       "url": "https://www.ruankao.org.cn/",
       "title": "中国计算机技术职业资格网",
       "icon": "",
@@ -857,28 +833,12 @@
       "domain": "www.fenbi.com"
     },
     {
-      "url": "http://www.jdpta.com/",
-      "title": "四川省人事考试基地",
-      "icon": "",
-      "original_category": "test",
-      "smart_category": "test",
-      "domain": "www.jdpta.com"
-    },
-    {
       "url": "https://yz.chsi.com.cn/",
       "title": "全国硕士研究生招生考试网",
       "icon": "",
       "original_category": "test",
       "smart_category": "test",
       "domain": "yz.chsi.com.cn"
-    },
-    {
-      "url": "http://bm.e21cn.com/",
-      "title": "考生之家 - 在线报名",
-      "icon": "",
-      "original_category": "test",
-      "smart_category": "test",
-      "domain": "bm.e21cn.com"
     },
     {
       "url": "https://www.amac.org.cn/",
