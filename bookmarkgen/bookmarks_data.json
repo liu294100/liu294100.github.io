@@ -1873,22 +1873,6 @@
       "domain": "www.tinkercad.com"
     },
     {
-      "url": "https://www.shichengbbs.com/#new",
-      "title": "狮城BBS - 狮城论坛 - 新加坡",
-      "icon": "",
-      "original_category": "论坛",
-      "smart_category": "论坛",
-      "domain": "www.shichengbbs.com"
-    },
-    {
-      "url": "https://bbs.icnkr.com/",
-      "title": "奋斗在韩国 韩国留学生华人论坛 奋韩网 - 最大的韩国中文网站",
-      "icon": "",
-      "original_category": "论坛",
-      "smart_category": "论坛",
-      "domain": "bbs.icnkr.com"
-    },
-    {
       "url": "https://www.xiaobaotv.com/",
       "title": "小宝影院 - 在线视频",
       "icon": "",
@@ -6996,14 +6980,6 @@
         "original_category": "Jobs",
         "smart_category": "Jobs",
         "domain": "www.lagou.com"
-      },
-      {
-        "url": "https://www.itneituiquan.com/",
-        "title": "成都IT内推圈-求职招聘平台",
-        "icon": "",
-        "original_category": "Jobs",
-        "smart_category": "Jobs",
-        "domain": "www.itneituiquan.com"
       },
       {
         "url": "https://www.zhaopin.com/",
