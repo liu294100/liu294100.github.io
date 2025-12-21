@@ -27,7 +27,35 @@ BLENDING = true;
 /* if empty the text will be a random number */
 var TEXT;
 num = 0;
-TEXTArray = ["余兰","LOVE","Y O U","喜欢你","LOVE","Y O U","Yu","Lan"];
+TEXTArray = [];
+
+LOVE2_CONFIG = { personName: "你" };
+
+function love2_normalizeName(name) {
+	if (name === undefined || name === null) return LOVE2_CONFIG.personName;
+	name = ("" + name).replace(/^\s+|\s+$/g, "");
+	return name ? name : LOVE2_CONFIG.personName;
+}
+
+function love2_applyConfig(config) {
+	var personName = love2_normalizeName(config && config.personName);
+
+	var nodes = document.querySelectorAll(".cfg-person-name");
+	for (var i = 0; i < nodes.length; i++) {
+		nodes[i].textContent = personName;
+	}
+
+	document.title = personName + "，因为有你，因为有你。        Create By F.L";
+	TEXTArray = [personName, "LOVE", "Y O U", "喜欢你", "LOVE", "Y O U", personName];
+	num = 0;
+}
+
+function love2_loadConfig() {
+	if (!window.fetch) return Promise.resolve(LOVE2_CONFIG);
+	return fetch("config.json", { cache: "no-store" })
+		.then(function (r) { return r.ok ? r.json() : LOVE2_CONFIG; })
+		.catch(function () { return LOVE2_CONFIG; });
+}
 
 QUALITY_TO_FONT_SIZE = [5, 12, 30, 45, 200, 350];
 QUALITY_TO_SCALE = [20, 6, 4, 1, 0.9, 1.5];
@@ -35,28 +63,29 @@ QUALITY_TO_TEXT_POS = [20, 20, 40, 60, 170, 280];
 
 
 window.onload = function () {
-	document.body.style.backgroundColor = BACKGROUND;
+	function start() {
+		document.body.style.backgroundColor = BACKGROUND;
 
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
 
-	var W = canvas.width;
-	var H = canvas.height;
+		var W = canvas.width;
+		var H = canvas.height;
 
-	var tcanvas = document.createElement("canvas");
-	var tctx = tcanvas.getContext("2d");
-	tcanvas.width = W;
-	tcanvas.height = H;
+		var tcanvas = document.createElement("canvas");
+		var tctx = tcanvas.getContext("2d");
+		tcanvas.width = W;
+		tcanvas.height = H;
 
-	total_area = W * H;
-	total_particles = 1000;
-	single_particle_area = total_area / total_particles;
-	area_length = Math.sqrt(single_particle_area);
+		total_area = W * H;
+		total_particles = 1000;
+		single_particle_area = total_area / total_particles;
+		area_length = Math.sqrt(single_particle_area);
 
-	var particles = [];
-	for (var i = 1; i <= total_particles; i++) {
-		particles.push(new particle(i));
-	}
+		var particles = [];
+		for (var i = 1; i <= total_particles; i++) {
+			particles.push(new particle(i));
+		}
 
 	function particle(i) {
 		this.r = Math.round(Math.random() * 255 | 0);
@@ -73,7 +102,7 @@ window.onload = function () {
 		this.radius = 0.1 + Math.random() * 2;
 	}
 
-	var positions = [];
+		var positions = [];
 
 	function new_positions() {
 
@@ -202,11 +231,15 @@ window.onload = function () {
 		}
 	}
 
-	function init() {
-		new_positions();
-		setInterval(draw, 30);
-		setInterval(new_positions, 2000);
+		function init() {
+			new_positions();
+			setInterval(draw, 30);
+			setInterval(new_positions, 2000);
+		}
+
+		init();
 	}
 
-	init();
+	love2_loadConfig()
+		.then(function (config) { love2_applyConfig(config); start(); });
 };
