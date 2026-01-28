@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片预览与水印工具</title>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            overflow: hidden; /* 防止出现滚动条 */
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* 自定义文件上传按钮 */
+        .file-upload {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            color: #aaa;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        #preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 1rem;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .secondary-button {
+            background-color: #6c757d;
+        }
+
+        /* 左下角信息栏 */
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            min-width: 200px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+        }
+        
+        .action-buttons button {
+            flex: 1;
+        }
+
+        .info-icon {
+            margin-right: 10px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="action-buttons" style="margin-bottom: 10px; gap: 10px;">
+            <button type="button" id="refreshWatermarkBtn" style="background-color: #5cb85c;" disabled>🔄 刷新水印</button>
+            <button type="button" id="downloadBtn" style="background-color: #f0ad4e;" disabled>⬇️ 导出图片</button>
+        </div>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label>上传图片</label>
+                <div class="file-upload">
+                    <div class="file-upload-icon">📷</div>
+                    <span class="file-upload-text">点击或拖拽上传图片</span>
+                    <input type="file" id="imageInput" accept="image/*,.heic,.heif">
+                </div>
+                <button type="button" id="chooseImageBtn" class="secondary-button" style="margin-top: 10px;">选择图片</button>
+                <!-- 预览区域 -->
+                <div class="preview-container">
+                    <img id="preview-image" alt="预览图">
+                    <canvas id="watermarkCanvas" style="display:none;"></canvas>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">描述文本</label>
+                <textarea id="description" rows="4" placeholder="请输入描述信息..."></textarea>
+            </div>
+
+            <!-- <button type="submit" style="margin-top: 10px;">提交表单</button> -->
+        </form>
+    </div>
+
+    <div class="info-panel">
+        <div class="info-item">
+            <span class="info-icon">📍</span>
+            <span id="location-text">等待获取位置...</span>
+            <button type="button" id="getLocationBtn" style="margin-left: 10px; padding: 2px 8px; font-size: 0.8rem; width: auto; background: rgba(255,255,255,0.2);">获取位置</button>
+        </div>
+        <div class="info-item">
+            <span class="info-icon">🕒</span>
+            <span id="time-text">--:--:--</span>
+        </div>
+    </div>
+
+    <script>
+        // 1. 时间更新逻辑
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            const dateString = now.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'short'
+            });
+            document.getElementById('time-text').textContent = `${dateString} ${timeString}`;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 2. 图片预览与水印逻辑
+        const imageInput = document.getElementById('imageInput');
+        const previewImage = document.getElementById('preview-image');
+        const uploadText = document.querySelector('.file-upload-text');
+        const canvas = document.getElementById('watermarkCanvas');
+        const ctx = canvas.getContext('2d');
+        const actionButtons = document.querySelector('.action-buttons');
+        const descriptionInput = document.getElementById('description');
+        const chooseImageBtn = document.getElementById('chooseImageBtn');
+        const refreshWatermarkBtn = document.getElementById('refreshWatermarkBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        let originalImage = null; // 保存原始图片对象
+        let exifData = { time: null, location: null }; // 保存 EXIF 信息
+
+        // 辅助函数：将度分秒转换为十进制
+        function convertDMSToDD(degrees, minutes, seconds, direction) {
+            let dd = degrees + minutes / 60 + seconds / (60 * 60);
+            if (direction == "S" || direction == "W") {
+                dd = dd * -1;
+            }
+            return dd;
+        }
+
+        // 监听描述文本变化，实时更新水印
+        descriptionInput.addEventListener('input', () => {
+            if (originalImage) drawWatermark();
+        });
+
+        // 监听手动刷新按钮
+        refreshWatermarkBtn.addEventListener('click', () => {
+            if (originalImage) drawWatermark();
+        });
+
+        // 监听下载按钮
+        downloadBtn.addEventListener('click', () => {
+            if (!originalImage) return;
+            const link = document.createElement('a');
+            link.download = `watermark_${new Date().getTime()}.jpg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.85);
+            link.click();
+        });
+
+        chooseImageBtn.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            exifData = { time: null, location: null };
+
+            const loadImageFromSrc = (src, fileName, revoke, onError) => {
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    if (revoke) URL.revokeObjectURL(src);
+                    drawWatermark();
+                    previewImage.style.display = 'block';
+                    refreshWatermarkBtn.disabled = false;
+                    downloadBtn.disabled = false;
+                    uploadText.textContent = fileName;
+                };
+                originalImage.onerror = function() {
+                    if (revoke) URL.revokeObjectURL(src);
+                    if (onError) {
+                        onError();
+                        return;
+                    }
+                    uploadText.textContent = '图片加载失败';
+                };
+                originalImage.src = src;
+            };
+
+            if (typeof EXIF !== 'undefined') {
+                EXIF.getData(file, function() {
+                    const dateTime = EXIF.getTag(this, "DateTimeOriginal");
+                    if (dateTime) {
+                        const parts = dateTime.split(' ');
+                        const dateParts = parts[0].split(':');
+                        exifData.time = `${dateParts[0]}年${dateParts[1]}月${dateParts[2]}日 ${parts[1]}`;
+                    }
+
+                    const lat = EXIF.getTag(this, "GPSLatitude");
+                    const latRef = EXIF.getTag(this, "GPSLatitudeRef");
+                    const long = EXIF.getTag(this, "GPSLongitude");
+                    const longRef = EXIF.getTag(this, "GPSLongitudeRef");
+
+                    if (lat && latRef && long && longRef) {
+                        const latitude = convertDMSToDD(lat[0], lat[1], lat[2], latRef);
+                        const longitude = convertDMSToDD(long[0], long[1], long[2], longRef);
+                        exifData.location = `纬度: ${latitude.toFixed(4)}, 经度: ${longitude.toFixed(4)}`;
+                    }
+                    if (exifData.time || exifData.location) {
+                        drawWatermark();
+                    }
+                });
+            }
+
+            const isHeic = file.type === 'image/heic' || file.type === 'image/heif' || /\.(heic|heif)$/i.test(file.name);
+            if (isHeic) {
+                const objectUrl = URL.createObjectURL(file);
+                loadImageFromSrc(objectUrl, file.name, true, () => {
+                    if (typeof heic2any === 'undefined') {
+                        uploadText.textContent = 'HEIC 需要转换库';
+                        return;
+                    }
+                    heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 })
+                        .then((convertedBlob) => {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                loadImageFromSrc(e.target.result, file.name, false);
+                            };
+                            reader.readAsDataURL(convertedBlob);
+                        })
+                        .catch(() => {
+                            uploadText.textContent = 'HEIC 转换失败';
+                        });
+                });
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                loadImageFromSrc(e.target.result, file.name, false);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function drawWatermark() {
+            if (!originalImage) return;
+
+            // 设置画布大小与原图一致
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+
+            // 1. 绘制原图
+            ctx.drawImage(originalImage, 0, 0);
+
+            // 2. 准备水印信息
+            // 优先使用 EXIF 信息，否则使用当前实时信息
+            const sysTimeText = document.getElementById('time-text').textContent;
+            const sysLocationText = document.getElementById('location-text').textContent;
+            
+            const displayTime = exifData.time ? `${exifData.time} (拍摄时间)` : sysTimeText;
+            const displayLocation = exifData.location ? `${exifData.location} (拍摄地点)` : sysLocationText;
+            const userText = document.getElementById('description').value;
+
+            // 3. 设置水印样式
+            const fontSize = Math.max(20, Math.floor(canvas.width / 30)); // 动态字体大小
+            ctx.font = `${fontSize}px "Microsoft YaHei", sans-serif`;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            ctx.shadowBlur = 4;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            
+            // 4. 计算绘制位置 (左下角)
+            const padding = fontSize;
+            const lineHeight = fontSize * 1.5;
+            let currentY = canvas.height - padding;
+
+            ctx.textAlign = 'left';
+
+            // 地理位置
+            ctx.fillText(`📍 ${displayLocation}`, padding, currentY);
+            currentY -= lineHeight;
+
+            // 时间
+            ctx.fillText(`🕒 ${displayTime}`, padding, currentY);
+            currentY -= lineHeight;
+
+            // ctx.textAlign = 'right';
+            // ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            // ctx.fillText(`📍 ${displayLocation}`, canvas.width - padding, canvas.height - padding);
+            // ctx.textAlign = 'left';
+
+            // 用户描述文本 (支持多行)
+            if (userText) {
+                const lines = userText.split('\n');
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.95)';
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    ctx.fillText(`📝 ${lines[i]}`, padding, currentY);
+                    currentY -= lineHeight;
+                }
+            }
+
+            // 5. 更新预览图
+            previewImage.src = canvas.toDataURL('image/png');
+        }
+
+        // 3. 地理位置逻辑
+        function getLocation() {
+            const locText = document.getElementById('location-text');
+            const btn = document.getElementById('getLocationBtn');
+            
+            if (!navigator.geolocation) {
+                locText.textContent = "您的浏览器不支持地理位置";
+                return;
+            }
+
+            locText.innerHTML = '获取位置中...<span class="loading"></span>';
+            btn.disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude.toFixed(4);
+                    const lng = position.coords.longitude.toFixed(4);
+                    locText.textContent = `纬度: ${lat}, 经度: ${lng}`;
+                    btn.disabled = false;
+                    // 如果已经有图片，重新绘制水印以更新位置信息
+                    if (originalImage) drawWatermark();
+                },
+                (error) => {
+                    let errorMsg = "";
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg = "用户拒绝了位置请求";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg = "位置信息不可用";
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg = "请求超时";
+                            break;
+                        default:
+                            errorMsg = "获取位置未知错误";
+                            break;
+                    }
+                    locText.textContent = errorMsg;
+                    btn.disabled = false;
+                }
+            );
+        }
+
+        // 绑定获取位置按钮事件
+        document.getElementById('getLocationBtn').addEventListener('click', getLocation);
+
+        // 页面加载后自动尝试获取一次位置
+        window.addEventListener('load', getLocation);
+
+        // 表单提交（演示）
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('提交成功！\n（此处为演示，未实际发送数据）');
+        });
+    </script>
+</body>
+</html>

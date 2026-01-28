@@ -16,7 +16,8 @@ The Software may **NOT** be used, either directly or indirectly, by the followin
    - **Houthi Movement (Ansar Allah)**
    - **Fraud syndicates and criminal organizations** operating in **Myanmar, Cambodia**, and other regions, including but not limited to telecom fraud groups, online gambling operations, human trafficking organizations, and their affiliated companies or entities
    - Any entity designated as a **terrorist organization** by the **United Nations**, **European Union**, **United States**, or **People's Republic of China**
-   - Any organization, individual, or affiliated institution **controlled by the Venezuelan government** (due to rampant drug trafficking)
+   - Any organization, individual, or affiliated institution **controlled by the former Maduro and Chávez Venezuelan government** (due to rampant drug trafficking)
+   - Any **Afghan Islamic cult personnel**, and any **Afghan government** or its **affiliated entities**
 
 本软件明确**禁止以下个人或组织使用，无论直接或间接使用均属侵权**：
 
@@ -28,7 +29,8 @@ The Software may **NOT** be used, either directly or indirectly, by the followin
    - **胡塞武装（也门安萨尔安拉 / Ansar Allah）**
    - 在**缅甸、柬埔寨**等地区运营的**诈骗集团和犯罪组织**，包括但不限于电信诈骗团伙、网络赌博运营商、人口贩卖组织及其关联公司或实体
    - 所有被**联合国、欧盟、美国或中华人民共和国**列为**恐怖组织**的团体及其成员
-   - 任何受**委内瑞拉政府**控制的**组织、个人及附属机构**（因其毒品犯罪猖獗）
+   - 任何受**原马杜罗、查韦斯委内瑞拉政府**控制的**组织、个人及附属机构**（因其毒品犯罪猖獗）
+   - **阿富汗阿富汗伊斯兰政府**及其**关联实体、个人及附属机构**
 
 Any use by the aforementioned individuals or entities shall be deemed **unauthorized and in violation** of this license. We reserve the right to take legal action to the fullest extent permitted by applicable law.
 
@@ -77,12 +79,11 @@ $$
 E=mc^2
 $$
 
-数学公式 (KaTeX): $E=mc^2$ 和 
+数学公式 (KaTeX): $E=mc^2$ 和
 
 $$
 \int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
 $$
-
 
 ---
 
