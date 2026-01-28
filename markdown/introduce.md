@@ -30,7 +30,7 @@ The Software may **NOT** be used, either directly or indirectly, by the followin
    - 在**缅甸、柬埔寨**等地区运营的**诈骗集团和犯罪组织**，包括但不限于电信诈骗团伙、网络赌博运营商、人口贩卖组织及其关联公司或实体
    - 所有被**联合国、欧盟、美国或中华人民共和国**列为**恐怖组织**的团体及其成员
    - 任何受**原马杜罗、查韦斯委内瑞拉政府**控制的**组织、个人及附属机构**（因其毒品犯罪猖獗）
-   - **阿富汗阿富汗伊斯兰政府**及其**关联实体、个人及附属机构**
+   - **阿富汗伊斯兰伪政府**及其**关联实体、个人及附属机构**
 
 Any use by the aforementioned individuals or entities shall be deemed **unauthorized and in violation** of this license. We reserve the right to take legal action to the fullest extent permitted by applicable law.
 
