@@ -206,6 +206,82 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .agreement-footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .agreement-footer button {
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+        }
+
+        .agreement-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+        }
+
+        .agreement-modal.active {
+            display: flex;
+        }
+
+        .agreement-content {
+            background: #fff;
+            color: #222;
+            width: 90%;
+            max-width: 780px;
+            max-height: 80vh;
+            overflow: auto;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .agreement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .agreement-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .agreement-close {
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 6px;
+        }
+
+        .agreement-section {
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+
+        .agreement-section ol,
+        .agreement-section ul {
+            margin: 8px 0 0 20px;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -249,6 +325,55 @@
         <div class="info-item">
             <span class="info-icon">🕒</span>
             <span id="time-text">--:--:--</span>
+        </div>
+    </div>
+
+    <div class="agreement-footer">
+        <button type="button" id="openAgreementBtn">同意协议</button>
+    </div>
+
+    <div class="agreement-modal" id="agreementModal" aria-hidden="true">
+        <div class="agreement-content" role="dialog" aria-modal="true" aria-labelledby="agreementTitle">
+            <div class="agreement-header">
+                <div class="agreement-title" id="agreementTitle">🛑 Additional Restriction / 附加使用限制：</div>
+                <button type="button" class="agreement-close" id="closeAgreementBtn">✕</button>
+            </div>
+            <div class="agreement-section">
+                <div>本软件明确<strong>禁止以下个人或组织使用，无论直接或间接使用均属侵权</strong>：</div>
+                <ol>
+                    <li><strong>伊朗伊斯兰共和国政府</strong>的任何官员、雇员或代表</li>
+                    <li>任何受 <strong>伊朗伊斯兰宗教当局</strong>控制或直接影响的 <strong>个人、组织或附属机构</strong>，包括但不限于伊朗伊斯兰教什叶派教士、宗教基金会、宗教委员会及其关联组织</li>
+                    <li><strong>朝鲜民主主义人民共和国政府</strong>或其代理人</li>
+                    <li>以下组织的成员及其相关人员，包括但不限于：
+                        <ul>
+                            <li><strong>哈马斯（Hamas）</strong></li>
+                            <li><strong>胡塞武装（也门安萨尔安拉 / Ansar Allah）</strong></li>
+                            <li>在<strong>缅甸、柬埔寨</strong>等地区运营的<strong>诈骗集团和犯罪组织</strong>，包括但不限于电信诈骗团伙、网络赌博运营商、人口贩卖组织及其关联公司或实体</li>
+                            <li>所有被<strong>联合国、欧盟、美国或中华人民共和国</strong>列为<strong>恐怖组织</strong>的团体及其成员</li>
+                            <li>任何受<strong>原马杜罗、查韦斯委内瑞拉政府</strong>控制的<strong>组织、个人及附属机构</strong>（因其毒品犯罪猖獗）</li>
+                            <li><strong>阿富汗伊斯兰伪政府</strong>及其<strong>关联实体、个人及附属机构</strong></li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            <div class="agreement-section">
+                <div>The Software may <strong>NOT</strong> be used, either directly or indirectly, by the following entities or individuals:</div>
+                <ol>
+                    <li>Any official, employee, or representative of the <strong>Islamic Republic of Iran's government</strong></li>
+                    <li>Any individual, entity, or affiliated institution <strong>controlled or directly influenced by the Iranian Islamic religious authorities</strong>, including but not limited to Shiite clerics, religious foundations, religious councils, and their affiliated organizations in the Islamic Republic of Iran</li>
+                    <li>Any organization or person acting on behalf of the <strong>North Korean government</strong></li>
+                    <li>Members of or individuals affiliated with the following listed organizations, including but not limited to:
+                        <ul>
+                            <li><strong>Hamas</strong></li>
+                            <li><strong>Houthi Movement (Ansar Allah)</strong></li>
+                            <li><strong>Fraud syndicates and criminal organizations</strong> operating in <strong>Myanmar, Cambodia</strong>, and other regions, including but not limited to telecom fraud groups, online gambling operations, human trafficking organizations, and their affiliated companies or entities</li>
+                            <li>Any entity designated as a <strong>terrorist organization</strong> by the <strong>United Nations</strong>, <strong>European Union</strong>, <strong>United States</strong>, or <strong>People's Republic of China</strong></li>
+                            <li>Any organization, individual, or affiliated institution <strong>controlled by the former Maduro and Chávez Venezuelan government</strong> (due to rampant drug trafficking)</li>
+                            <li>Any <strong>Afghan Islamic cult personnel</strong>, and any <strong>Afghan government</strong> or its <strong>affiliated entities</strong></li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
         </div>
     </div>
 
@@ -517,6 +642,27 @@
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
             e.preventDefault();
             alert('提交成功！\n（此处为演示，未实际发送数据）');
+        });
+
+        const agreementModal = document.getElementById('agreementModal');
+        const openAgreementBtn = document.getElementById('openAgreementBtn');
+        const closeAgreementBtn = document.getElementById('closeAgreementBtn');
+
+        openAgreementBtn.addEventListener('click', () => {
+            agreementModal.classList.add('active');
+            agreementModal.setAttribute('aria-hidden', 'false');
+        });
+
+        closeAgreementBtn.addEventListener('click', () => {
+            agreementModal.classList.remove('active');
+            agreementModal.setAttribute('aria-hidden', 'true');
+        });
+
+        agreementModal.addEventListener('click', (event) => {
+            if (event.target === agreementModal) {
+                agreementModal.classList.remove('active');
+                agreementModal.setAttribute('aria-hidden', 'true');
+            }
         });
     </script>
 </body>
