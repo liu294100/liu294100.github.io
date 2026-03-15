@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球新闻网站清单</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text: #1f2d3d;
+            --muted: #5f6b7a;
+            --primary: #2563eb;
+            --border: #e5eaf0;
+            --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", Arial, sans-serif;
+            background: linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
+            color: var(--text);
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 22px 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.92);
+            line-height: 1.6;
+        }
+
+        .toolbar {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1 1 420px;
+            min-width: 220px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 12px;
+            outline: none;
+            font-size: 15px;
+            padding: 0 14px;
+        }
+
+        .search-input:focus {
+            border-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+        }
+
+        .clear-btn {
+            height: 44px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            background: #fff;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+
+        .stats {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .layout {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 16px;
+        }
+
+        .toc {
+            position: sticky;
+            top: 16px;
+            max-height: calc(100vh - 32px);
+            overflow: auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .toc-title {
+            margin: 0 0 10px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .toc a {
+            display: block;
+            text-decoration: none;
+            color: var(--muted);
+            border-radius: 8px;
+            padding: 7px 8px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+            background: #f0f6ff;
+        }
+
+        .content-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            box-shadow: var(--shadow);
+            min-height: 520px;
+        }
+
+        #content h1, #content h2, #content h3 {
+            scroll-margin-top: 16px;
+        }
+
+        #content h2 {
+            margin-top: 28px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #edf2f7;
+            color: #1e3a8a;
+        }
+
+        #content h3 {
+            margin-top: 18px;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        #content p, #content li {
+            line-height: 1.75;
+            color: #1f2937;
+        }
+
+        #content a {
+            color: #2563eb;
+            word-break: break-all;
+        }
+
+        #content code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        #content pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 14px;
+            overflow: auto;
+        }
+
+        .empty-state {
+            padding: 40px 0;
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .json-panel {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            background: #f8fbff;
+            margin-bottom: 18px;
+        }
+
+        .json-title {
+            margin: 0 0 12px;
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .json-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .json-input, .json-select {
+            height: 38px;
+            border: 1px solid #d8e1ec;
+            border-radius: 10px;
+            padding: 0 10px;
+            font-size: 14px;
+            background: #fff;
+        }
+
+        .json-select {
+            min-width: 220px;
+            max-width: 340px;
+        }
+
+        .json-input {
+            min-width: 220px;
+            flex: 1 1 260px;
+        }
+
+        .json-btn {
+            height: 38px;
+            border: 1px solid #c8d7f5;
+            border-radius: 10px;
+            padding: 0 12px;
+            background: #fff;
+            color: #1d4ed8;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .json-summary {
+            margin-top: 10px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .json-results {
+            margin-top: 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .json-country {
+            border: 1px solid #e7edf5;
+            border-radius: 10px;
+            background: #fff;
+            padding: 10px 12px;
+        }
+
+        .json-country h4 {
+            margin: 0 0 8px;
+            color: #1f2937;
+            font-size: 15px;
+        }
+
+        .json-country ul {
+            margin: 0;
+            padding-left: 18px;
+            display: grid;
+            gap: 4px;
+        }
+
+        .json-country li {
+            line-height: 1.5;
+            color: #334155;
+        }
+
+        .json-country a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .json-country a:hover {
+            text-decoration: underline;
+        }
+
+        .json-preview {
+            display: none;
+            margin-top: 12px;
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 14px;
+            max-height: 360px;
+            overflow: auto;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .toc {
+                position: static;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <section class="hero">
+            <h1>可直接访问的海内外新闻网站清单</h1>
+            <p>基于 news/news.md 自动渲染，支持目录跳转、链接直达与关键词筛选。</p>
+            <div class="toolbar">
+                <input id="searchInput" class="search-input" type="text" placeholder="输入关键词筛选清单（国家、媒体名、域名）">
+                <button id="clearBtn" class="clear-btn" type="button">清空</button>
+                <div class="stats">
+                    <span id="countryStat" class="stat">国家：--</span>
+                    <span id="siteStat" class="stat">网站：--</span>
+                    <span id="visibleStat" class="stat">当前匹配：--</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="layout">
+            <aside class="toc">
+                <h2 class="toc-title">目录</h2>
+                <nav id="tocNav"></nav>
+            </aside>
+            <main class="content-card">
+                <section class="json-panel">
+                    <h2 class="json-title">JSON 检索</h2>
+                    <div class="json-toolbar">
+                        <select id="countrySelect" class="json-select">
+                            <option value="">全部国家</option>
+                        </select>
+                        <input id="mediaSearchInput" class="json-input" type="text" placeholder="搜索媒体名称或域名">
+                        <button id="jsonResetBtn" class="json-btn" type="button">重置</button>
+                        <button id="downloadJsonBtn" class="json-btn" type="button">下载 JSON</button>
+                        <button id="toggleJsonBtn" class="json-btn" type="button">显示 JSON</button>
+                    </div>
+                    <div id="jsonSummary" class="json-summary">匹配结果：--</div>
+                    <div id="jsonResults" class="json-results"></div>
+                    <pre id="jsonPreview" class="json-preview"></pre>
+                </section>
+                <article id="content">
+                    <div class="empty-state">正在加载 news.md ...</div>
+                </article>
+            </main>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+    <script>
+        const contentEl = document.getElementById('content');
+        const tocNavEl = document.getElementById('tocNav');
+        const searchInputEl = document.getElementById('searchInput');
+        const clearBtnEl = document.getElementById('clearBtn');
+        const countryStatEl = document.getElementById('countryStat');
+        const siteStatEl = document.getElementById('siteStat');
+        const visibleStatEl = document.getElementById('visibleStat');
+        const countrySelectEl = document.getElementById('countrySelect');
+        const mediaSearchInputEl = document.getElementById('mediaSearchInput');
+        const jsonResetBtnEl = document.getElementById('jsonResetBtn');
+        const downloadJsonBtnEl = document.getElementById('downloadJsonBtn');
+        const toggleJsonBtnEl = document.getElementById('toggleJsonBtn');
+        const jsonSummaryEl = document.getElementById('jsonSummary');
+        const jsonResultsEl = document.getElementById('jsonResults');
+        const jsonPreviewEl = document.getElementById('jsonPreview');
+
+        let listItems = [];
+        let newsData = null;
+        let mediaRecords = [];
+
+        function toSlug(text) {
+            return text
+                .trim()
+                .toLowerCase()
+                .replace(/[^\u4e00-\u9fa5a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+
+        function normalizeZhihuRedirect(url) {
+            try {
+                const parsed = new URL(url, window.location.href);
+                if (!parsed.hostname.includes('link.zhihu.com')) {
+                    return url;
+                }
+                const target = parsed.searchParams.get('target');
+                if (!target) {
+                    return url;
+                }
+                return decodeURIComponent(target);
+            } catch {
+                return url;
+            }
+        }
+
+        function cleanText(text) {
+            return text
+                .replace(/\*\*/g, '')
+                .replace(/`/g, '')
+                .replace(/<[^>]*>/g, '')
+                .trim();
+        }
+
+        function normalizeCountryTitle(title) {
+            const pure = cleanText(title);
+            const match = pure.match(/^(\d+)\s+(.+)$/);
+            if (match) {
+                return { index: Number(match[1]), name: match[2].trim(), raw: pure };
+            }
+            return { index: null, name: pure, raw: pure };
+        }
+
+        function extractLinks(line) {
+            const links = [];
+            const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+            let match = regex.exec(line);
+            while (match) {
+                links.push({
+                    text: cleanText(match[1]),
+                    url: normalizeZhihuRedirect(match[2])
+                });
+                match = regex.exec(line);
+            }
+            return links;
+        }
+
+        function extractMediaName(line, links) {
+            const plain = line
+                .replace(/^\*\s*/, '')
+                .replace(/^[🟢🟡🔴]\s*/, '')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1')
+                .replace(/https?:\/\/\S+/g, '')
+                .replace(/[：:]\s*$/g, '')
+                .trim();
+            if (plain) {
+                return cleanText(plain);
+            }
+            if (links.length > 0 && links[0].text) {
+                return cleanText(links[0].text);
+            }
+            return '未命名媒体';
+        }
+
+        function parseMarkdownToData(markdown) {
+            const lines = markdown.split(/\r?\n/);
+            const countries = [];
+            let currentContinent = '';
+            let currentCountry = null;
+
+            lines.forEach((line) => {
+                if (/^##\s+/.test(line)) {
+                    currentContinent = cleanText(line.replace(/^##\s+/, ''));
+                    return;
+                }
+
+                if (/^###\s+/.test(line)) {
+                    const countryInfo = normalizeCountryTitle(line.replace(/^###\s+/, ''));
+                    currentCountry = {
+                        id: `${countries.length + 1}`,
+                        continent: currentContinent || '未分区',
+                        country: countryInfo.name,
+                        countryIndex: countryInfo.index,
+                        countryRaw: countryInfo.raw,
+                        media: []
+                    };
+                    countries.push(currentCountry);
+                    return;
+                }
+
+                if (!/^\*\s+/.test(line) || !currentCountry) {
+                    return;
+                }
+
+                const statusMatch = line.match(/^\*\s+(🟢|🟡|🔴)/);
+                const status = statusMatch ? statusMatch[1] : '';
+                const links = extractLinks(line);
+                const mediaName = extractMediaName(line, links);
+                const mediaUrl = links.length > 0 ? links[0].url : '';
+                currentCountry.media.push({
+                    status,
+                    name: mediaName,
+                    url: mediaUrl,
+                    raw: cleanText(line)
+                });
+            });
+
+            const totalMedia = countries.reduce((sum, item) => sum + item.media.length, 0);
+            return {
+                generatedAt: new Date().toISOString(),
+                totalCountries: countries.length,
+                totalMedia,
+                countries
+            };
+        }
+
+        function updateVisibleCount() {
+            const visible = listItems.filter((li) => li.style.display !== 'none').length;
+            visibleStatEl.textContent = `当前匹配：${visible}`;
+            if (visible === 0) {
+                const empty = document.getElementById('search-empty-tip');
+                if (!empty) {
+                    const tip = document.createElement('div');
+                    tip.id = 'search-empty-tip';
+                    tip.className = 'empty-state';
+                    tip.textContent = '没有匹配项，试试缩短关键词或换个语言搜索。';
+                    contentEl.appendChild(tip);
+                }
+            } else {
+                const empty = document.getElementById('search-empty-tip');
+                if (empty) {
+                    empty.remove();
+                }
+            }
+        }
+
+        function applySearch(query) {
+            const keyword = query.trim().toLowerCase();
+            listItems.forEach((li) => {
+                const matched = !keyword || li.textContent.toLowerCase().includes(keyword);
+                li.style.display = matched ? '' : 'none';
+            });
+            updateVisibleCount();
+        }
+
+        function buildToc() {
+            tocNavEl.innerHTML = '';
+            const headings = [...contentEl.querySelectorAll('h2, h3')];
+            headings.forEach((heading) => {
+                const text = heading.textContent.trim();
+                const slug = toSlug(text);
+                if (!slug) {
+                    return;
+                }
+                if (!heading.id) {
+                    heading.id = slug;
+                }
+                const link = document.createElement('a');
+                link.href = `#${heading.id}`;
+                link.textContent = heading.tagName === 'H3' ? `　${text}` : text;
+                tocNavEl.appendChild(link);
+            });
+        }
+
+        function setStats(rawMarkdown) {
+            const countryMatch = rawMarkdown.match(/覆盖全球\s*(\d+)\s*个国家/);
+            const countryCount = newsData && newsData.totalCountries ? newsData.totalCountries : (countryMatch ? countryMatch[1] : '--');
+            const totalLinks = mediaRecords.length > 0 ? mediaRecords.length : contentEl.querySelectorAll('a[href]').length;
+            countryStatEl.textContent = `国家：${countryCount}`;
+            siteStatEl.textContent = `网站：${totalLinks}`;
+            visibleStatEl.textContent = `当前匹配：${listItems.length}`;
+        }
+
+        function buildCountryOptions() {
+            countrySelectEl.innerHTML = '<option value="">全部国家</option>';
+            if (!newsData) {
+                return;
+            }
+            newsData.countries.forEach((countryItem) => {
+                const option = document.createElement('option');
+                option.value = countryItem.country;
+                option.textContent = `${countryItem.country}${countryItem.continent ? `（${countryItem.continent}）` : ''}`;
+                countrySelectEl.appendChild(option);
+            });
+        }
+
+        function flattenMediaRecords() {
+            if (!newsData) {
+                return [];
+            }
+            const records = [];
+            newsData.countries.forEach((countryItem) => {
+                countryItem.media.forEach((mediaItem) => {
+                    records.push({
+                        continent: countryItem.continent,
+                        country: countryItem.country,
+                        status: mediaItem.status,
+                        name: mediaItem.name,
+                        url: mediaItem.url,
+                        raw: mediaItem.raw
+                    });
+                });
+            });
+            return records;
+        }
+
+        function applyJsonSearch() {
+            if (!newsData) {
+                return;
+            }
+
+            const countryValue = countrySelectEl.value.trim();
+            const keyword = mediaSearchInputEl.value.trim().toLowerCase();
+            const matchedCountries = [];
+
+            newsData.countries.forEach((countryItem) => {
+                if (countryValue && countryItem.country !== countryValue) {
+                    return;
+                }
+                const medias = countryItem.media.filter((mediaItem) => {
+                    if (!keyword) {
+                        return true;
+                    }
+                    const target = `${mediaItem.name} ${mediaItem.url} ${mediaItem.raw}`.toLowerCase();
+                    return target.includes(keyword);
+                });
+                if (medias.length > 0) {
+                    matchedCountries.push({
+                        continent: countryItem.continent,
+                        country: countryItem.country,
+                        media: medias
+                    });
+                }
+            });
+
+            const totalMatchedMedia = matchedCountries.reduce((sum, item) => sum + item.media.length, 0);
+            jsonSummaryEl.textContent = `匹配结果：${matchedCountries.length} 个国家，${totalMatchedMedia} 家媒体`;
+            jsonResultsEl.innerHTML = '';
+
+            if (totalMatchedMedia === 0) {
+                jsonResultsEl.innerHTML = '<div class="empty-state">JSON 检索无结果，请调整国家或关键词。</div>';
+                return;
+            }
+
+            matchedCountries.forEach((countryItem) => {
+                const block = document.createElement('div');
+                block.className = 'json-country';
+                const title = document.createElement('h4');
+                title.textContent = `${countryItem.country}（${countryItem.continent}）`;
+                block.appendChild(title);
+                const ul = document.createElement('ul');
+                countryItem.media.forEach((mediaItem) => {
+                    const li = document.createElement('li');
+                    if (mediaItem.url) {
+                        const a = document.createElement('a');
+                        a.href = mediaItem.url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.textContent = `${mediaItem.status ? `${mediaItem.status} ` : ''}${mediaItem.name}`;
+                        li.appendChild(a);
+                    } else {
+                        li.textContent = `${mediaItem.status ? `${mediaItem.status} ` : ''}${mediaItem.name}`;
+                    }
+                    ul.appendChild(li);
+                });
+                block.appendChild(ul);
+                jsonResultsEl.appendChild(block);
+            });
+        }
+
+        function toggleJsonPreview() {
+            const shown = jsonPreviewEl.style.display === 'block';
+            if (shown) {
+                jsonPreviewEl.style.display = 'none';
+                toggleJsonBtnEl.textContent = '显示 JSON';
+                return;
+            }
+            jsonPreviewEl.textContent = JSON.stringify(newsData, null, 2);
+            jsonPreviewEl.style.display = 'block';
+            toggleJsonBtnEl.textContent = '隐藏 JSON';
+        }
+
+        function downloadJson() {
+            if (!newsData) {
+                return;
+            }
+            const blob = new Blob([JSON.stringify(newsData, null, 2)], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'news-index.json';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        async function loadNewsJson() {
+            try {
+                const response = await fetch('./news.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+                if (!data || !Array.isArray(data.countries)) {
+                    throw new Error('JSON 结构无效');
+                }
+                return data;
+            } catch {
+                return null;
+            }
+        }
+
+        async function loadMarkdown() {
+            try {
+                const response = await fetch('./news.md');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const markdown = await response.text();
+                const md = window.markdownit({
+                    html: true,
+                    linkify: true,
+                    breaks: true
+                });
+                contentEl.innerHTML = md.render(markdown);
+
+                const links = contentEl.querySelectorAll('a[href]');
+                links.forEach((a) => {
+                    const normalized = normalizeZhihuRedirect(a.getAttribute('href'));
+                    a.href = normalized;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                });
+
+                listItems = [...contentEl.querySelectorAll('li')];
+                newsData = await loadNewsJson();
+                if (!newsData) {
+                    newsData = parseMarkdownToData(markdown);
+                }
+                mediaRecords = flattenMediaRecords();
+                buildToc();
+                buildCountryOptions();
+                applyJsonSearch();
+                setStats(markdown);
+            } catch (error) {
+                contentEl.innerHTML = `<div class="empty-state">加载失败：${error.message}</div>`;
+                jsonResultsEl.innerHTML = `<div class="empty-state">JSON 构建失败：${error.message}</div>`;
+            }
+        }
+
+        searchInputEl.addEventListener('input', (event) => {
+            applySearch(event.target.value);
+        });
+
+        clearBtnEl.addEventListener('click', () => {
+            searchInputEl.value = '';
+            applySearch('');
+            searchInputEl.focus();
+        });
+
+        countrySelectEl.addEventListener('change', applyJsonSearch);
+        mediaSearchInputEl.addEventListener('input', applyJsonSearch);
+
+        jsonResetBtnEl.addEventListener('click', () => {
+            countrySelectEl.value = '';
+            mediaSearchInputEl.value = '';
+            applyJsonSearch();
+            mediaSearchInputEl.focus();
+        });
+
+        downloadJsonBtnEl.addEventListener('click', downloadJson);
+        toggleJsonBtnEl.addEventListener('click', toggleJsonPreview);
+
+        loadMarkdown();
+    </script>
+</body>
+</html>
