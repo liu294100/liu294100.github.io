@@ -11,7 +11,6 @@
 * **验证码拦截？** 个别网站[Cloudflare](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=Cloudflare&zhida_source=entity)验证级别高，频繁访问会被临时拉黑，稍后再试即可。
 * **看不懂外语？** Edge、Safari等浏览器自带网页翻译功能，也可安装翻译插件（如[沉浸式翻译](https://link.zhihu.com/?target=https%3A//immersivetranslate.com/download/)）。
 * **速度慢？** 因物理距离、网站配置等因素，请耐心等待。
-* ***网站选用标准：可访问>权威>主流>普通>待补充***
 * **标识说明：** 🟢流畅 / 🟡适中 / 🔴缓慢（仅供参考）
 
 ---
@@ -30,17 +29,51 @@
 
 ### 1 中国
 
+#### 中国大陆
+
 * 🟢新华网：[新华网_https://www.news.cn/](https://link.zhihu.com/?target=https%3A//www.news.cn/)
 * 🟢[人民网](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=%E4%BA%BA%E6%B0%91%E7%BD%91&zhida_source=entity)：[https://www.**people.com.cn/**](https://link.zhihu.com/?target=https%3A//www.people.com.cn/)
 * 🟢央视网：[央视网_https://www.cctv.com/](https://link.zhihu.com/?target=https%3A//www.cctv.com/)
 * 🟢环球网：[环球网_https://huanqiu.com/](https://link.zhihu.com/?target=https%3A//huanqiu.com/)
 * 🟢光明网：[光明网_https://www.gmw.cn/](https://link.zhihu.com/?target=https%3A//www.gmw.cn/)
+* 🟢财新网：[https://www.**caixin.com/**](https://link.zhihu.com/?target=https%3A//www.caixin.com/)
+* 🟢界面新闻：[https://www.**jiemian.com/**](https://link.zhihu.com/?target=https%3A//www.jiemian.com/)
+* 🟢澎湃新闻：[https://www.**thepaper.cn/**](https://link.zhihu.com/?target=https%3A//www.thepaper.cn/)
+* 🟢观察者网：[https://www.**guancha.cn/**](https://link.zhihu.com/?target=https%3A//www.guancha.cn/)
+* 🟢第一财经：[https://www.**yicai.com/**](https://link.zhihu.com/?target=https%3A//www.yicai.com/)
+
+#### 香港
+
 * 🟢香港新闻网：[https://hkcna.hk](https://link.zhihu.com/?target=https%3A//hkcna.hk/)
 * 🟢香港文汇网：[文匯網 - https://www.wenweipo.com/hongkong](https://link.zhihu.com/?target=https%3A//www.wenweipo.com/hongkong)
-* 🟢[中时新闻](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=%E4%B8%AD%E6%97%B6%E6%96%B0%E9%97%BB&zhida_source=entity)：[https://www.**chinatimes.com/**](https://link.zhihu.com/?target=https%3A//www.chinatimes.com/)
-* 🔴[ETtoday](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=ETtoday&zhida_source=entity)：[https://www.**ettoday.net/**](https://link.zhihu.com/?target=https%3A//www.ettoday.net/)
+* 🟢香港01：[https://www.**hk01.com/**](https://link.zhihu.com/?target=https%3A//www.hk01.com/)
+* 🟢经济日报：[https://www.**hket.com/**](https://link.zhihu.com/?target=https%3A//www.hket.com/)
+* 🟢明报：[https://www.**mingpao.com/**](https://link.zhihu.com/?target=https%3A//www.mingpao.com/)
+* 🟢无线新闻（TVB）：[https://news.**tvb.com/**](https://link.zhihu.com/?target=https%3A//news.tvb.com/)
+* 🟢Now 新闻台：[https://news.**now.com/**](https://link.zhihu.com/?target=https%3A//news.now.com/)
+* 🟢香港电台新闻（RTHK）：[https://news.**rthk.hk/**](https://link.zhihu.com/?target=https%3A//news.rthk.hk/)
+* 🟢香港有线新闻：[https://www.**i-cable.com/news/**](https://link.zhihu.com/?target=https%3A//www.i-cable.com/news/)
+* 🟢ViuTV 新闻：[https://news.**viu.tv/**](https://link.zhihu.com/?target=https%3A//news.viu.tv/)
+
+#### 澳门
+
 * 🟢澳门日报：[https://www.macaodaily.com](https://link.zhihu.com/?target=https%3A//www.macaodaily.com/)
 * 🟢澳门新闻：[https://www.**exmoo.com/**](https://link.zhihu.com/?target=https%3A//www.exmoo.com/)
+* 🟢力报：[https://www.**exmoo.com/article/**](https://link.zhihu.com/?target=https%3A//www.exmoo.com/article/)
+
+#### 台湾
+
+* 🟢[中时新闻](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=%E4%B8%AD%E6%97%B6%E6%96%B0%E9%97%BB&zhida_source=entity)：[https://www.**chinatimes.com/**](https://link.zhihu.com/?target=https%3A//www.chinatimes.com/)
+* 🔴[ETtoday](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=ETtoday&zhida_source=entity)：[https://www.**ettoday.net/**](https://link.zhihu.com/?target=https%3A//www.ettoday.net/)
+* 🟢联合新闻网：[https://udn.com/](https://link.zhihu.com/?target=https%3A//udn.com/)
+* 🟢自由时报：[https://news.ltn.com.tw/](https://link.zhihu.com/?target=https%3A//news.ltn.com.tw/)
+* 🟢风传媒：[https://www.**storm.mg/**](https://link.zhihu.com/?target=https%3A//www.storm.mg/)
+* 🟢TVBS 新闻网：[https://news.**tvbs.com.tw/**](https://link.zhihu.com/?target=https%3A//news.tvbs.com.tw/)
+* 🟢东森新闻云：[https://news.**ebc.net.tw/**](https://link.zhihu.com/?target=https%3A//news.ebc.net.tw/)
+* 🟢三立新闻网：[https://www.**setn.com/**](https://link.zhihu.com/?target=https%3A//www.setn.com/)
+* 🟢民视新闻网：[https://www.**ftvnews.com.tw/**](https://link.zhihu.com/?target=https%3A//www.ftvnews.com.tw/)
+* 🟢公共电视新闻网：[https://news.**pts.org.tw/**](https://link.zhihu.com/?target=https%3A//news.pts.org.tw/)
+* 🟢中央社：[https://www.**cna.com.tw/**](https://link.zhihu.com/?target=https%3A//www.cna.com.tw/)
 
 ### 2 日本
 
@@ -62,7 +95,44 @@
 * 🟡中央日报：[https://**joongang.co.kr/**](https://link.zhihu.com/?target=https%3A//joongang.co.kr/)
 * 🟡**MBC **News：[https://**imnews.imbc.com/**](https://link.zhihu.com/?target=https%3A//imnews.imbc.com/)
 
-### 4 土耳其
+### 4 新加坡
+
+* 🟡Mothership：[https://**mothership.sg/**](https://link.zhihu.com/?target=https%3A//mothership.sg/)
+* 🟢联合早报：[https://www.**zaobao.com/**](https://link.zhihu.com/?target=https%3A//www.zaobao.com/)
+* 🔴新加坡眼：[https://www.**yan.sg/**](https://link.zhihu.com/?target=https%3A//www.yan.sg/)
+* 🟢海峡时报：[https://www.**straitstimes.com/**](https://link.zhihu.com/?target=https%3A//www.straitstimes.com/)
+* 🟢亚洲新闻台：[https://www.**channelnewsasia.com/**](https://link.zhihu.com/?target=https%3A//www.channelnewsasia.com/)
+* 🟢TODAY：[https://www.**todayonline.com/**](https://link.zhihu.com/?target=https%3A//www.todayonline.com/)
+
+### 5 以色列
+
+* 🟢以色列时报：[https://www.**timesofisrael.com/**](https://link.zhihu.com/?target=https%3A//www.timesofisrael.com/)
+* 🟢国土报：[https://www.**haaretz.com/**](https://link.zhihu.com/?target=https%3A//www.haaretz.com/)
+* 🟢Ynetnews：[https://www.**ynetnews.com/**](https://link.zhihu.com/?target=https%3A//www.ynetnews.com/)
+* 🟢The Jerusalem Post **耶路撒冷邮报** ：[https://www.**jpost.com/**](https://link.zhihu.com/?target=https%3A//www.jpost.com/)
+* 🟡Israel Hayom：[https://www.**israelhayom.com/**](https://link.zhihu.com/?target=https%3A//www.israelhayom.com/)
+* 🟢Arutz Sheva **以色列国家新闻** ：[https://www.**israelnationalnews.com/**](https://link.zhihu.com/?target=https%3A//www.israelnationalnews.com/)
+
+### 6 马来西亚
+
+* 🟢星报：[https://www.**thestar.com.my/**](https://link.zhihu.com/?target=https%3A//www.thestar.com.my/)
+* 🟢马来西亚通讯社：[https://**bernama.com/bm/index.ph**p](https://link.zhihu.com/?target=https%3A//bernama.com/bm/index.php)
+* 🟢当今大马：[https://www.**malaysiakini.com/**](https://link.zhihu.com/?target=https%3A//www.malaysiakini.com/)
+* 🟢新海峡时报：[https://www.**nst.com.my/**](https://link.zhihu.com/?target=https%3A//www.nst.com.my/)
+* 🟢阳光日报：[https://www.**sinardaily.my/**](https://link.zhihu.com/?target=https%3A//www.sinardaily.my/)
+
+### 7 越南
+
+* 🟢越南新闻：[https://**vietnamnews.vn/**](https://link.zhihu.com/?target=https%3A//vietnamnews.vn/)
+* 🟢VnExpress：[https://**e.vnexpress.net/**](https://link.zhihu.com/?target=https%3A//e.vnexpress.net/)
+
+### 8 泰国
+
+* 🟢Sanook：[https://www.**sanook.com/**](https://link.zhihu.com/?target=https%3A//www.sanook.com/)
+* 🟢泰叻报：[https://www.**thairath.co.th/**](https://link.zhihu.com/?target=https%3A//www.thairath.co.th/)
+* 🟢考苏得英文报：[https://www.**khaosod.co.th/**](https://link.zhihu.com/?target=https%3A//www.khaosod.co.th/)
+
+### 9 土耳其
 
 * 🟡[自由报](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=%E8%87%AA%E7%94%B1%E6%8A%A5&zhida_source=entity)：[https://www.**hurriyet.com.tr/**](https://link.zhihu.com/?target=https%3A//www.hurriyet.com.tr/)
 * 🔴[Milliyet](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=Milliyet&zhida_source=entity)：[https://www.**milliyet.com.tr/**](https://link.zhihu.com/?target=https%3A//www.milliyet.com.tr/)
@@ -72,7 +142,7 @@
 * 🟡[Mynet](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=Mynet&zhida_source=entity)：[https://www.**mynet.com/**](https://link.zhihu.com/?target=https%3A//www.mynet.com/)
 * 🟡[En Son Haber](https://zhida.zhihu.com/search?content_id=773059618&content_type=Answer&match_order=1&q=En+Son+Haber&zhida_source=entity)：[https://www.**ensonhaber.com/**](https://link.zhihu.com/?target=https%3A//www.ensonhaber.com/)
 
-### 5 沙特阿拉伯
+### 10 沙特阿拉伯
 
 * 🟢阿拉伯新闻：[https://www.**arabnews.com/**](https://link.zhihu.com/?target=https%3A//www.arabnews.com/)
 * 🟢沙特公报：[https://**saudigazette.com.sa/**](https://link.zhihu.com/?target=https%3A//saudigazette.com.sa/)
@@ -81,46 +151,12 @@
 * 🟡沙特官方通讯社：[https://www.**spa.gov.sa/**](https://link.zhihu.com/?target=https%3A//www.spa.gov.sa/)
 * 🟢奥卡兹报：[https://www.**okaz.com.sa/**](https://link.zhihu.com/?target=https%3A//www.okaz.com.sa/)
 
-### 6 巴基斯坦
+### 11 巴基斯坦
 
 * 🟢SAMAA TV：[https://www.**samaa.tv/**](https://link.zhihu.com/?target=https%3A//www.samaa.tv/)
 * 🟢ARY News：[https://**arynews.tv/**](https://link.zhihu.com/?target=https%3A//arynews.tv/)
 * 🟢战斗报：[https://**jang.com.pk/**](https://link.zhihu.com/?target=https%3A//jang.com.pk/)
 * 🟢巴基斯坦联合通讯社：[https://www.**app.com.pk/**](https://link.zhihu.com/?target=https%3A//www.app.com.pk/)
-
-### 7 以色列
-
-* 🟢以色列时报：[https://www.**timesofisrael.com/**](https://link.zhihu.com/?target=https%3A//www.timesofisrael.com/)
-* 🟢国土报：[https://www.**haaretz.com/**](https://link.zhihu.com/?target=https%3A//www.haaretz.com/)
-* 🟢Ynetnews：[https://www.**ynetnews.com/**](https://link.zhihu.com/?target=https%3A//www.ynetnews.com/)
-* 🟢The Jerusalem Post **耶路撒冷邮报** ：[https://www.**jpost.com/**](https://link.zhihu.com/?target=https%3A//www.jpost.com/)
-* 🟡Israel Hayom：[https://www.**israelhayom.com/**](https://link.zhihu.com/?target=https%3A//www.israelhayom.com/)
-* 🟢Arutz Sheva **以色列国家新闻** ：[https://www.**israelnationalnews.com/**](https://link.zhihu.com/?target=https%3A//www.israelnationalnews.com/)
-
-### 8 伊朗
-
-* 🟢伊朗伊斯兰共和国通讯社：[https://**en.irna.ir/**](https://link.zhihu.com/?target=https%3A//en.irna.ir/)
-* 🟢Press TV：[https://www.**presstv.ir/**](https://link.zhihu.com/?target=https%3A//www.presstv.ir/)
-
-### 9 阿联酋
-
-* 🟢海湾新闻：[https://**gulfnews.com/**](https://link.zhihu.com/?target=https%3A//gulfnews.com/)
-* 🟢国家报：[https://www.**thenationalnews.com/**](https://link.zhihu.com/?target=https%3A//www.thenationalnews.com/)
-* 🟢宣言报：[https://www.**albayan.ae/**](https://link.zhihu.com/?target=https%3A//www.albayan.ae/)
-* 🟢阿联酋国家通讯社：[https://www.**wam.ae/ar/home/main**](https://link.zhihu.com/?target=https%3A//www.wam.ae/ar/home/main)
-* 🟡哈利吉时报：[https://www.**khaleejtimes.com/**](https://link.zhihu.com/?target=https%3A//www.khaleejtimes.com/)
-* 🟡Emirates Today：[https://www.**emirates247.com/**](https://link.zhihu.com/?target=https%3A//www.emirates247.com/)
-
-### 10 新加坡
-
-* 🟡Mothership：[https://**mothership.sg/**](https://link.zhihu.com/?target=https%3A//mothership.sg/)
-* 🟢联合早报：[https://www.**zaobao.com/**](https://link.zhihu.com/?target=https%3A//www.zaobao.com/)
-* 🔴新加坡眼：[https://www.**yan.sg/**](https://link.zhihu.com/?target=https%3A//www.yan.sg/)
-
-### 11 马来西亚
-
-* 🟢星报：[https://www.**thestar.com.my/**](https://link.zhihu.com/?target=https%3A//www.thestar.com.my/)
-* 🟢马来西亚通讯社：[https://**bernama.com/bm/index.ph**p](https://link.zhihu.com/?target=https%3A//bernama.com/bm/index.php)
 
 ### 12 印度尼西亚
 
@@ -129,20 +165,7 @@
 * 🟡[http://**Kompas.com**](https://link.zhihu.com/?target=http%3A//Kompas.com)：[https://www.**kompas.com/**](https://link.zhihu.com/?target=https%3A//www.kompas.com/)
 * 🟡CNBC Indonesia：[https://www.**cnbcindonesia.com/**](https://link.zhihu.com/?target=https%3A//www.cnbcindonesia.com/)
 
-### 13 越南
-
-* 🟢越南新闻：[https://**vietnamnews.vn/**](https://link.zhihu.com/?target=https%3A//vietnamnews.vn/)
-* 🟢VnExpress：[https://**e.vnexpress.net/**](https://link.zhihu.com/?target=https%3A//e.vnexpress.net/)
-
-### 14 阿富汗
-
-* 🟢阿富汗新闻网：[https://www.**afghanistannews.net/**](https://link.zhihu.com/?target=https%3A//www.afghanistannews.net/)
-* 🟡Tolo News：[https://**tolonews.com/**](https://link.zhihu.com/?target=https%3A//tolonews.com/)
-* 🟡Pajhwok Afghan News：[https://www.**pajhwok.com/**](https://link.zhihu.com/?target=https%3A//www.pajhwok.com/)
-* 🔴Ariana News：[https://www.**ariananews.af/**](https://link.zhihu.com/?target=https%3A//www.ariananews.af/)
-* 🟡巴赫特通讯社：[https://www.**bakhtarnews.af/**](https://link.zhihu.com/?target=https%3A//www.bakhtarnews.af/)
-
-### 15 阿塞拜疆
+### 14 阿塞拜疆
 
 * 🟢阿塞拜疆新闻：[https://www.**azernews.az/**](https://link.zhihu.com/?target=https%3A//www.azernews.az/)
 * 🟡 趋势通讯社（Trend News Agency）：[https://**en.trend.az/**](https://link.zhihu.com/?target=https%3A//en.trend.az/)
@@ -150,13 +173,22 @@
 * 🟡 第一新闻频道（[1news.az](https://link.zhihu.com/?target=https%3A//1news.az/)）：[https://**1news.az/**](https://link.zhihu.com/?target=https%3A//1news.az/)
 * 🟡 阿塞拜疆国家新闻社（AZERTAC）：[https://**azertag.az/en/**](https://link.zhihu.com/?target=https%3A//azertag.az/en/)
 
-### 16 伊拉克
+### 15 伊拉克
 
 * 🟢伊拉克国家通讯社：[http://www.**ina.iq/**](https://link.zhihu.com/?target=http%3A//www.ina.iq/)
 * 🟡  **伊拉克媒体网（Iraqi Media Network）** ：[https://www.**imn.iq/**](https://link.zhihu.com/?target=https%3A//www.imn.iq/)
 * 🟡 苏美尔新闻（Al-Sumaria News）：[https://www.**alsumaria.tv/**](https://link.zhihu.com/?target=https%3A//www.alsumaria.tv/)
 * 🟡 沙法克新闻（Shafaq News）：[https://**shafaq.com/**](https://link.zhihu.com/?target=https%3A//shafaq.com/)
 * 🟡萨巴赫报：[https://**alsabaah.iq/**](https://link.zhihu.com/?target=https%3A//alsabaah.iq/)
+
+### 16 阿联酋
+
+* 🟢海湾新闻：[https://**gulfnews.com/**](https://link.zhihu.com/?target=https%3A//gulfnews.com/)
+* 🟢国家报：[https://www.**thenationalnews.com/**](https://link.zhihu.com/?target=https%3A//www.thenationalnews.com/)
+* 🟢宣言报：[https://www.**albayan.ae/**](https://link.zhihu.com/?target=https%3A//www.albayan.ae/)
+* 🟢阿联酋国家通讯社：[https://www.**wam.ae/ar/home/main**](https://link.zhihu.com/?target=https%3A//www.wam.ae/ar/home/main)
+* 🟡哈利吉时报：[https://www.**khaleejtimes.com/**](https://link.zhihu.com/?target=https%3A//www.khaleejtimes.com/)
+* 🟡Emirates Today：[https://www.**emirates247.com/**](https://link.zhihu.com/?target=https%3A//www.emirates247.com/)
 
 ### 17 卡塔尔
 
@@ -165,18 +197,12 @@
 * 🟢论坛报：[https://www.**qatar-tribune.com/**](https://link.zhihu.com/?target=https%3A//www.qatar-tribune.com/)
 * 🟢Al-Sharq：[https://**al-sharq.com/**](https://link.zhihu.com/?target=https%3A//al-sharq.com/)
 
-### 18 泰国
-
-* 🟢Sanook：[https://www.**sanook.com/**](https://link.zhihu.com/?target=https%3A//www.sanook.com/)
-* 🟢泰叻报：[https://www.**thairath.co.th/**](https://link.zhihu.com/?target=https%3A//www.thairath.co.th/)
-* 🟢考苏得英文报：[https://www.**khaosod.co.th/**](https://link.zhihu.com/?target=https%3A//www.khaosod.co.th/)
-
-### 19 孟加拉国
+### 18 孟加拉国
 
 * 🟢bdnews24：[https://**bdnews24.com/**](https://link.zhihu.com/?target=https%3A//bdnews24.com/)
 * 🟢每日星报：[https://www.**thedailystar.net/**](https://link.zhihu.com/?target=https%3A//www.thedailystar.net/)
 
-### 20 菲律宾
+### 19 菲律宾
 
 * 🟢Rappler：[https://www.**rappler.com/**](https://link.zhihu.com/?target=https%3A//www.rappler.com/)
 * 🟢GMA新闻：[https://www.**gmanetwork.com/news/**](https://link.zhihu.com/?target=https%3A//www.gmanetwork.com/news/)
@@ -184,12 +210,12 @@
 * 🟡The Manila Times：[https://www.**manilatimes.net/**](https://link.zhihu.com/?target=https%3A//www.manilatimes.net/)
 * 🟡Philippine Star：[https://www.**philstar.com/**](https://link.zhihu.com/?target=https%3A//www.philstar.com/)
 
-### 21 哈萨克斯坦
+### 20 哈萨克斯坦
 
 * 🟢Qazinform：[https://**qazinform.com/**](https://link.zhihu.com/?target=https%3A//qazinform.com/)
 * 🟢Tengrinews：[https://**tengrinews.kz/**](https://link.zhihu.com/?target=https%3A//tengrinews.kz/)
 
-### 22 科威特
+### 21 科威特
 
 * 🟢科威特时报：[https://**kuwaittimes.com/**](https://link.zhihu.com/?target=https%3A//kuwaittimes.com/)
 * 🟡Al Qabas：[https://**alqabas.com/**](https://link.zhihu.com/?target=https%3A//alqabas.com/)
@@ -197,12 +223,12 @@
 * 🟡 阿拉伯时报：[https://www.**arabtimesonline.com/**](https://link.zhihu.com/?target=https%3A//www.arabtimesonline.com/)
 * 🟡 Indians in Kuwait：[https://www.**indiansinkuwait.com/**](https://link.zhihu.com/?target=https%3A//www.indiansinkuwait.com/)
 
-### 23 印度
+### 22 印度
 
 * 🟢Aaj Tak：[https://www.**aajtak.in/**](https://link.zhihu.com/?target=https%3A//www.aajtak.in/)
 * 🟢Scroll：[https://**scroll.in/**](https://link.zhihu.com/?target=https%3A//scroll.in/)
 
-### 24 巴勒斯坦
+### 23 巴勒斯坦
 
 * 🟢972 Magazine：[https://www.**972mag.com/**](https://link.zhihu.com/?target=https%3A//www.972mag.com/)
 * 🟢巴勒斯坦通讯社：[https://**english.wafa.ps/**](https://link.zhihu.com/?target=https%3A//english.wafa.ps/)
@@ -213,48 +239,48 @@
 * 🟢Palestine News Network：[https://**pnn.ps/**](https://link.zhihu.com/?target=https%3A//pnn.ps/)
 * 🟢圣城报：[https://www.**alquds.com/ar/**](https://link.zhihu.com/?target=https%3A//www.alquds.com/ar/)
 
-### 25 亚美尼亚
+### 24 亚美尼亚
 
 * 🟢亚美尼亚公共广播电台：[https://**en.armradio.am/**](https://link.zhihu.com/?target=https%3A//en.armradio.am/)
 * 🟢CivilNet：[https://www.**civilnet.am/**](https://link.zhihu.com/?target=https%3A//www.civilnet.am/)
 * 🟢News Armenia：[https://**newsarmenia.am/**](https://link.zhihu.com/?target=https%3A//newsarmenia.am/)
 
-### 26 巴林
+### 25 巴林
 
 * 🟢巴林本周：[https://www.**bahrainthisweek.com/**](https://link.zhihu.com/?target=https%3A//www.bahrainthisweek.com/)
 * 🟢巴林镜报：[https://**bahrainmirror.com/**](https://link.zhihu.com/?target=https%3A//bahrainmirror.com/)
 * 🟢巴林通讯社：[https://www.**bna.bh/**](https://link.zhihu.com/?target=https%3A//www.bna.bh/)
 
-### 27 文莱
+### 26 文莱
 
 * 🟢文莱灯塔报：[https://www.**pelitabrunei.gov.bn/**](https://link.zhihu.com/?target=https%3A//www.pelitabrunei.gov.bn/)
 * 🟢文莱快报：[https://www.**brudirect.com/**](https://link.zhihu.com/?target=https%3A//www.brudirect.com/)
 * 🟢文莱商业网：[https://www.**bizbrunei.com/**](https://link.zhihu.com/?target=https%3A//www.bizbrunei.com/)
 
-### 28 柬埔寨
+### 27 柬埔寨
 
 * 🟢Fresh News：[https://**freshnews.com.kh/**](https://link.zhihu.com/?target=https%3A//freshnews.com.kh/)
 * 🟢柬埔寨通讯社：[https://www.**akp.gov.kh/**](https://link.zhihu.com/?target=https%3A//www.akp.gov.kh/)
 * 🟢金边邮报：[https://www.**phnompenhpost.com/**](https://link.zhihu.com/?target=https%3A//www.phnompenhpost.com/)
 
-### 29 朝鲜
+### 28 朝鲜
 
 * 🟢Uriminzokkiri：[https://www.**minjok.com/**](https://link.zhihu.com/?target=https%3A//www.minjok.com/)
 * 🟢朝鲜之声：[https://www.**vok.rep.kp/**](https://link.zhihu.com/?target=https%3A//www.vok.rep.kp/)
 
-### 30 东帝汶
+### 29 东帝汶
 
 * 🟢帝力周报：[https://**thediliweekly.com/**](https://link.zhihu.com/?target=https%3A//thediliweekly.com/)
 * 🟢Media One Timor：[https://**mediaonetimor.co/**](https://link.zhihu.com/?target=https%3A//mediaonetimor.co/)
 * 🟢Timor News：[https://www.**timornews.tl/**](https://link.zhihu.com/?target=https%3A//www.timornews.tl/)
 
-### 31 格鲁吉亚
+### 30 格鲁吉亚
 
 * 🟢IPN新闻社：[https://www.**interpressnews.ge/ka/**](https://link.zhihu.com/?target=https%3A//www.interpressnews.ge/ka/)
 * 🟢Netgazeti：[https://**netgazeti.ge/**](https://link.zhihu.com/?target=https%3A//netgazeti.ge/)
 * 🟢Tabula：[https://**tabula.ge/ge**](https://link.zhihu.com/?target=https%3A//tabula.ge/ge) Civil.ge：[https://**civil.ge/**](https://link.zhihu.com/?target=https%3A//civil.ge/)
 
-### 32 约旦
+### 31 约旦
 
 * 🟢约旦时报：[https://**jordantimes.com/**](https://link.zhihu.com/?target=https%3A//jordantimes.com/)
 * 🟢言论报：[https://**alrai.com/**](https://link.zhihu.com/?target=https%3A//alrai.com/)
@@ -262,7 +288,7 @@
 * 🟢alghad：[https://**alghad.com/**](https://link.zhihu.com/?target=https%3A//alghad.com/)
 * 🟢道路报：[https://**assabeel.net/**](https://link.zhihu.com/?target=https%3A//assabeel.net/)
 
-### 33 吉尔吉斯斯坦
+### 32 吉尔吉斯斯坦
 
 * 🟢TCA：[https://**timesca.com/**](https://link.zhihu.com/?target=https%3A//timesca.com/)
 * 🟢Kyrgyzstan News：[https://www.**kyrgyzstannews.net/**](https://link.zhihu.com/?target=https%3A//www.kyrgyzstannews.net/)
@@ -272,14 +298,14 @@
 * 🟢吉尔吉斯斯坦通讯社之一：[https://**akipress.org/**](https://link.zhihu.com/?target=https%3A//akipress.org/)
 * 🟢吉尔吉斯坦新闻：[https://**kloop.kg/**](https://link.zhihu.com/?target=https%3A//kloop.kg/)
 
-### 34 老挝
+### 33 老挝
 
 * 🟢万象时报：[https://www.vientianetimeslao.la/](https://link.zhihu.com/?target=https%3A//www.vientianetimeslao.la/%25E3%2580%2581https%3A//www.vientianetimes.org.la/)
   * [https://www.vientianetimes.org.la/](https://link.zhihu.com/?target=https%3A//www.vientianetimeslao.la/%25E3%2580%2581https%3A//www.vientianetimes.org.la/)
 * 🟡老挝广播电台：[https://**lnr.org.la/**](https://link.zhihu.com/?target=https%3A//lnr.org.la/)
 * 🔴老挝国家通讯社：[https://**kpl.gov.la/**](https://link.zhihu.com/?target=https%3A//kpl.gov.la/)
 
-### 35 黎巴嫩
+### 34 黎巴嫩
 
 * 🟢黎巴嫩国家通讯社：[https://**nna-leb.gov.lb/ar**](https://link.zhihu.com/?target=https%3A//nna-leb.gov.lb/ar)
 * 🟢安纳哈尔报：[https://www.**annahar.com/**](https://link.zhihu.com/?target=https%3A//www.annahar.com/)
@@ -287,25 +313,30 @@
 * 🟢东方日报：[https://www.**lorientlejour.com/**](https://link.zhihu.com/?target=https%3A//www.lorientlejour.com/)
 * 🟢Al-Akhbar：[https://www.**al-akhbar.com/**](https://link.zhihu.com/?target=https%3A//www.al-akhbar.com/)
 
-### 36 马尔代夫
+### 35 马尔代夫
 
 * 🟢马尔代夫独立版：[https://**maldivesindependent.com**/](https://link.zhihu.com/?target=https%3A//maldivesindependent.com/)
 * 🟡马尔代夫官方公共媒体：[https://**psmnews.mv/**](https://link.zhihu.com/?target=https%3A//psmnews.mv/)
 * 🟡太阳报：[https://**see.mv/**](https://link.zhihu.com/?target=https%3A//see.mv/)
 * 🟡Mihaaru：[https://**mihaaru.com/**](https://link.zhihu.com/?target=https%3A//mihaaru.com/)
 
-### 37 蒙古
+### 36 蒙古
 
 * 🟡Gogo：[https://**gogo.mn/**](https://link.zhihu.com/?target=https%3A//gogo.mn/)
 * 🟡Sonin：[https://**sonin.mn/**](https://link.zhihu.com/?target=https%3A//sonin.mn/)
 * 🔴蒙古国家通讯社：[https://**montsame.mn/**](https://link.zhihu.com/?target=https%3A//montsame.mn/)
 * 🔴蒙古国家公共广播电视台：[https://www.**mnb.mn/**](https://link.zhihu.com/?target=https%3A//www.mnb.mn/)
 
-### 38 缅甸
+### 37 缅甸
 
 * 🟢缅甸现在新闻：[https://**myanmar-now.org/en/**](https://link.zhihu.com/?target=https%3A//myanmar-now.org/en/)
 * 🔴缅甸官方英文日报：[https://www.**gnlm.com.mm/**](https://link.zhihu.com/?target=https%3A//www.gnlm.com.mm/)
 * 🟢伊洛瓦底新闻网：[https://www.**irrawaddy.com/**](https://link.zhihu.com/?target=https%3A//www.irrawaddy.com/)
+
+### 38 伊朗
+
+* 🟢伊朗伊斯兰共和国通讯社：[https://**en.irna.ir/**](https://link.zhihu.com/?target=https%3A//en.irna.ir/)
+* 🟢Press TV：[https://www.**presstv.ir/**](https://link.zhihu.com/?target=https%3A//www.presstv.ir/)
 
 ### 39 尼泊尔
 
@@ -318,6 +349,14 @@
 * 🟡国报：[https://**alwatan.om/**](https://link.zhihu.com/?target=https%3A//alwatan.om/)
 * 🟡青年报：[https://**shabiba.com/**](https://link.zhihu.com/?target=https%3A//shabiba.com/)
 * 🟡阿曼每日观察：[https://www.**omanobserver.om/**](https://link.zhihu.com/?target=https%3A//www.omanobserver.om/)
+
+### 阿富汗
+
+* 🟢阿富汗新闻网：[https://www.**afghanistannews.net/**](https://link.zhihu.com/?target=https%3A//www.afghanistannews.net/)
+* 🟡Tolo News：[https://**tolonews.com/**](https://link.zhihu.com/?target=https%3A//tolonews.com/)
+* 🟡Pajhwok Afghan News：[https://www.**pajhwok.com/**](https://link.zhihu.com/?target=https%3A//www.pajhwok.com/)
+* 🔴Ariana News：[https://www.**ariananews.af/**](https://link.zhihu.com/?target=https%3A//www.ariananews.af/)
+* 🟡巴赫特通讯社：[https://www.**bakhtarnews.af/**](https://link.zhihu.com/?target=https%3A//www.bakhtarnews.af/)
 
 ### 41 斯里兰卡
 

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-03-28T03:45:46Z",
+  "generatedAt": "2026-03-28T04:08:42Z",
   "source": "news/news.md",
   "totalCountries": 198,
-  "totalMedia": 664,
+  "totalMedia": 693,
   "countries": [
     {
       "id": "1",
@@ -82,6 +82,36 @@
         },
         {
           "status": "🟢",
+          "name": "财新网",
+          "url": "https://www.caixin.com/",
+          "raw": "* 🟢财新网：[https://www.caixin.com/](https://link.zhihu.com/?target=https%3A//www.caixin.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "界面新闻",
+          "url": "https://www.jiemian.com/",
+          "raw": "* 🟢界面新闻：[https://www.jiemian.com/](https://link.zhihu.com/?target=https%3A//www.jiemian.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "澎湃新闻",
+          "url": "https://www.thepaper.cn/",
+          "raw": "* 🟢澎湃新闻：[https://www.thepaper.cn/](https://link.zhihu.com/?target=https%3A//www.thepaper.cn/)"
+        },
+        {
+          "status": "🟢",
+          "name": "观察者网",
+          "url": "https://www.guancha.cn/",
+          "raw": "* 🟢观察者网：[https://www.guancha.cn/](https://link.zhihu.com/?target=https%3A//www.guancha.cn/)"
+        },
+        {
+          "status": "🟢",
+          "name": "第一财经",
+          "url": "https://www.yicai.com/",
+          "raw": "* 🟢第一财经：[https://www.yicai.com/](https://link.zhihu.com/?target=https%3A//www.yicai.com/)"
+        },
+        {
+          "status": "🟢",
           "name": "香港新闻网",
           "url": "https://hkcna.hk/",
           "raw": "* 🟢香港新闻网：[https://hkcna.hk](https://link.zhihu.com/?target=https%3A//hkcna.hk/)"
@@ -91,6 +121,72 @@
           "name": "香港文汇网：文匯網 -",
           "url": "https://www.wenweipo.com/hongkong",
           "raw": "* 🟢香港文汇网：[文匯網 - https://www.wenweipo.com/hongkong](https://link.zhihu.com/?target=https%3A//www.wenweipo.com/hongkong)"
+        },
+        {
+          "status": "🟢",
+          "name": "香港01",
+          "url": "https://www.hk01.com/",
+          "raw": "* 🟢香港01：[https://www.hk01.com/](https://link.zhihu.com/?target=https%3A//www.hk01.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "经济日报",
+          "url": "https://www.hket.com/",
+          "raw": "* 🟢经济日报：[https://www.hket.com/](https://link.zhihu.com/?target=https%3A//www.hket.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "明报",
+          "url": "https://www.mingpao.com/",
+          "raw": "* 🟢明报：[https://www.mingpao.com/](https://link.zhihu.com/?target=https%3A//www.mingpao.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "无线新闻（TVB）",
+          "url": "https://news.tvb.com/",
+          "raw": "* 🟢无线新闻（TVB）：[https://news.tvb.com/](https://link.zhihu.com/?target=https%3A//news.tvb.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "Now 新闻台",
+          "url": "https://news.now.com/",
+          "raw": "* 🟢Now 新闻台：[https://news.now.com/](https://link.zhihu.com/?target=https%3A//news.now.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "香港电台新闻（RTHK）",
+          "url": "https://news.rthk.hk/",
+          "raw": "* 🟢香港电台新闻（RTHK）：[https://news.rthk.hk/](https://link.zhihu.com/?target=https%3A//news.rthk.hk/)"
+        },
+        {
+          "status": "🟢",
+          "name": "香港有线新闻",
+          "url": "https://www.i-cable.com/news/",
+          "raw": "* 🟢香港有线新闻：[https://www.i-cable.com/news/](https://link.zhihu.com/?target=https%3A//www.i-cable.com/news/)"
+        },
+        {
+          "status": "🟢",
+          "name": "ViuTV 新闻",
+          "url": "https://news.viu.tv/",
+          "raw": "* 🟢ViuTV 新闻：[https://news.viu.tv/](https://link.zhihu.com/?target=https%3A//news.viu.tv/)"
+        },
+        {
+          "status": "🟢",
+          "name": "澳门日报",
+          "url": "https://www.macaodaily.com/",
+          "raw": "* 🟢澳门日报：[https://www.macaodaily.com](https://link.zhihu.com/?target=https%3A//www.macaodaily.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "澳门新闻",
+          "url": "https://www.exmoo.com/",
+          "raw": "* 🟢澳门新闻：[https://www.exmoo.com/](https://link.zhihu.com/?target=https%3A//www.exmoo.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "力报",
+          "url": "https://www.exmoo.com/article/",
+          "raw": "* 🟢力报：[https://www.exmoo.com/article/](https://link.zhihu.com/?target=https%3A//www.exmoo.com/article/)"
         },
         {
           "status": "🟢",
@@ -106,15 +202,57 @@
         },
         {
           "status": "🟢",
-          "name": "澳门日报",
-          "url": "https://www.macaodaily.com/",
-          "raw": "* 🟢澳门日报：[https://www.macaodaily.com](https://link.zhihu.com/?target=https%3A//www.macaodaily.com/)"
+          "name": "联合新闻网",
+          "url": "https://udn.com/",
+          "raw": "* 🟢联合新闻网：[https://udn.com/](https://link.zhihu.com/?target=https%3A//udn.com/)"
         },
         {
           "status": "🟢",
-          "name": "澳门新闻",
-          "url": "https://www.exmoo.com/",
-          "raw": "* 🟢澳门新闻：[https://www.exmoo.com/](https://link.zhihu.com/?target=https%3A//www.exmoo.com/)"
+          "name": "自由时报",
+          "url": "https://news.ltn.com.tw/",
+          "raw": "* 🟢自由时报：[https://news.ltn.com.tw/](https://link.zhihu.com/?target=https%3A//news.ltn.com.tw/)"
+        },
+        {
+          "status": "🟢",
+          "name": "风传媒",
+          "url": "https://www.storm.mg/",
+          "raw": "* 🟢风传媒：[https://www.storm.mg/](https://link.zhihu.com/?target=https%3A//www.storm.mg/)"
+        },
+        {
+          "status": "🟢",
+          "name": "TVBS 新闻网",
+          "url": "https://news.tvbs.com.tw/",
+          "raw": "* 🟢TVBS 新闻网：[https://news.tvbs.com.tw/](https://link.zhihu.com/?target=https%3A//news.tvbs.com.tw/)"
+        },
+        {
+          "status": "🟢",
+          "name": "东森新闻云",
+          "url": "https://news.ebc.net.tw/",
+          "raw": "* 🟢东森新闻云：[https://news.ebc.net.tw/](https://link.zhihu.com/?target=https%3A//news.ebc.net.tw/)"
+        },
+        {
+          "status": "🟢",
+          "name": "三立新闻网",
+          "url": "https://www.setn.com/",
+          "raw": "* 🟢三立新闻网：[https://www.setn.com/](https://link.zhihu.com/?target=https%3A//www.setn.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "民视新闻网",
+          "url": "https://www.ftvnews.com.tw/",
+          "raw": "* 🟢民视新闻网：[https://www.ftvnews.com.tw/](https://link.zhihu.com/?target=https%3A//www.ftvnews.com.tw/)"
+        },
+        {
+          "status": "🟢",
+          "name": "公共电视新闻网",
+          "url": "https://news.pts.org.tw/",
+          "raw": "* 🟢公共电视新闻网：[https://news.pts.org.tw/](https://link.zhihu.com/?target=https%3A//news.pts.org.tw/)"
+        },
+        {
+          "status": "🟢",
+          "name": "中央社",
+          "url": "https://www.cna.com.tw/",
+          "raw": "* 🟢中央社：[https://www.cna.com.tw/](https://link.zhihu.com/?target=https%3A//www.cna.com.tw/)"
         }
       ]
     },
@@ -223,9 +361,186 @@
     {
       "id": "5",
       "continent": "🧰 亚洲（48国）",
-      "country": "土耳其",
+      "country": "新加坡",
       "countryIndex": 4,
-      "countryRaw": "4 土耳其",
+      "countryRaw": "4 新加坡",
+      "media": [
+        {
+          "status": "🟡",
+          "name": "Mothership",
+          "url": "https://mothership.sg/",
+          "raw": "* 🟡Mothership：[https://mothership.sg/](https://link.zhihu.com/?target=https%3A//mothership.sg/)"
+        },
+        {
+          "status": "🟢",
+          "name": "联合早报",
+          "url": "https://www.zaobao.com/",
+          "raw": "* 🟢联合早报：[https://www.zaobao.com/](https://link.zhihu.com/?target=https%3A//www.zaobao.com/)"
+        },
+        {
+          "status": "🔴",
+          "name": "新加坡眼",
+          "url": "https://www.yan.sg/",
+          "raw": "* 🔴新加坡眼：[https://www.yan.sg/](https://link.zhihu.com/?target=https%3A//www.yan.sg/)"
+        },
+        {
+          "status": "🟢",
+          "name": "海峡时报",
+          "url": "https://www.straitstimes.com/",
+          "raw": "* 🟢海峡时报：[https://www.straitstimes.com/](https://link.zhihu.com/?target=https%3A//www.straitstimes.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "亚洲新闻台",
+          "url": "https://www.channelnewsasia.com/",
+          "raw": "* 🟢亚洲新闻台：[https://www.channelnewsasia.com/](https://link.zhihu.com/?target=https%3A//www.channelnewsasia.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "TODAY",
+          "url": "https://www.todayonline.com/",
+          "raw": "* 🟢TODAY：[https://www.todayonline.com/](https://link.zhihu.com/?target=https%3A//www.todayonline.com/)"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "continent": "🧰 亚洲（48国）",
+      "country": "以色列",
+      "countryIndex": 5,
+      "countryRaw": "5 以色列",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "以色列时报",
+          "url": "https://www.timesofisrael.com/",
+          "raw": "* 🟢以色列时报：[https://www.timesofisrael.com/](https://link.zhihu.com/?target=https%3A//www.timesofisrael.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "国土报",
+          "url": "https://www.haaretz.com/",
+          "raw": "* 🟢国土报：[https://www.haaretz.com/](https://link.zhihu.com/?target=https%3A//www.haaretz.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "Ynetnews",
+          "url": "https://www.ynetnews.com/",
+          "raw": "* 🟢Ynetnews：[https://www.ynetnews.com/](https://link.zhihu.com/?target=https%3A//www.ynetnews.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "The Jerusalem Post 耶路撒冷邮报",
+          "url": "https://www.jpost.com/",
+          "raw": "* 🟢The Jerusalem Post 耶路撒冷邮报 ：[https://www.jpost.com/](https://link.zhihu.com/?target=https%3A//www.jpost.com/)"
+        },
+        {
+          "status": "🟡",
+          "name": "Israel Hayom",
+          "url": "https://www.israelhayom.com/",
+          "raw": "* 🟡Israel Hayom：[https://www.israelhayom.com/](https://link.zhihu.com/?target=https%3A//www.israelhayom.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "Arutz Sheva 以色列国家新闻",
+          "url": "https://www.israelnationalnews.com/",
+          "raw": "* 🟢Arutz Sheva 以色列国家新闻 ：[https://www.israelnationalnews.com/](https://link.zhihu.com/?target=https%3A//www.israelnationalnews.com/)"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "continent": "🧰 亚洲（48国）",
+      "country": "马来西亚",
+      "countryIndex": 6,
+      "countryRaw": "6 马来西亚",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "星报",
+          "url": "https://www.thestar.com.my/",
+          "raw": "* 🟢星报：[https://www.thestar.com.my/](https://link.zhihu.com/?target=https%3A//www.thestar.com.my/)"
+        },
+        {
+          "status": "🟢",
+          "name": "马来西亚通讯社",
+          "url": "https://bernama.com/bm/index.php",
+          "raw": "* 🟢马来西亚通讯社：[https://bernama.com/bm/index.php](https://link.zhihu.com/?target=https%3A//bernama.com/bm/index.php)"
+        },
+        {
+          "status": "🟢",
+          "name": "当今大马",
+          "url": "https://www.malaysiakini.com/",
+          "raw": "* 🟢当今大马：[https://www.malaysiakini.com/](https://link.zhihu.com/?target=https%3A//www.malaysiakini.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "新海峡时报",
+          "url": "https://www.nst.com.my/",
+          "raw": "* 🟢新海峡时报：[https://www.nst.com.my/](https://link.zhihu.com/?target=https%3A//www.nst.com.my/)"
+        },
+        {
+          "status": "🟢",
+          "name": "阳光日报",
+          "url": "https://www.sinardaily.my/",
+          "raw": "* 🟢阳光日报：[https://www.sinardaily.my/](https://link.zhihu.com/?target=https%3A//www.sinardaily.my/)"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "continent": "🧰 亚洲（48国）",
+      "country": "越南",
+      "countryIndex": 7,
+      "countryRaw": "7 越南",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "越南新闻",
+          "url": "https://vietnamnews.vn/",
+          "raw": "* 🟢越南新闻：[https://vietnamnews.vn/](https://link.zhihu.com/?target=https%3A//vietnamnews.vn/)"
+        },
+        {
+          "status": "🟢",
+          "name": "VnExpress",
+          "url": "https://e.vnexpress.net/",
+          "raw": "* 🟢VnExpress：[https://e.vnexpress.net/](https://link.zhihu.com/?target=https%3A//e.vnexpress.net/)"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "continent": "🧰 亚洲（48国）",
+      "country": "泰国",
+      "countryIndex": 8,
+      "countryRaw": "8 泰国",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "Sanook",
+          "url": "https://www.sanook.com/",
+          "raw": "* 🟢Sanook：[https://www.sanook.com/](https://link.zhihu.com/?target=https%3A//www.sanook.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "泰叻报",
+          "url": "https://www.thairath.co.th/",
+          "raw": "* 🟢泰叻报：[https://www.thairath.co.th/](https://link.zhihu.com/?target=https%3A//www.thairath.co.th/)"
+        },
+        {
+          "status": "🟢",
+          "name": "考苏得英文报",
+          "url": "https://www.khaosod.co.th/",
+          "raw": "* 🟢考苏得英文报：[https://www.khaosod.co.th/](https://link.zhihu.com/?target=https%3A//www.khaosod.co.th/)"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "continent": "🧰 亚洲（48国）",
+      "country": "土耳其",
+      "countryIndex": 9,
+      "countryRaw": "9 土耳其",
       "media": [
         {
           "status": "🟡",
@@ -272,11 +587,11 @@
       ]
     },
     {
-      "id": "6",
+      "id": "11",
       "continent": "🧰 亚洲（48国）",
       "country": "沙特阿拉伯",
-      "countryIndex": 5,
-      "countryRaw": "5 沙特阿拉伯",
+      "countryIndex": 10,
+      "countryRaw": "10 沙特阿拉伯",
       "media": [
         {
           "status": "🟢",
@@ -317,11 +632,11 @@
       ]
     },
     {
-      "id": "7",
+      "id": "12",
       "continent": "🧰 亚洲（48国）",
       "country": "巴基斯坦",
-      "countryIndex": 6,
-      "countryRaw": "6 巴基斯坦",
+      "countryIndex": 11,
+      "countryRaw": "11 巴基斯坦",
       "media": [
         {
           "status": "🟢",
@@ -350,77 +665,122 @@
       ]
     },
     {
-      "id": "8",
+      "id": "13",
       "continent": "🧰 亚洲（48国）",
-      "country": "以色列",
-      "countryIndex": 7,
-      "countryRaw": "7 以色列",
+      "country": "印度尼西亚",
+      "countryIndex": 12,
+      "countryRaw": "12 印度尼西亚",
       "media": [
         {
           "status": "🟢",
-          "name": "以色列时报",
-          "url": "https://www.timesofisrael.com/",
-          "raw": "* 🟢以色列时报：[https://www.timesofisrael.com/](https://link.zhihu.com/?target=https%3A//www.timesofisrael.com/)"
-        },
-        {
-          "status": "🟢",
-          "name": "国土报",
-          "url": "https://www.haaretz.com/",
-          "raw": "* 🟢国土报：[https://www.haaretz.com/](https://link.zhihu.com/?target=https%3A//www.haaretz.com/)"
-        },
-        {
-          "status": "🟢",
-          "name": "Ynetnews",
-          "url": "https://www.ynetnews.com/",
-          "raw": "* 🟢Ynetnews：[https://www.ynetnews.com/](https://link.zhihu.com/?target=https%3A//www.ynetnews.com/)"
-        },
-        {
-          "status": "🟢",
-          "name": "The Jerusalem Post 耶路撒冷邮报",
-          "url": "https://www.jpost.com/",
-          "raw": "* 🟢The Jerusalem Post 耶路撒冷邮报 ：[https://www.jpost.com/](https://link.zhihu.com/?target=https%3A//www.jpost.com/)"
+          "name": "安塔拉通讯社",
+          "url": "https://en.antaranews.com/",
+          "raw": "* 🟢安塔拉通讯社：[https://en.antaranews.com/](https://link.zhihu.com/?target=https%3A//en.antaranews.com/)"
         },
         {
           "status": "🟡",
-          "name": "Israel Hayom",
-          "url": "https://www.israelhayom.com/",
-          "raw": "* 🟡Israel Hayom：[https://www.israelhayom.com/](https://link.zhihu.com/?target=https%3A//www.israelhayom.com/)"
+          "name": "http://Detik.com",
+          "url": "http://Detik.com",
+          "raw": "* 🟡[http://Detik.com](https://link.zhihu.com/?target=http%3A//Detik.com)：[https://www.detik.com/](https://link.zhihu.com/?target=https%3A//www.detik.com/)"
         },
         {
-          "status": "🟢",
-          "name": "Arutz Sheva 以色列国家新闻",
-          "url": "https://www.israelnationalnews.com/",
-          "raw": "* 🟢Arutz Sheva 以色列国家新闻 ：[https://www.israelnationalnews.com/](https://link.zhihu.com/?target=https%3A//www.israelnationalnews.com/)"
+          "status": "🟡",
+          "name": "http://Kompas.com",
+          "url": "http://Kompas.com",
+          "raw": "* 🟡[http://Kompas.com](https://link.zhihu.com/?target=http%3A//Kompas.com)：[https://www.kompas.com/](https://link.zhihu.com/?target=https%3A//www.kompas.com/)"
+        },
+        {
+          "status": "🟡",
+          "name": "CNBC Indonesia",
+          "url": "https://www.cnbcindonesia.com/",
+          "raw": "* 🟡CNBC Indonesia：[https://www.cnbcindonesia.com/](https://link.zhihu.com/?target=https%3A//www.cnbcindonesia.com/)"
         }
       ]
     },
     {
-      "id": "9",
+      "id": "14",
       "continent": "🧰 亚洲（48国）",
-      "country": "伊朗",
-      "countryIndex": 8,
-      "countryRaw": "8 伊朗",
+      "country": "阿塞拜疆",
+      "countryIndex": 14,
+      "countryRaw": "14 阿塞拜疆",
       "media": [
         {
           "status": "🟢",
-          "name": "伊朗伊斯兰共和国通讯社",
-          "url": "https://en.irna.ir/",
-          "raw": "* 🟢伊朗伊斯兰共和国通讯社：[https://en.irna.ir/](https://link.zhihu.com/?target=https%3A//en.irna.ir/)"
+          "name": "阿塞拜疆新闻",
+          "url": "https://www.azernews.az/",
+          "raw": "* 🟢阿塞拜疆新闻：[https://www.azernews.az/](https://link.zhihu.com/?target=https%3A//www.azernews.az/)"
         },
         {
-          "status": "🟢",
-          "name": "Press TV",
-          "url": "https://www.presstv.ir/",
-          "raw": "* 🟢Press TV：[https://www.presstv.ir/](https://link.zhihu.com/?target=https%3A//www.presstv.ir/)"
+          "status": "🟡",
+          "name": "趋势通讯社（Trend News Agency）",
+          "url": "https://en.trend.az/",
+          "raw": "* 🟡 趋势通讯社（Trend News Agency）：[https://en.trend.az/](https://link.zhihu.com/?target=https%3A//en.trend.az/)"
+        },
+        {
+          "status": "🟡",
+          "name": "报告通讯社（Report.az）",
+          "url": "https://report.az/",
+          "raw": "* 🟡 报告通讯社（[Report.az](https://link.zhihu.com/?target=https%3A//report.az/)）：[https://report.az/en/](https://link.zhihu.com/?target=https%3A//report.az/en/)"
+        },
+        {
+          "status": "🟡",
+          "name": "第一新闻频道（1news.az）",
+          "url": "https://1news.az/",
+          "raw": "* 🟡 第一新闻频道（[1news.az](https://link.zhihu.com/?target=https%3A//1news.az/)）：[https://1news.az/](https://link.zhihu.com/?target=https%3A//1news.az/)"
+        },
+        {
+          "status": "🟡",
+          "name": "阿塞拜疆国家新闻社（AZERTAC）",
+          "url": "https://azertag.az/en/",
+          "raw": "* 🟡 阿塞拜疆国家新闻社（AZERTAC）：[https://azertag.az/en/](https://link.zhihu.com/?target=https%3A//azertag.az/en/)"
         }
       ]
     },
     {
-      "id": "10",
+      "id": "15",
+      "continent": "🧰 亚洲（48国）",
+      "country": "伊拉克",
+      "countryIndex": 15,
+      "countryRaw": "15 伊拉克",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "伊拉克国家通讯社",
+          "url": "http://www.ina.iq/",
+          "raw": "* 🟢伊拉克国家通讯社：[http://www.ina.iq/](https://link.zhihu.com/?target=http%3A//www.ina.iq/)"
+        },
+        {
+          "status": "🟡",
+          "name": "伊拉克媒体网（Iraqi Media Network）",
+          "url": "https://www.imn.iq/",
+          "raw": "* 🟡  伊拉克媒体网（Iraqi Media Network） ：[https://www.imn.iq/](https://link.zhihu.com/?target=https%3A//www.imn.iq/)"
+        },
+        {
+          "status": "🟡",
+          "name": "苏美尔新闻（Al-Sumaria News）",
+          "url": "https://www.alsumaria.tv/",
+          "raw": "* 🟡 苏美尔新闻（Al-Sumaria News）：[https://www.alsumaria.tv/](https://link.zhihu.com/?target=https%3A//www.alsumaria.tv/)"
+        },
+        {
+          "status": "🟡",
+          "name": "沙法克新闻（Shafaq News）",
+          "url": "https://shafaq.com/",
+          "raw": "* 🟡 沙法克新闻（Shafaq News）：[https://shafaq.com/](https://link.zhihu.com/?target=https%3A//shafaq.com/)"
+        },
+        {
+          "status": "🟡",
+          "name": "萨巴赫报",
+          "url": "https://alsabaah.iq/",
+          "raw": "* 🟡萨巴赫报：[https://alsabaah.iq/](https://link.zhihu.com/?target=https%3A//alsabaah.iq/)"
+        }
+      ]
+    },
+    {
+      "id": "16",
       "continent": "🧰 亚洲（48国）",
       "country": "阿联酋",
-      "countryIndex": 9,
-      "countryRaw": "9 阿联酋",
+      "countryIndex": 16,
+      "countryRaw": "16 阿联酋",
       "media": [
         {
           "status": "🟢",
@@ -461,226 +821,7 @@
       ]
     },
     {
-      "id": "11",
-      "continent": "🧰 亚洲（48国）",
-      "country": "新加坡",
-      "countryIndex": 10,
-      "countryRaw": "10 新加坡",
-      "media": [
-        {
-          "status": "🟡",
-          "name": "Mothership",
-          "url": "https://mothership.sg/",
-          "raw": "* 🟡Mothership：[https://mothership.sg/](https://link.zhihu.com/?target=https%3A//mothership.sg/)"
-        },
-        {
-          "status": "🟢",
-          "name": "联合早报",
-          "url": "https://www.zaobao.com/",
-          "raw": "* 🟢联合早报：[https://www.zaobao.com/](https://link.zhihu.com/?target=https%3A//www.zaobao.com/)"
-        },
-        {
-          "status": "🔴",
-          "name": "新加坡眼",
-          "url": "https://www.yan.sg/",
-          "raw": "* 🔴新加坡眼：[https://www.yan.sg/](https://link.zhihu.com/?target=https%3A//www.yan.sg/)"
-        }
-      ]
-    },
-    {
-      "id": "12",
-      "continent": "🧰 亚洲（48国）",
-      "country": "马来西亚",
-      "countryIndex": 11,
-      "countryRaw": "11 马来西亚",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "星报",
-          "url": "https://www.thestar.com.my/",
-          "raw": "* 🟢星报：[https://www.thestar.com.my/](https://link.zhihu.com/?target=https%3A//www.thestar.com.my/)"
-        },
-        {
-          "status": "🟢",
-          "name": "马来西亚通讯社",
-          "url": "https://bernama.com/bm/index.php",
-          "raw": "* 🟢马来西亚通讯社：[https://bernama.com/bm/index.php](https://link.zhihu.com/?target=https%3A//bernama.com/bm/index.php)"
-        }
-      ]
-    },
-    {
-      "id": "13",
-      "continent": "🧰 亚洲（48国）",
-      "country": "印度尼西亚",
-      "countryIndex": 12,
-      "countryRaw": "12 印度尼西亚",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "安塔拉通讯社",
-          "url": "https://en.antaranews.com/",
-          "raw": "* 🟢安塔拉通讯社：[https://en.antaranews.com/](https://link.zhihu.com/?target=https%3A//en.antaranews.com/)"
-        },
-        {
-          "status": "🟡",
-          "name": "http://Detik.com",
-          "url": "http://Detik.com",
-          "raw": "* 🟡[http://Detik.com](https://link.zhihu.com/?target=http%3A//Detik.com)：[https://www.detik.com/](https://link.zhihu.com/?target=https%3A//www.detik.com/)"
-        },
-        {
-          "status": "🟡",
-          "name": "http://Kompas.com",
-          "url": "http://Kompas.com",
-          "raw": "* 🟡[http://Kompas.com](https://link.zhihu.com/?target=http%3A//Kompas.com)：[https://www.kompas.com/](https://link.zhihu.com/?target=https%3A//www.kompas.com/)"
-        },
-        {
-          "status": "🟡",
-          "name": "CNBC Indonesia",
-          "url": "https://www.cnbcindonesia.com/",
-          "raw": "* 🟡CNBC Indonesia：[https://www.cnbcindonesia.com/](https://link.zhihu.com/?target=https%3A//www.cnbcindonesia.com/)"
-        }
-      ]
-    },
-    {
-      "id": "14",
-      "continent": "🧰 亚洲（48国）",
-      "country": "越南",
-      "countryIndex": 13,
-      "countryRaw": "13 越南",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "越南新闻",
-          "url": "https://vietnamnews.vn/",
-          "raw": "* 🟢越南新闻：[https://vietnamnews.vn/](https://link.zhihu.com/?target=https%3A//vietnamnews.vn/)"
-        },
-        {
-          "status": "🟢",
-          "name": "VnExpress",
-          "url": "https://e.vnexpress.net/",
-          "raw": "* 🟢VnExpress：[https://e.vnexpress.net/](https://link.zhihu.com/?target=https%3A//e.vnexpress.net/)"
-        }
-      ]
-    },
-    {
-      "id": "15",
-      "continent": "🧰 亚洲（48国）",
-      "country": "阿富汗",
-      "countryIndex": 14,
-      "countryRaw": "14 阿富汗",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "阿富汗新闻网",
-          "url": "https://www.afghanistannews.net/",
-          "raw": "* 🟢阿富汗新闻网：[https://www.afghanistannews.net/](https://link.zhihu.com/?target=https%3A//www.afghanistannews.net/)"
-        },
-        {
-          "status": "🟡",
-          "name": "Tolo News",
-          "url": "https://tolonews.com/",
-          "raw": "* 🟡Tolo News：[https://tolonews.com/](https://link.zhihu.com/?target=https%3A//tolonews.com/)"
-        },
-        {
-          "status": "🟡",
-          "name": "Pajhwok Afghan News",
-          "url": "https://www.pajhwok.com/",
-          "raw": "* 🟡Pajhwok Afghan News：[https://www.pajhwok.com/](https://link.zhihu.com/?target=https%3A//www.pajhwok.com/)"
-        },
-        {
-          "status": "🔴",
-          "name": "Ariana News",
-          "url": "https://www.ariananews.af/",
-          "raw": "* 🔴Ariana News：[https://www.ariananews.af/](https://link.zhihu.com/?target=https%3A//www.ariananews.af/)"
-        },
-        {
-          "status": "🟡",
-          "name": "巴赫特通讯社",
-          "url": "https://www.bakhtarnews.af/",
-          "raw": "* 🟡巴赫特通讯社：[https://www.bakhtarnews.af/](https://link.zhihu.com/?target=https%3A//www.bakhtarnews.af/)"
-        }
-      ]
-    },
-    {
-      "id": "16",
-      "continent": "🧰 亚洲（48国）",
-      "country": "阿塞拜疆",
-      "countryIndex": 15,
-      "countryRaw": "15 阿塞拜疆",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "阿塞拜疆新闻",
-          "url": "https://www.azernews.az/",
-          "raw": "* 🟢阿塞拜疆新闻：[https://www.azernews.az/](https://link.zhihu.com/?target=https%3A//www.azernews.az/)"
-        },
-        {
-          "status": "🟡",
-          "name": "趋势通讯社（Trend News Agency）",
-          "url": "https://en.trend.az/",
-          "raw": "* 🟡 趋势通讯社（Trend News Agency）：[https://en.trend.az/](https://link.zhihu.com/?target=https%3A//en.trend.az/)"
-        },
-        {
-          "status": "🟡",
-          "name": "报告通讯社（Report.az）",
-          "url": "https://report.az/",
-          "raw": "* 🟡 报告通讯社（[Report.az](https://link.zhihu.com/?target=https%3A//report.az/)）：[https://report.az/en/](https://link.zhihu.com/?target=https%3A//report.az/en/)"
-        },
-        {
-          "status": "🟡",
-          "name": "第一新闻频道（1news.az）",
-          "url": "https://1news.az/",
-          "raw": "* 🟡 第一新闻频道（[1news.az](https://link.zhihu.com/?target=https%3A//1news.az/)）：[https://1news.az/](https://link.zhihu.com/?target=https%3A//1news.az/)"
-        },
-        {
-          "status": "🟡",
-          "name": "阿塞拜疆国家新闻社（AZERTAC）",
-          "url": "https://azertag.az/en/",
-          "raw": "* 🟡 阿塞拜疆国家新闻社（AZERTAC）：[https://azertag.az/en/](https://link.zhihu.com/?target=https%3A//azertag.az/en/)"
-        }
-      ]
-    },
-    {
       "id": "17",
-      "continent": "🧰 亚洲（48国）",
-      "country": "伊拉克",
-      "countryIndex": 16,
-      "countryRaw": "16 伊拉克",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "伊拉克国家通讯社",
-          "url": "http://www.ina.iq/",
-          "raw": "* 🟢伊拉克国家通讯社：[http://www.ina.iq/](https://link.zhihu.com/?target=http%3A//www.ina.iq/)"
-        },
-        {
-          "status": "🟡",
-          "name": "伊拉克媒体网（Iraqi Media Network）",
-          "url": "https://www.imn.iq/",
-          "raw": "* 🟡  伊拉克媒体网（Iraqi Media Network） ：[https://www.imn.iq/](https://link.zhihu.com/?target=https%3A//www.imn.iq/)"
-        },
-        {
-          "status": "🟡",
-          "name": "苏美尔新闻（Al-Sumaria News）",
-          "url": "https://www.alsumaria.tv/",
-          "raw": "* 🟡 苏美尔新闻（Al-Sumaria News）：[https://www.alsumaria.tv/](https://link.zhihu.com/?target=https%3A//www.alsumaria.tv/)"
-        },
-        {
-          "status": "🟡",
-          "name": "沙法克新闻（Shafaq News）",
-          "url": "https://shafaq.com/",
-          "raw": "* 🟡 沙法克新闻（Shafaq News）：[https://shafaq.com/](https://link.zhihu.com/?target=https%3A//shafaq.com/)"
-        },
-        {
-          "status": "🟡",
-          "name": "萨巴赫报",
-          "url": "https://alsabaah.iq/",
-          "raw": "* 🟡萨巴赫报：[https://alsabaah.iq/](https://link.zhihu.com/?target=https%3A//alsabaah.iq/)"
-        }
-      ]
-    },
-    {
-      "id": "18",
       "continent": "🧰 亚洲（48国）",
       "country": "卡塔尔",
       "countryIndex": 17,
@@ -713,38 +854,11 @@
       ]
     },
     {
-      "id": "19",
-      "continent": "🧰 亚洲（48国）",
-      "country": "泰国",
-      "countryIndex": 18,
-      "countryRaw": "18 泰国",
-      "media": [
-        {
-          "status": "🟢",
-          "name": "Sanook",
-          "url": "https://www.sanook.com/",
-          "raw": "* 🟢Sanook：[https://www.sanook.com/](https://link.zhihu.com/?target=https%3A//www.sanook.com/)"
-        },
-        {
-          "status": "🟢",
-          "name": "泰叻报",
-          "url": "https://www.thairath.co.th/",
-          "raw": "* 🟢泰叻报：[https://www.thairath.co.th/](https://link.zhihu.com/?target=https%3A//www.thairath.co.th/)"
-        },
-        {
-          "status": "🟢",
-          "name": "考苏得英文报",
-          "url": "https://www.khaosod.co.th/",
-          "raw": "* 🟢考苏得英文报：[https://www.khaosod.co.th/](https://link.zhihu.com/?target=https%3A//www.khaosod.co.th/)"
-        }
-      ]
-    },
-    {
-      "id": "20",
+      "id": "18",
       "continent": "🧰 亚洲（48国）",
       "country": "孟加拉国",
-      "countryIndex": 19,
-      "countryRaw": "19 孟加拉国",
+      "countryIndex": 18,
+      "countryRaw": "18 孟加拉国",
       "media": [
         {
           "status": "🟢",
@@ -761,11 +875,11 @@
       ]
     },
     {
-      "id": "21",
+      "id": "19",
       "continent": "🧰 亚洲（48国）",
       "country": "菲律宾",
-      "countryIndex": 20,
-      "countryRaw": "20 菲律宾",
+      "countryIndex": 19,
+      "countryRaw": "19 菲律宾",
       "media": [
         {
           "status": "🟢",
@@ -800,11 +914,11 @@
       ]
     },
     {
-      "id": "22",
+      "id": "20",
       "continent": "🧰 亚洲（48国）",
       "country": "哈萨克斯坦",
-      "countryIndex": 21,
-      "countryRaw": "21 哈萨克斯坦",
+      "countryIndex": 20,
+      "countryRaw": "20 哈萨克斯坦",
       "media": [
         {
           "status": "🟢",
@@ -821,11 +935,11 @@
       ]
     },
     {
-      "id": "23",
+      "id": "21",
       "continent": "🧰 亚洲（48国）",
       "country": "科威特",
-      "countryIndex": 22,
-      "countryRaw": "22 科威特",
+      "countryIndex": 21,
+      "countryRaw": "21 科威特",
       "media": [
         {
           "status": "🟢",
@@ -860,11 +974,11 @@
       ]
     },
     {
-      "id": "24",
+      "id": "22",
       "continent": "🧰 亚洲（48国）",
       "country": "印度",
-      "countryIndex": 23,
-      "countryRaw": "23 印度",
+      "countryIndex": 22,
+      "countryRaw": "22 印度",
       "media": [
         {
           "status": "🟢",
@@ -881,11 +995,11 @@
       ]
     },
     {
-      "id": "25",
+      "id": "23",
       "continent": "🧰 亚洲（48国）",
       "country": "巴勒斯坦",
-      "countryIndex": 24,
-      "countryRaw": "24 巴勒斯坦",
+      "countryIndex": 23,
+      "countryRaw": "23 巴勒斯坦",
       "media": [
         {
           "status": "🟢",
@@ -938,11 +1052,11 @@
       ]
     },
     {
-      "id": "26",
+      "id": "24",
       "continent": "🧰 亚洲（48国）",
       "country": "亚美尼亚",
-      "countryIndex": 25,
-      "countryRaw": "25 亚美尼亚",
+      "countryIndex": 24,
+      "countryRaw": "24 亚美尼亚",
       "media": [
         {
           "status": "🟢",
@@ -965,11 +1079,11 @@
       ]
     },
     {
-      "id": "27",
+      "id": "25",
       "continent": "🧰 亚洲（48国）",
       "country": "巴林",
-      "countryIndex": 26,
-      "countryRaw": "26 巴林",
+      "countryIndex": 25,
+      "countryRaw": "25 巴林",
       "media": [
         {
           "status": "🟢",
@@ -992,11 +1106,11 @@
       ]
     },
     {
-      "id": "28",
+      "id": "26",
       "continent": "🧰 亚洲（48国）",
       "country": "文莱",
-      "countryIndex": 27,
-      "countryRaw": "27 文莱",
+      "countryIndex": 26,
+      "countryRaw": "26 文莱",
       "media": [
         {
           "status": "🟢",
@@ -1019,11 +1133,11 @@
       ]
     },
     {
-      "id": "29",
+      "id": "27",
       "continent": "🧰 亚洲（48国）",
       "country": "柬埔寨",
-      "countryIndex": 28,
-      "countryRaw": "28 柬埔寨",
+      "countryIndex": 27,
+      "countryRaw": "27 柬埔寨",
       "media": [
         {
           "status": "🟢",
@@ -1046,11 +1160,11 @@
       ]
     },
     {
-      "id": "30",
+      "id": "28",
       "continent": "🧰 亚洲（48国）",
       "country": "朝鲜",
-      "countryIndex": 29,
-      "countryRaw": "29 朝鲜",
+      "countryIndex": 28,
+      "countryRaw": "28 朝鲜",
       "media": [
         {
           "status": "🟢",
@@ -1067,11 +1181,11 @@
       ]
     },
     {
-      "id": "31",
+      "id": "29",
       "continent": "🧰 亚洲（48国）",
       "country": "东帝汶",
-      "countryIndex": 30,
-      "countryRaw": "30 东帝汶",
+      "countryIndex": 29,
+      "countryRaw": "29 东帝汶",
       "media": [
         {
           "status": "🟢",
@@ -1094,11 +1208,11 @@
       ]
     },
     {
-      "id": "32",
+      "id": "30",
       "continent": "🧰 亚洲（48国）",
       "country": "格鲁吉亚",
-      "countryIndex": 31,
-      "countryRaw": "31 格鲁吉亚",
+      "countryIndex": 30,
+      "countryRaw": "30 格鲁吉亚",
       "media": [
         {
           "status": "🟢",
@@ -1121,11 +1235,11 @@
       ]
     },
     {
-      "id": "33",
+      "id": "31",
       "continent": "🧰 亚洲（48国）",
       "country": "约旦",
-      "countryIndex": 32,
-      "countryRaw": "32 约旦",
+      "countryIndex": 31,
+      "countryRaw": "31 约旦",
       "media": [
         {
           "status": "🟢",
@@ -1160,11 +1274,11 @@
       ]
     },
     {
-      "id": "34",
+      "id": "32",
       "continent": "🧰 亚洲（48国）",
       "country": "吉尔吉斯斯坦",
-      "countryIndex": 33,
-      "countryRaw": "33 吉尔吉斯斯坦",
+      "countryIndex": 32,
+      "countryRaw": "32 吉尔吉斯斯坦",
       "media": [
         {
           "status": "🟢",
@@ -1211,11 +1325,11 @@
       ]
     },
     {
-      "id": "35",
+      "id": "33",
       "continent": "🧰 亚洲（48国）",
       "country": "老挝",
-      "countryIndex": 34,
-      "countryRaw": "34 老挝",
+      "countryIndex": 33,
+      "countryRaw": "33 老挝",
       "media": [
         {
           "status": "🟢",
@@ -1238,11 +1352,11 @@
       ]
     },
     {
-      "id": "36",
+      "id": "34",
       "continent": "🧰 亚洲（48国）",
       "country": "黎巴嫩",
-      "countryIndex": 35,
-      "countryRaw": "35 黎巴嫩",
+      "countryIndex": 34,
+      "countryRaw": "34 黎巴嫩",
       "media": [
         {
           "status": "🟢",
@@ -1277,11 +1391,11 @@
       ]
     },
     {
-      "id": "37",
+      "id": "35",
       "continent": "🧰 亚洲（48国）",
       "country": "马尔代夫",
-      "countryIndex": 36,
-      "countryRaw": "36 马尔代夫",
+      "countryIndex": 35,
+      "countryRaw": "35 马尔代夫",
       "media": [
         {
           "status": "🟢",
@@ -1310,11 +1424,11 @@
       ]
     },
     {
-      "id": "38",
+      "id": "36",
       "continent": "🧰 亚洲（48国）",
       "country": "蒙古",
-      "countryIndex": 37,
-      "countryRaw": "37 蒙古",
+      "countryIndex": 36,
+      "countryRaw": "36 蒙古",
       "media": [
         {
           "status": "🟡",
@@ -1343,11 +1457,11 @@
       ]
     },
     {
-      "id": "39",
+      "id": "37",
       "continent": "🧰 亚洲（48国）",
       "country": "缅甸",
-      "countryIndex": 38,
-      "countryRaw": "38 缅甸",
+      "countryIndex": 37,
+      "countryRaw": "37 缅甸",
       "media": [
         {
           "status": "🟢",
@@ -1370,7 +1484,28 @@
       ]
     },
     {
-      "id": "40",
+      "id": "38",
+      "continent": "🧰 亚洲（48国）",
+      "country": "伊朗",
+      "countryIndex": 38,
+      "countryRaw": "38 伊朗",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "伊朗伊斯兰共和国通讯社",
+          "url": "https://en.irna.ir/",
+          "raw": "* 🟢伊朗伊斯兰共和国通讯社：[https://en.irna.ir/](https://link.zhihu.com/?target=https%3A//en.irna.ir/)"
+        },
+        {
+          "status": "🟢",
+          "name": "Press TV",
+          "url": "https://www.presstv.ir/",
+          "raw": "* 🟢Press TV：[https://www.presstv.ir/](https://link.zhihu.com/?target=https%3A//www.presstv.ir/)"
+        }
+      ]
+    },
+    {
+      "id": "39",
       "continent": "🧰 亚洲（48国）",
       "country": "尼泊尔",
       "countryIndex": 39,
@@ -1391,7 +1526,7 @@
       ]
     },
     {
-      "id": "41",
+      "id": "40",
       "continent": "🧰 亚洲（48国）",
       "country": "阿曼",
       "countryIndex": 40,
@@ -1420,6 +1555,45 @@
           "name": "阿曼每日观察",
           "url": "https://www.omanobserver.om/",
           "raw": "* 🟡阿曼每日观察：[https://www.omanobserver.om/](https://link.zhihu.com/?target=https%3A//www.omanobserver.om/)"
+        }
+      ]
+    },
+    {
+      "id": "41",
+      "continent": "🧰 亚洲（48国）",
+      "country": "阿富汗",
+      "countryIndex": null,
+      "countryRaw": "阿富汗",
+      "media": [
+        {
+          "status": "🟢",
+          "name": "阿富汗新闻网",
+          "url": "https://www.afghanistannews.net/",
+          "raw": "* 🟢阿富汗新闻网：[https://www.afghanistannews.net/](https://link.zhihu.com/?target=https%3A//www.afghanistannews.net/)"
+        },
+        {
+          "status": "🟡",
+          "name": "Tolo News",
+          "url": "https://tolonews.com/",
+          "raw": "* 🟡Tolo News：[https://tolonews.com/](https://link.zhihu.com/?target=https%3A//tolonews.com/)"
+        },
+        {
+          "status": "🟡",
+          "name": "Pajhwok Afghan News",
+          "url": "https://www.pajhwok.com/",
+          "raw": "* 🟡Pajhwok Afghan News：[https://www.pajhwok.com/](https://link.zhihu.com/?target=https%3A//www.pajhwok.com/)"
+        },
+        {
+          "status": "🔴",
+          "name": "Ariana News",
+          "url": "https://www.ariananews.af/",
+          "raw": "* 🔴Ariana News：[https://www.ariananews.af/](https://link.zhihu.com/?target=https%3A//www.ariananews.af/)"
+        },
+        {
+          "status": "🟡",
+          "name": "巴赫特通讯社",
+          "url": "https://www.bakhtarnews.af/",
+          "raw": "* 🟡巴赫特通讯社：[https://www.bakhtarnews.af/](https://link.zhihu.com/?target=https%3A//www.bakhtarnews.af/)"
         }
       ]
     },
