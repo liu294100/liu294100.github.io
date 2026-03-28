@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-03-15T10:01:54Z",
+  "generatedAt": "2026-03-28T03:45:46Z",
   "source": "news/news.md",
   "totalCountries": 198,
-  "totalMedia": 653,
+  "totalMedia": 664,
   "countries": [
     {
       "id": "1",
@@ -1747,6 +1747,42 @@
           "name": "英国独立电台",
           "url": "https://www.itv.com/news",
           "raw": "* 🟢英国独立电台：[https://www.itv.com/news](https://link.zhihu.com/?target=https%3A//www.itv.com/news)"
+        },
+        {
+          "status": "🟢",
+          "name": "英国广播公司",
+          "url": "https://www.bbc.com/news",
+          "raw": "* 🟢英国广播公司：[https://www.bbc.com/news](https://link.zhihu.com/?target=https%3A//www.bbc.com/news)"
+        },
+        {
+          "status": "🟢",
+          "name": "卫报",
+          "url": "https://www.theguardian.com/uk",
+          "raw": "* 🟢卫报：[https://www.theguardian.com/uk](https://link.zhihu.com/?target=https%3A//www.theguardian.com/uk)"
+        },
+        {
+          "status": "🟢",
+          "name": "金融时报",
+          "url": "https://www.ft.com/",
+          "raw": "* 🟢金融时报：[https://www.ft.com/](https://link.zhihu.com/?target=https%3A//www.ft.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "路透社英国版",
+          "url": "https://www.reuters.com/world/uk/",
+          "raw": "* 🟢路透社英国版：[https://www.reuters.com/world/uk/](https://link.zhihu.com/?target=https%3A//www.reuters.com/world/uk/)"
+        },
+        {
+          "status": "🟢",
+          "name": "第四频道新闻",
+          "url": "https://www.channel4.com/news",
+          "raw": "* 🟢第四频道新闻：[https://www.channel4.com/news](https://link.zhihu.com/?target=https%3A//www.channel4.com/news)"
+        },
+        {
+          "status": "🟢",
+          "name": "每日邮报",
+          "url": "https://www.dailymail.co.uk/",
+          "raw": "* 🟢每日邮报：[https://www.dailymail.co.uk/](https://link.zhihu.com/?target=https%3A//www.dailymail.co.uk/)"
         }
       ]
     },
@@ -3067,6 +3103,42 @@
           "name": "*Common Dreams",
           "url": "https://www.commondreams.org/",
           "raw": "* 🟢*Common Dreams：[https://www.commondreams.org/](https://link.zhihu.com/?target=https%3A//www.commondreams.org/)*"
+        },
+        {
+          "status": "🟢",
+          "name": "纽约时报",
+          "url": "https://www.nytimes.com/",
+          "raw": "* 🟢纽约时报：[https://www.nytimes.com/](https://link.zhihu.com/?target=https%3A//www.nytimes.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "华盛顿邮报",
+          "url": "https://www.washingtonpost.com/",
+          "raw": "* 🟢华盛顿邮报：[https://www.washingtonpost.com/](https://link.zhihu.com/?target=https%3A//www.washingtonpost.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "华尔街日报",
+          "url": "https://www.wsj.com/",
+          "raw": "* 🟢华尔街日报：[https://www.wsj.com/](https://link.zhihu.com/?target=https%3A//www.wsj.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "路透社美国版",
+          "url": "https://www.reuters.com/world/us/",
+          "raw": "* 🟢路透社美国版：[https://www.reuters.com/world/us/](https://link.zhihu.com/?target=https%3A//www.reuters.com/world/us/)"
+        },
+        {
+          "status": "🟢",
+          "name": "彭博社",
+          "url": "https://www.bloomberg.com/",
+          "raw": "* 🟢彭博社：[https://www.bloomberg.com/](https://link.zhihu.com/?target=https%3A//www.bloomberg.com/)"
+        },
+        {
+          "status": "🟢",
+          "name": "CNBC",
+          "url": "https://www.cnbc.com/",
+          "raw": "* 🟢CNBC：[https://www.cnbc.com/](https://link.zhihu.com/?target=https%3A//www.cnbc.com/)"
         }
       ]
     },
@@ -5695,12 +5767,6 @@
           "name": "搜索引擎会优先展示关键词同语言的结果。",
           "url": "",
           "raw": "* 搜索引擎会优先展示关键词同语言的结果。"
-        },
-        {
-          "status": "",
-          "name": "例如想获取国外关于爱泼斯坦的报道，用“Epstein”或“Epstein news”作为关键词。",
-          "url": "",
-          "raw": "* 例如想获取国外关于爱泼斯坦的报道，用“Epstein”或“Epstein news”作为关键词。"
         }
       ]
     }

@@ -391,6 +391,12 @@
 * 🟢天空新闻：[https://**news.sky.com/**](https://link.zhihu.com/?target=https%3A//news.sky.com/)
 * 🟢泰晤士报：[https://www.**thetimes.com/**](https://link.zhihu.com/?target=https%3A//www.thetimes.com/)
 * 🟢英国独立电台：[https://www.**itv.com/news**](https://link.zhihu.com/?target=https%3A//www.itv.com/news)
+* 🟢英国广播公司：[https://www.**bbc.com/news**](https://link.zhihu.com/?target=https%3A//www.bbc.com/news)
+* 🟢卫报：[https://www.**theguardian.com/uk**](https://link.zhihu.com/?target=https%3A//www.theguardian.com/uk)
+* 🟢金融时报：[https://www.**ft.com/**](https://link.zhihu.com/?target=https%3A//www.ft.com/)
+* 🟢路透社英国版：[https://www.**reuters.com/world/uk/**](https://link.zhihu.com/?target=https%3A//www.reuters.com/world/uk/)
+* 🟢第四频道新闻：[https://www.**channel4.com/news**](https://link.zhihu.com/?target=https%3A//www.channel4.com/news)
+* 🟢每日邮报：[https://www.**dailymail.co.uk/**](https://link.zhihu.com/?target=https%3A//www.dailymail.co.uk/)
 
 ### 52 法国
 
@@ -676,6 +682,12 @@
 * 🟢ABC新闻：[https://**abcnews.com/**](https://link.zhihu.com/?target=https%3A//abcnews.com/)
 * 🟢U.S. News：[https://www.usnews.com](https://link.zhihu.com/?target=https%3A//www.usnews.com/)
 * 🟢***Common Dreams：[https://www.**commondreams.org/**](https://link.zhihu.com/?target=https%3A//www.commondreams.org/)***
+* 🟢纽约时报：[https://www.**nytimes.com/**](https://link.zhihu.com/?target=https%3A//www.nytimes.com/)
+* 🟢华盛顿邮报：[https://www.**washingtonpost.com/**](https://link.zhihu.com/?target=https%3A//www.washingtonpost.com/)
+* 🟢华尔街日报：[https://www.**wsj.com/**](https://link.zhihu.com/?target=https%3A//www.wsj.com/)
+* 🟢路透社美国版：[https://www.**reuters.com/world/us/**](https://link.zhihu.com/?target=https%3A//www.reuters.com/world/us/)
+* 🟢彭博社：[https://www.**bloomberg.com/**](https://link.zhihu.com/?target=https%3A//www.bloomberg.com/)
+* 🟢CNBC：[https://www.**cnbc.com/**](https://link.zhihu.com/?target=https%3A//www.cnbc.com/)
 
 ### 94 加拿大
 
