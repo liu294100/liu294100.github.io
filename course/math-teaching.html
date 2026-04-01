@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学直观演示课堂</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+            color: #1f2937;
+        }
+        .page {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+        .header, .panel, .canvas-wrap {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+        }
+        .header {
+            padding: 18px 22px;
+            margin-bottom: 14px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+        .header p {
+            margin: 8px 0 0;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .layout {
+            display: grid;
+            grid-template-columns: 390px 1fr;
+            gap: 14px;
+        }
+        .panel {
+            padding: 16px;
+            max-height: calc(100vh - 80px);
+            overflow: auto;
+        }
+        .canvas-wrap { padding: 12px; }
+        .section-title {
+            margin: 0 0 10px;
+            font-size: 17px;
+            font-weight: 700;
+        }
+        .field { margin-bottom: 10px; }
+        .field label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+        .field input, .field select, .field button {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            padding: 9px 10px;
+            background: #f8fafc;
+            font-size: 14px;
+        }
+        .field button {
+            border: none;
+            background: #4f46e5;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .field button.secondary { background: #0ea5e9; }
+        .field button.warning { background: #ef4444; }
+        .inline { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .inline-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .hidden { display: none; }
+        .canvas-stage {
+            position: relative;
+            width: 100%;
+            height: 680px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            background: #fff;
+        }
+        canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #ink-canvas { pointer-events: none; }
+        .tips {
+            margin-top: 10px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 10px;
+            color: #334155;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: #1d4ed8;
+            background: #dbeafe;
+            margin-right: 6px;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .result-card {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #1e293b;
+        }
+        @media (max-width: 1080px) {
+            .layout { grid-template-columns: 1fr; }
+            .canvas-stage { height: 560px; }
+            .panel { max-height: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="header">
+        <h1>数学直观演示课堂（扩展版）</h1>
+        <p>覆盖高中到大学常见数学：函数与解析几何、三维曲面、微积分、数列、极限。支持表达式输入、动态演示和画布手写标注。</p>
+    </div>
+
+    <div class="layout">
+        <div class="panel">
+            <h2 class="section-title">演示控制台</h2>
+            <div class="field">
+                <label>模块</label>
+                <select id="mode">
+                    <option value="function">函数图像（2D）</option>
+                    <option value="ellipse">椭圆</option>
+                    <option value="parabola">抛物线</option>
+                    <option value="hyperbola">双曲线</option>
+                    <option value="surface3d">三维曲面 z=f(x,y)</option>
+                    <option value="calculus">微积分（导数+定积分）</option>
+                    <option value="sequence">数列与部分和</option>
+                    <option value="limit">极限演示</option>
+                    <option value="series-sum">数列求和与公式推导</option>
+                    <option value="finance">复利与年金来源</option>
+                    <option value="binomial">二项式展开与化简</option>
+                    <option value="combinatorics">排列组合</option>
+                    <option value="prob-stats">概率与统计</option>
+                </select>
+            </div>
+
+            <div id="function-panel">
+                <div class="field">
+                    <label>函数表达式 y = f(x)</label>
+                    <input id="function-expression" value="sin(x)">
+                </div>
+                <div class="field">
+                    <label>预设函数</label>
+                    <select id="function-preset">
+                        <option value="">请选择</option>
+                        <option value="sin(x)">sin(x)</option>
+                        <option value="cos(2*x)">cos(2x)</option>
+                        <option value="tan(x)">tan(x)</option>
+                        <option value="x^2-4*x+1">x²-4x+1</option>
+                        <option value="x^3-3*x">x³-3x</option>
+                        <option value="exp(0.2*x)">e^(0.2x)</option>
+                        <option value="ln(x+6)">ln(x+6)</option>
+                        <option value="sqrt(abs(x))">sqrt(|x|)</option>
+                        <option value="abs(x)">|x|</option>
+                        <option value="1/(x-1)">1/(x-1)</option>
+                        <option value="sinh(x/2)">sinh(x/2)</option>
+                    </select>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>x 最小值</label><input id="x-min" type="number" value="-10"></div>
+                    <div class="field"><label>x 最大值</label><input id="x-max" type="number" value="10"></div>
+                </div>
+            </div>
+
+            <div id="ellipse-panel" class="hidden">
+                <div class="inline-3">
+                    <div class="field"><label>中心 h</label><input id="ellipse-h" type="number" value="0" step="0.2"></div>
+                    <div class="field"><label>中心 k</label><input id="ellipse-k" type="number" value="0" step="0.2"></div>
+                    <div class="field"><label>半长轴 a</label><input id="ellipse-a" type="number" value="5" min="0.1" step="0.2"></div>
+                </div>
+                <div class="field"><label>半短轴 b</label><input id="ellipse-b" type="number" value="3" min="0.1" step="0.2"></div>
+            </div>
+
+            <div id="parabola-panel" class="hidden">
+                <div class="inline-3">
+                    <div class="field"><label>顶点 h</label><input id="parabola-h" type="number" value="0" step="0.2"></div>
+                    <div class="field"><label>顶点 k</label><input id="parabola-k" type="number" value="0" step="0.2"></div>
+                    <div class="field"><label>参数 p</label><input id="parabola-p" type="number" value="2" step="0.2"></div>
+                </div>
+                <div class="field">
+                    <label>开口方向</label>
+                    <select id="parabola-direction">
+                        <option value="up">(x-h)² = 4p(y-k)</option>
+                        <option value="right">(y-k)² = 4p(x-h)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="hyperbola-panel" class="hidden">
+                <div class="inline-3">
+                    <div class="field"><label>中心 h</label><input id="hyperbola-h" type="number" value="0" step="0.2"></div>
+                    <div class="field"><label>中心 k</label><input id="hyperbola-k" type="number" value="0" step="0.2"></div>
+                    <div class="field"><label>a</label><input id="hyperbola-a" type="number" value="3" min="0.1"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>b</label><input id="hyperbola-b" type="number" value="2" min="0.1"></div>
+                    <div class="field">
+                        <label>轴向</label>
+                        <select id="hyperbola-direction">
+                            <option value="x">左右开口</option>
+                            <option value="y">上下开口</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div id="surface3d-panel" class="hidden">
+                <div class="field">
+                    <label>曲面表达式 z = f(x,y)</label>
+                    <input id="surface-expression" value="sin(x)*cos(y)">
+                </div>
+                <div class="field">
+                    <label>预设曲面</label>
+                    <select id="surface-preset">
+                        <option value="">请选择</option>
+                        <option value="sin(x)*cos(y)">sin(x)cos(y)</option>
+                        <option value="0.1*(x^2+y^2)">抛物面</option>
+                        <option value="sin(sqrt(x^2+y^2))*2">波纹面</option>
+                        <option value="x*y/8">鞍面</option>
+                    </select>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>x 范围</label><input id="surface-range-x" type="number" value="6"></div>
+                    <div class="field"><label>y 范围</label><input id="surface-range-y" type="number" value="6"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>网格密度</label><input id="surface-density" type="number" value="24" min="8" max="60"></div>
+                    <div class="field"><label>旋转角度</label><input id="surface-rotate" type="range" min="-180" max="180" value="35"></div>
+                </div>
+            </div>
+
+            <div id="calculus-panel" class="hidden">
+                <div class="field"><label>函数 f(x)</label><input id="calc-expression" value="x^3-3*x"></div>
+                <div class="inline-3">
+                    <div class="field"><label>切点 x0</label><input id="calc-x0" type="number" value="1" step="0.1"></div>
+                    <div class="field"><label>积分下限 a</label><input id="calc-a" type="number" value="-1" step="0.1"></div>
+                    <div class="field"><label>积分上限 b</label><input id="calc-b" type="number" value="2" step="0.1"></div>
+                </div>
+            </div>
+
+            <div id="sequence-panel" class="hidden">
+                <div class="field"><label>数列表达式 a_n</label><input id="seq-expression" value="1/n"></div>
+                <div class="field">
+                    <label>预设数列</label>
+                    <select id="seq-preset">
+                        <option value="">请选择</option>
+                        <option value="1/n">调和数列 1/n</option>
+                        <option value="1/n^2">p级数 1/n²</option>
+                        <option value="2*n+1">等差数列 2n+1</option>
+                        <option value="2^n">等比数列 2^n</option>
+                        <option value="(-1)^n/n">交错数列 (-1)^n/n</option>
+                    </select>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>项数 n_max</label><input id="seq-nmax" type="number" value="24" min="5" max="200"></div>
+                    <div class="field"><label>起始 n</label><input id="seq-start" type="number" value="1" min="1"></div>
+                </div>
+            </div>
+
+            <div id="limit-panel" class="hidden">
+                <div class="field"><label>表达式 f(x)</label><input id="limit-expression" value="sin(x)/x"></div>
+                <div class="inline">
+                    <div class="field"><label>趋近点 x0</label><input id="limit-x0" type="number" value="0" step="0.1"></div>
+                    <div class="field">
+                        <label>方向</label>
+                        <select id="limit-side">
+                            <option value="both">双侧</option>
+                            <option value="left">左极限</option>
+                            <option value="right">右极限</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field"><label>局部窗口半径</label><input id="limit-window" type="number" value="2" min="0.1" step="0.1"></div>
+            </div>
+
+            <div id="series-sum-panel" class="hidden">
+                <div class="field">
+                    <label>求和类型</label>
+                    <select id="series-type">
+                        <option value="k2">1²+2²+...+n²</option>
+                        <option value="k">1+2+...+n</option>
+                        <option value="arith">等差数列求和</option>
+                        <option value="geo">等比数列求和</option>
+                        <option value="custom">自定义 a_n</option>
+                    </select>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>n</label><input id="series-n" type="number" value="20" min="1"></div>
+                    <div class="field"><label>自定义 a_n</label><input id="series-custom" value="n^2"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>等差首项 a1</label><input id="arith-a1" type="number" value="1"></div>
+                    <div class="field"><label>等差公差 d</label><input id="arith-d" type="number" value="1"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>等比首项 a1</label><input id="geo-a1" type="number" value="1"></div>
+                    <div class="field"><label>等比公比 q</label><input id="geo-q" type="number" value="1.1" step="0.1"></div>
+                </div>
+            </div>
+
+            <div id="finance-panel" class="hidden">
+                <div class="inline">
+                    <div class="field"><label>本金 P</label><input id="fin-p" type="number" value="10000"></div>
+                    <div class="field"><label>年利率 r（%）</label><input id="fin-r" type="number" value="4.2" step="0.1"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>每年复利次数 m</label><input id="fin-m" type="number" value="12" min="1"></div>
+                    <div class="field"><label>年数 t</label><input id="fin-t" type="number" value="20" min="1"></div>
+                </div>
+                <div class="field"><label>每期追加 C（期末）</label><input id="fin-c" type="number" value="500"></div>
+            </div>
+
+            <div id="binomial-panel" class="hidden">
+                <div class="field"><label>二项式表达式（示例：(x+1)^5 或 (2x-3)^4）</label><input id="bin-expression" value="(x+1)^5"></div>
+                <div class="inline">
+                    <div class="field"><label>a</label><input id="bin-a" type="number" value="1"></div>
+                    <div class="field"><label>b</label><input id="bin-b" type="number" value="1"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>幂次 n</label><input id="bin-n" type="number" value="5" min="0"></div>
+                    <div class="field"><label>变量名</label><input id="bin-var" value="x"></div>
+                </div>
+            </div>
+
+            <div id="combinatorics-panel" class="hidden">
+                <div class="inline">
+                    <div class="field"><label>n</label><input id="comb-n" type="number" value="10" min="0"></div>
+                    <div class="field"><label>r</label><input id="comb-r" type="number" value="3" min="0"></div>
+                </div>
+                <div class="field">
+                    <label>直观场景</label>
+                    <select id="comb-scene">
+                        <option value="class">班级选干部（组合）</option>
+                        <option value="password">密码位次（排列）</option>
+                        <option value="lottery">抽奖不放回（超几何）</option>
+                    </select>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>总体 N</label><input id="comb-pop-n" type="number" value="30" min="1"></div>
+                    <div class="field"><label>成功数 K</label><input id="comb-pop-k" type="number" value="8" min="0"></div>
+                </div>
+                <div class="inline">
+                    <div class="field"><label>抽取 n</label><input id="comb-draw-n" type="number" value="6" min="0"></div>
+                    <div class="field"><label>恰好成功 k</label><input id="comb-hit-k" type="number" value="2" min="0"></div>
+                </div>
+            </div>
+
+            <div id="prob-stats-panel" class="hidden">
+                <div class="field"><label>样本数据（逗号分隔）</label><input id="stats-data" value="12,15,17,18,20,21,21,24,30"></div>
+                <div class="inline">
+                    <div class="field"><label>二项分布 n</label><input id="prob-n" type="number" value="12" min="1"></div>
+                    <div class="field"><label>成功率 p</label><input id="prob-p" type="number" value="0.35" min="0" max="1" step="0.01"></div>
+                </div>
+                <div class="field"><label>计算 P(X=k) 的 k</label><input id="prob-k" type="number" value="4" min="0"></div>
+            </div>
+
+            <div class="inline">
+                <div class="field">
+                    <label>二维坐标缩放</label>
+                    <input id="scale" type="range" min="20" max="95" value="38">
+                </div>
+                <div class="field">
+                    <label>当前缩放</label>
+                    <input id="scale-value" value="38" readonly>
+                </div>
+            </div>
+
+            <div class="inline">
+                <div class="field"><button id="redraw">更新图像</button></div>
+                <div class="field"><button id="toggle-animation" class="secondary">开始动画</button></div>
+            </div>
+
+            <h2 class="section-title">手写标注</h2>
+            <div class="inline">
+                <div class="field">
+                    <label>启用手写</label>
+                    <select id="ink-enable">
+                        <option value="off">关闭</option>
+                        <option value="on">开启</option>
+                    </select>
+                </div>
+                <div class="field"><label>颜色</label><input id="ink-color" type="color" value="#ef4444"></div>
+            </div>
+            <div class="inline">
+                <div class="field"><label>画笔粗细</label><input id="ink-width" type="range" min="1" max="12" value="3"></div>
+                <div class="field"><button id="clear-ink" class="warning">清空标注</button></div>
+            </div>
+
+            <h2 class="section-title">知识树</h2>
+            <div class="tips">
+                <b>高中数学</b><br>
+                函数与图像 → 数列 → 三角函数 → 解析几何 → 概率统计<br><br>
+                <b>大学数学</b><br>
+                极限连续 → 导数微分 → 积分应用 → 多元函数与曲面 → 线性代数与概率论<br><br>
+                <b>本页新增重点</b><br>
+                数列求和推导、复利与年金公式来源、二项式展开、排列组合、超几何概率、样本统计指标
+            </div>
+
+            <div class="tips" id="formula-box"></div>
+        </div>
+
+        <div class="canvas-wrap">
+            <div class="canvas-stage" id="canvas-stage">
+                <canvas id="graph-canvas"></canvas>
+                <canvas id="ink-canvas"></canvas>
+            </div>
+            <div class="tips">
+                <span class="badge">支持函数</span>
+                sin cos tan asin acos atan sinh cosh tanh exp ln log sqrt cbrt abs floor ceil round min max pow PI E
+                <br>
+                <span class="badge">表达式说明</span>
+                幂运算支持 x^2，绝对值可写 abs(x)，可用 x 与 y 变量（3D模块）。
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const graphCanvas = document.getElementById("graph-canvas");
+    const graphCtx = graphCanvas.getContext("2d");
+    const inkCanvas = document.getElementById("ink-canvas");
+    const inkCtx = inkCanvas.getContext("2d");
+
+    const modeSelect = document.getElementById("mode");
+    const formulaBox = document.getElementById("formula-box");
+    const scaleInput = document.getElementById("scale");
+    const scaleValue = document.getElementById("scale-value");
+    const redrawBtn = document.getElementById("redraw");
+    const toggleAnimationBtn = document.getElementById("toggle-animation");
+
+    const panels = {
+        function: document.getElementById("function-panel"),
+        ellipse: document.getElementById("ellipse-panel"),
+        parabola: document.getElementById("parabola-panel"),
+        hyperbola: document.getElementById("hyperbola-panel"),
+        surface3d: document.getElementById("surface3d-panel"),
+        calculus: document.getElementById("calculus-panel"),
+        sequence: document.getElementById("sequence-panel"),
+        limit: document.getElementById("limit-panel"),
+        "series-sum": document.getElementById("series-sum-panel"),
+        finance: document.getElementById("finance-panel"),
+        binomial: document.getElementById("binomial-panel"),
+        combinatorics: document.getElementById("combinatorics-panel"),
+        "prob-stats": document.getElementById("prob-stats-panel")
+    };
+
+    let scale = Number(scaleInput.value);
+    let animating = false;
+    let ticker = 0;
+    let rafId = null;
+    let drawing = false;
+
+    function toPixelX(x) { return graphCanvas.clientWidth / 2 + x * scale; }
+    function toPixelY(y) { return graphCanvas.clientHeight / 2 - y * scale; }
+    function toMathX(px) { return (px - graphCanvas.clientWidth / 2) / scale; }
+
+    function normalizeExpression(expr) {
+        return expr
+            .replace(/π/g, "PI")
+            .replace(/\^/g, "**")
+            .replace(/\bln\(/g, "log(");
+    }
+
+    function compileExpression(expr, vars) {
+        const normalized = normalizeExpression(expr);
+        const safe = /^[0-9a-zA-Z_+\-*/().,\s%<>=!?&|]*$/.test(normalized);
+        if (!safe || normalized.includes("=>") || normalized.includes("function")) {
+            throw new Error("表达式包含不支持字符");
+        }
+        const args = vars.join(",");
+        const body = `const {sin,cos,tan,asin,acos,atan,sinh,cosh,tanh,sqrt,cbrt,log,exp,abs,floor,ceil,round,min,max,pow,PI,E}=Math; return (${normalized});`;
+        return new Function(args, body);
+    }
+
+    function resizeCanvas() {
+        const ratio = window.devicePixelRatio || 1;
+        const rect = graphCanvas.getBoundingClientRect();
+        graphCanvas.width = Math.floor(rect.width * ratio);
+        graphCanvas.height = Math.floor(rect.height * ratio);
+        inkCanvas.width = Math.floor(rect.width * ratio);
+        inkCanvas.height = Math.floor(rect.height * ratio);
+        graphCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        inkCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        render();
+    }
+
+    function drawGrid() {
+        const w = graphCanvas.clientWidth;
+        const h = graphCanvas.clientHeight;
+        graphCtx.clearRect(0, 0, w, h);
+        graphCtx.strokeStyle = "#e2e8f0";
+        graphCtx.lineWidth = 1;
+        graphCtx.beginPath();
+        for (let x = (w / 2) % scale; x <= w; x += scale) {
+            graphCtx.moveTo(x, 0);
+            graphCtx.lineTo(x, h);
+        }
+        for (let y = (h / 2) % scale; y <= h; y += scale) {
+            graphCtx.moveTo(0, y);
+            graphCtx.lineTo(w, y);
+        }
+        graphCtx.stroke();
+        graphCtx.strokeStyle = "#334155";
+        graphCtx.lineWidth = 1.5;
+        graphCtx.beginPath();
+        graphCtx.moveTo(0, h / 2);
+        graphCtx.lineTo(w, h / 2);
+        graphCtx.moveTo(w / 2, 0);
+        graphCtx.lineTo(w / 2, h);
+        graphCtx.stroke();
+    }
+
+    function drawCurveByFn(fn, xMin, xMax, color, width = 2.2) {
+        const w = graphCanvas.clientWidth;
+        graphCtx.strokeStyle = color;
+        graphCtx.lineWidth = width;
+        graphCtx.beginPath();
+        let started = false;
+        const stepPx = 2;
+        for (let px = 0; px <= w; px += stepPx) {
+            const x = xMin + (px / w) * (xMax - xMin);
+            const y = fn(x);
+            if (!Number.isFinite(y) || Math.abs(y) > 1e5) {
+                started = false;
+                continue;
+            }
+            const cx = toPixelX(x);
+            const cy = toPixelY(y);
+            if (!started) {
+                graphCtx.moveTo(cx, cy);
+                started = true;
+            } else {
+                graphCtx.lineTo(cx, cy);
+            }
+        }
+        graphCtx.stroke();
+    }
+
+    function drawFunction() {
+        const expr = document.getElementById("function-expression").value.trim();
+        const xMin = Number(document.getElementById("x-min").value);
+        const xMax = Number(document.getElementById("x-max").value);
+        if (!Number.isFinite(xMin) || !Number.isFinite(xMax) || xMin >= xMax) {
+            formulaBox.innerHTML = "请输入有效区间：x 最小值 < x 最大值。";
+            return;
+        }
+        let fn;
+        try {
+            fn = compileExpression(expr, ["x"]);
+        } catch (e) {
+            formulaBox.innerHTML = "函数表达式错误：" + e.message;
+            return;
+        }
+        drawGrid();
+        drawCurveByFn(fn, xMin, xMax, "#7c3aed");
+        const t = (Math.sin(ticker) + 1) / 2;
+        const xDot = xMin + t * (xMax - xMin);
+        const yDot = fn(xDot);
+        if (Number.isFinite(yDot)) {
+            graphCtx.fillStyle = "#ef4444";
+            graphCtx.beginPath();
+            graphCtx.arc(toPixelX(xDot), toPixelY(yDot), 5.5, 0, Math.PI * 2);
+            graphCtx.fill();
+        }
+        formulaBox.innerHTML = `函数：<b>y=${expr}</b><br>示例点：x=${xDot.toFixed(3)}，y=${Number.isFinite(yDot) ? yDot.toFixed(3) : "无定义"}`;
+    }
+
+    function drawEllipse() {
+        const h = Number(document.getElementById("ellipse-h").value);
+        const k = Number(document.getElementById("ellipse-k").value);
+        const a = Number(document.getElementById("ellipse-a").value);
+        const b = Number(document.getElementById("ellipse-b").value);
+        if (!(a > 0 && b > 0)) {
+            formulaBox.innerHTML = "椭圆参数要求 a>0 且 b>0。";
+            return;
+        }
+        drawGrid();
+        graphCtx.strokeStyle = "#0284c7";
+        graphCtx.lineWidth = 2.3;
+        graphCtx.beginPath();
+        for (let t = 0; t <= Math.PI * 2 + 0.01; t += 0.01) {
+            const x = h + a * Math.cos(t);
+            const y = k + b * Math.sin(t);
+            if (t === 0) graphCtx.moveTo(toPixelX(x), toPixelY(y));
+            else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+        }
+        graphCtx.stroke();
+        const c = Math.sqrt(Math.abs(a * a - b * b));
+        const horizontal = a >= b;
+        const f1 = horizontal ? [h - c, k] : [h, k - c];
+        const f2 = horizontal ? [h + c, k] : [h, k + c];
+        graphCtx.fillStyle = "#ef4444";
+        [f1, f2].forEach(([x, y]) => {
+            graphCtx.beginPath();
+            graphCtx.arc(toPixelX(x), toPixelY(y), 5, 0, Math.PI * 2);
+            graphCtx.fill();
+        });
+        formulaBox.innerHTML = `方程：<b>(x-${h})²/${(a * a).toFixed(2)} + (y-${k})²/${(b * b).toFixed(2)} = 1</b><br>焦点 F1(${f1[0].toFixed(2)},${f1[1].toFixed(2)}) F2(${f2[0].toFixed(2)},${f2[1].toFixed(2)}), 离心率 e=${(c / Math.max(a, b)).toFixed(3)}`;
+    }
+
+    function drawParabola() {
+        const h = Number(document.getElementById("parabola-h").value);
+        const k = Number(document.getElementById("parabola-k").value);
+        const p = Number(document.getElementById("parabola-p").value);
+        const direction = document.getElementById("parabola-direction").value;
+        if (!Number.isFinite(p) || Math.abs(p) < 1e-4) {
+            formulaBox.innerHTML = "参数 p 不能接近 0。";
+            return;
+        }
+        drawGrid();
+        graphCtx.strokeStyle = "#16a34a";
+        graphCtx.lineWidth = 2.3;
+        graphCtx.beginPath();
+        if (direction === "up") {
+            const xMin = -graphCanvas.clientWidth / (2 * scale) - 2;
+            const xMax = graphCanvas.clientWidth / (2 * scale) + 2;
+            let first = true;
+            for (let x = xMin; x <= xMax; x += 0.03) {
+                const y = (x - h) * (x - h) / (4 * p) + k;
+                if (first) { graphCtx.moveTo(toPixelX(x), toPixelY(y)); first = false; }
+                else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+            }
+            graphCtx.stroke();
+            graphCtx.fillStyle = "#ef4444";
+            graphCtx.beginPath();
+            graphCtx.arc(toPixelX(h), toPixelY(k + p), 5, 0, Math.PI * 2);
+            graphCtx.fill();
+            formulaBox.innerHTML = `方程：<b>(x-${h})²=${(4 * p).toFixed(2)}(y-${k})</b><br>焦点 F(${h.toFixed(2)},${(k + p).toFixed(2)}), 准线 y=${(k - p).toFixed(2)}`;
+        } else {
+            const yMin = -graphCanvas.clientHeight / (2 * scale) - 2;
+            const yMax = graphCanvas.clientHeight / (2 * scale) + 2;
+            let first = true;
+            for (let y = yMin; y <= yMax; y += 0.03) {
+                const x = (y - k) * (y - k) / (4 * p) + h;
+                if (first) { graphCtx.moveTo(toPixelX(x), toPixelY(y)); first = false; }
+                else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+            }
+            graphCtx.stroke();
+            graphCtx.fillStyle = "#ef4444";
+            graphCtx.beginPath();
+            graphCtx.arc(toPixelX(h + p), toPixelY(k), 5, 0, Math.PI * 2);
+            graphCtx.fill();
+            formulaBox.innerHTML = `方程：<b>(y-${k})²=${(4 * p).toFixed(2)}(x-${h})</b><br>焦点 F(${(h + p).toFixed(2)},${k.toFixed(2)}), 准线 x=${(h - p).toFixed(2)}`;
+        }
+    }
+
+    function drawHyperbola() {
+        const h = Number(document.getElementById("hyperbola-h").value);
+        const k = Number(document.getElementById("hyperbola-k").value);
+        const a = Number(document.getElementById("hyperbola-a").value);
+        const b = Number(document.getElementById("hyperbola-b").value);
+        const direction = document.getElementById("hyperbola-direction").value;
+        if (!(a > 0 && b > 0)) {
+            formulaBox.innerHTML = "双曲线参数要求 a>0 且 b>0。";
+            return;
+        }
+        drawGrid();
+        graphCtx.strokeStyle = "#d97706";
+        graphCtx.lineWidth = 2.2;
+        const c = Math.sqrt(a * a + b * b);
+        const max = Math.max(graphCanvas.clientWidth, graphCanvas.clientHeight) / scale + 3;
+        if (direction === "x") {
+            drawHyperBranchX(h, k, a, b, 1, max);
+            drawHyperBranchX(h, k, a, b, -1, max);
+            formulaBox.innerHTML = `方程：<b>(x-${h})²/${(a * a).toFixed(2)}-(y-${k})²/${(b * b).toFixed(2)}=1</b><br>焦点在 (${(h - c).toFixed(2)},${k.toFixed(2)}) 与 (${(h + c).toFixed(2)},${k.toFixed(2)}), e=${(c / a).toFixed(3)}`;
+        } else {
+            drawHyperBranchY(h, k, a, b, 1, max);
+            drawHyperBranchY(h, k, a, b, -1, max);
+            formulaBox.innerHTML = `方程：<b>(y-${k})²/${(a * a).toFixed(2)}-(x-${h})²/${(b * b).toFixed(2)}=1</b><br>焦点在 (${h.toFixed(2)},${(k - c).toFixed(2)}) 与 (${h.toFixed(2)},${(k + c).toFixed(2)}), e=${(c / a).toFixed(3)}`;
+        }
+    }
+
+    function drawHyperBranchX(h, k, a, b, sign, max) {
+        graphCtx.beginPath();
+        let started = false;
+        for (let x = h + a; x <= max; x += 0.04) {
+            const val = ((x - h) * (x - h)) / (a * a) - 1;
+            if (val < 0) continue;
+            const y = k + sign * b * Math.sqrt(val);
+            if (!started) { graphCtx.moveTo(toPixelX(x), toPixelY(y)); started = true; }
+            else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+        }
+        graphCtx.stroke();
+        graphCtx.beginPath();
+        started = false;
+        for (let x = h - a; x >= -max; x -= 0.04) {
+            const val = ((x - h) * (x - h)) / (a * a) - 1;
+            if (val < 0) continue;
+            const y = k + sign * b * Math.sqrt(val);
+            if (!started) { graphCtx.moveTo(toPixelX(x), toPixelY(y)); started = true; }
+            else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+        }
+        graphCtx.stroke();
+    }
+
+    function drawHyperBranchY(h, k, a, b, sign, max) {
+        graphCtx.beginPath();
+        let started = false;
+        for (let y = k + a; y <= max; y += 0.04) {
+            const val = ((y - k) * (y - k)) / (a * a) - 1;
+            if (val < 0) continue;
+            const x = h + sign * b * Math.sqrt(val);
+            if (!started) { graphCtx.moveTo(toPixelX(x), toPixelY(y)); started = true; }
+            else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+        }
+        graphCtx.stroke();
+        graphCtx.beginPath();
+        started = false;
+        for (let y = k - a; y >= -max; y -= 0.04) {
+            const val = ((y - k) * (y - k)) / (a * a) - 1;
+            if (val < 0) continue;
+            const x = h + sign * b * Math.sqrt(val);
+            if (!started) { graphCtx.moveTo(toPixelX(x), toPixelY(y)); started = true; }
+            else graphCtx.lineTo(toPixelX(x), toPixelY(y));
+        }
+        graphCtx.stroke();
+    }
+
+    function drawSurface3D() {
+        const expr = document.getElementById("surface-expression").value.trim();
+        const rangeX = Math.abs(Number(document.getElementById("surface-range-x").value)) || 6;
+        const rangeY = Math.abs(Number(document.getElementById("surface-range-y").value)) || 6;
+        const density = Math.max(8, Math.min(60, Number(document.getElementById("surface-density").value) || 24));
+        const rotate = Number(document.getElementById("surface-rotate").value) + (animating ? ticker * 25 : 0);
+        let fn;
+        try {
+            fn = compileExpression(expr, ["x", "y"]);
+        } catch (e) {
+            formulaBox.innerHTML = "三维表达式错误：" + e.message;
+            return;
+        }
+        graphCtx.clearRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+        graphCtx.fillStyle = "#f8fafc";
+        graphCtx.fillRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+        const rot = rotate * Math.PI / 180;
+        const cs = Math.cos(rot);
+        const sn = Math.sin(rot);
+        const baseScale = scale * 0.95;
+        const cx = graphCanvas.clientWidth / 2;
+        const cy = graphCanvas.clientHeight / 2 + 20;
+        graphCtx.strokeStyle = "#3b82f6";
+        graphCtx.lineWidth = 1;
+        function project(x, y, z) {
+            const xr = x * cs - y * sn;
+            const yr = x * sn + y * cs;
+            const px = cx + xr * baseScale;
+            const py = cy + (yr * 0.55 - z) * baseScale;
+            return [px, py];
+        }
+        for (let i = 0; i <= density; i++) {
+            let started = false;
+            graphCtx.beginPath();
+            const x = -rangeX + (2 * rangeX * i) / density;
+            for (let j = 0; j <= density; j++) {
+                const y = -rangeY + (2 * rangeY * j) / density;
+                const z = fn(x, y);
+                if (!Number.isFinite(z) || Math.abs(z) > 1e4) { started = false; continue; }
+                const [px, py] = project(x, y, z);
+                if (!started) { graphCtx.moveTo(px, py); started = true; }
+                else graphCtx.lineTo(px, py);
+            }
+            graphCtx.stroke();
+        }
+        graphCtx.strokeStyle = "#0ea5e9";
+        for (let j = 0; j <= density; j++) {
+            let started = false;
+            graphCtx.beginPath();
+            const y = -rangeY + (2 * rangeY * j) / density;
+            for (let i = 0; i <= density; i++) {
+                const x = -rangeX + (2 * rangeX * i) / density;
+                const z = fn(x, y);
+                if (!Number.isFinite(z) || Math.abs(z) > 1e4) { started = false; continue; }
+                const [px, py] = project(x, y, z);
+                if (!started) { graphCtx.moveTo(px, py); started = true; }
+                else graphCtx.lineTo(px, py);
+            }
+            graphCtx.stroke();
+        }
+        formulaBox.innerHTML = `三维曲面：<b>z=${expr}</b><br>当前旋转角度：${(rotate % 360).toFixed(1)}°，网格密度：${density}×${density}`;
+    }
+
+    function derivative(fn, x) {
+        const h = 1e-4;
+        return (fn(x + h) - fn(x - h)) / (2 * h);
+    }
+
+    function integrate(fn, a, b, n = 300) {
+        let sum = 0;
+        const step = (b - a) / n;
+        for (let i = 0; i < n; i++) {
+            const x1 = a + i * step;
+            const x2 = x1 + step;
+            const y1 = fn(x1);
+            const y2 = fn(x2);
+            if (Number.isFinite(y1) && Number.isFinite(y2)) {
+                sum += (y1 + y2) * 0.5 * step;
+            }
+        }
+        return sum;
+    }
+
+    function drawCalculus() {
+        const expr = document.getElementById("calc-expression").value.trim();
+        const x0 = Number(document.getElementById("calc-x0").value);
+        const a = Number(document.getElementById("calc-a").value);
+        const b = Number(document.getElementById("calc-b").value);
+        let fn;
+        try {
+            fn = compileExpression(expr, ["x"]);
+        } catch (e) {
+            formulaBox.innerHTML = "微积分表达式错误：" + e.message;
+            return;
+        }
+        drawGrid();
+        const xMin = -graphCanvas.clientWidth / (2 * scale);
+        const xMax = graphCanvas.clientWidth / (2 * scale);
+        drawCurveByFn(fn, xMin, xMax, "#7c3aed");
+        graphCtx.fillStyle = "rgba(59,130,246,0.22)";
+        graphCtx.beginPath();
+        let first = true;
+        const left = Math.min(a, b);
+        const right = Math.max(a, b);
+        for (let x = left; x <= right; x += (right - left) / 180) {
+            const y = fn(x);
+            if (!Number.isFinite(y)) continue;
+            if (first) {
+                graphCtx.moveTo(toPixelX(x), toPixelY(0));
+                graphCtx.lineTo(toPixelX(x), toPixelY(y));
+                first = false;
+            } else {
+                graphCtx.lineTo(toPixelX(x), toPixelY(y));
+            }
+        }
+        graphCtx.lineTo(toPixelX(right), toPixelY(0));
+        graphCtx.closePath();
+        graphCtx.fill();
+        const y0 = fn(x0);
+        const k = derivative(fn, x0);
+        if (Number.isFinite(y0) && Number.isFinite(k)) {
+            graphCtx.strokeStyle = "#ef4444";
+            graphCtx.lineWidth = 2;
+            graphCtx.beginPath();
+            const tA = xMin;
+            const tB = xMax;
+            graphCtx.moveTo(toPixelX(tA), toPixelY(y0 + k * (tA - x0)));
+            graphCtx.lineTo(toPixelX(tB), toPixelY(y0 + k * (tB - x0)));
+            graphCtx.stroke();
+            graphCtx.fillStyle = "#ef4444";
+            graphCtx.beginPath();
+            graphCtx.arc(toPixelX(x0), toPixelY(y0), 5, 0, Math.PI * 2);
+            graphCtx.fill();
+        }
+        const area = integrate(fn, a, b, 400);
+        formulaBox.innerHTML = `函数：<b>f(x)=${expr}</b><br>f'(${x0.toFixed(3)}) ≈ ${Number.isFinite(k) ? k.toFixed(6) : "无定义"}，∫[${a},${b}] f(x)dx ≈ ${Number.isFinite(area) ? area.toFixed(6) : "无定义"}`;
+    }
+
+    function drawSequence() {
+        const expr = document.getElementById("seq-expression").value.trim();
+        const nMax = Math.max(5, Math.min(200, Number(document.getElementById("seq-nmax").value) || 24));
+        const nStart = Math.max(1, Number(document.getElementById("seq-start").value) || 1);
+        let fn;
+        try {
+            fn = compileExpression(expr, ["n"]);
+        } catch (e) {
+            formulaBox.innerHTML = "数列表达式错误：" + e.message;
+            return;
+        }
+        graphCtx.clearRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+        const values = [];
+        for (let n = nStart; n < nStart + nMax; n++) {
+            const v = fn(n);
+            if (Number.isFinite(v) && Math.abs(v) < 1e6) values.push({ n, v });
+        }
+        if (values.length === 0) {
+            formulaBox.innerHTML = "数列结果为空，请调整表达式。";
+            return;
+        }
+        let minY = Infinity;
+        let maxY = -Infinity;
+        let sum = 0;
+        values.forEach(item => {
+            minY = Math.min(minY, item.v, 0);
+            maxY = Math.max(maxY, item.v, 0);
+            sum += item.v;
+        });
+        if (Math.abs(maxY - minY) < 1e-9) {
+            maxY += 1;
+            minY -= 1;
+        }
+        const w = graphCanvas.clientWidth;
+        const h = graphCanvas.clientHeight;
+        const pad = 45;
+        const plotW = w - pad * 2;
+        const plotH = h - pad * 2;
+        function px(i) { return pad + (i / (values.length - 1 || 1)) * plotW; }
+        function py(v) { return pad + (maxY - v) / (maxY - minY) * plotH; }
+        graphCtx.strokeStyle = "#e2e8f0";
+        graphCtx.strokeRect(pad, pad, plotW, plotH);
+        graphCtx.strokeStyle = "#334155";
+        graphCtx.beginPath();
+        graphCtx.moveTo(pad, py(0));
+        graphCtx.lineTo(pad + plotW, py(0));
+        graphCtx.stroke();
+        graphCtx.strokeStyle = "#2563eb";
+        graphCtx.fillStyle = "#2563eb";
+        values.forEach((item, i) => {
+            const x = px(i);
+            const y = py(item.v);
+            graphCtx.beginPath();
+            graphCtx.moveTo(x, py(0));
+            graphCtx.lineTo(x, y);
+            graphCtx.stroke();
+            graphCtx.beginPath();
+            graphCtx.arc(x, y, 3.2, 0, Math.PI * 2);
+            graphCtx.fill();
+        });
+        formulaBox.innerHTML = `数列：<b>a_n=${expr}</b>，n=${nStart}..${nStart + nMax - 1}<br>最大值≈${maxY.toFixed(4)}，最小值≈${minY.toFixed(4)}，部分和≈${sum.toFixed(6)}`;
+    }
+
+    function drawLimit() {
+        const expr = document.getElementById("limit-expression").value.trim();
+        const x0 = Number(document.getElementById("limit-x0").value);
+        const side = document.getElementById("limit-side").value;
+        const win = Math.max(0.1, Number(document.getElementById("limit-window").value) || 2);
+        let fn;
+        try {
+            fn = compileExpression(expr, ["x"]);
+        } catch (e) {
+            formulaBox.innerHTML = "极限表达式错误：" + e.message;
+            return;
+        }
+        drawGrid();
+        const left = x0 - win;
+        const right = x0 + win;
+        drawCurveByFn(fn, left, right, "#7c3aed");
+        const deltas = [1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01].map(v => v * win / 2);
+        const rows = [];
+        const leftValues = [];
+        const rightValues = [];
+        for (const d of deltas) {
+            let lText = "-";
+            let rText = "-";
+            if (side === "both" || side === "left") {
+                const yL = fn(x0 - d);
+                lText = Number.isFinite(yL) ? yL.toFixed(6) : "无定义";
+                if (Number.isFinite(yL)) leftValues.push(yL);
+            }
+            if (side === "both" || side === "right") {
+                const yR = fn(x0 + d);
+                rText = Number.isFinite(yR) ? yR.toFixed(6) : "无定义";
+                if (Number.isFinite(yR)) rightValues.push(yR);
+            }
+            rows.push(`δ=${d.toExponential(1)}: 左=${lText}, 右=${rText}`);
+        }
+        const leftApprox = leftValues.length ? leftValues[leftValues.length - 1] : NaN;
+        const rightApprox = rightValues.length ? rightValues[rightValues.length - 1] : NaN;
+        let summary = "";
+        if (side === "both") {
+            const converged = Number.isFinite(leftApprox) && Number.isFinite(rightApprox) && Math.abs(leftApprox - rightApprox) < 0.02;
+            summary = converged ? `双侧极限约为 ${(0.5 * (leftApprox + rightApprox)).toFixed(6)}` : "左右极限可能不相等或不存在";
+        } else if (side === "left") {
+            summary = Number.isFinite(leftApprox) ? `左极限约为 ${leftApprox.toFixed(6)}` : "左极限无法估计";
+        } else {
+            summary = Number.isFinite(rightApprox) ? `右极限约为 ${rightApprox.toFixed(6)}` : "右极限无法估计";
+        }
+        formulaBox.innerHTML = `极限：<b>lim x→${x0} ${expr}</b><br>${summary}<br>${rows.join("<br>")}`;
+    }
+
+    function factorial(n) {
+        if (!Number.isFinite(n) || n < 0 || Math.floor(n) !== n) return NaN;
+        if (n > 170) return Infinity;
+        let result = 1;
+        for (let i = 2; i <= n; i++) result *= i;
+        return result;
+    }
+
+    function combination(n, r) {
+        if (!Number.isFinite(n) || !Number.isFinite(r)) return NaN;
+        if (r < 0 || n < 0 || r > n || Math.floor(n) !== n || Math.floor(r) !== r) return 0;
+        r = Math.min(r, n - r);
+        let num = 1;
+        let den = 1;
+        for (let i = 1; i <= r; i++) {
+            num *= (n - r + i);
+            den *= i;
+        }
+        return num / den;
+    }
+
+    function permutation(n, r) {
+        if (!Number.isFinite(n) || !Number.isFinite(r)) return NaN;
+        if (r < 0 || n < 0 || r > n || Math.floor(n) !== n || Math.floor(r) !== r) return 0;
+        let result = 1;
+        for (let i = 0; i < r; i++) result *= (n - i);
+        return result;
+    }
+
+    function drawSeriesSum() {
+        drawGrid();
+        const type = document.getElementById("series-type").value;
+        const n = Math.max(1, Math.floor(Number(document.getElementById("series-n").value) || 1));
+        const points = [];
+        let text = "";
+
+        if (type === "k") {
+            const sum = n * (n + 1) / 2;
+            for (let i = 1; i <= n; i++) points.push({ x: i, y: i });
+            text = `求和：<b>1+2+...+n = n(n+1)/2</b><br>当 n=${n} 时，S=${sum}`;
+        } else if (type === "k2") {
+            const sum = n * (n + 1) * (2 * n + 1) / 6;
+            for (let i = 1; i <= n; i++) points.push({ x: i, y: i * i });
+            text = `求和：<b>1²+2²+...+n² = n(n+1)(2n+1)/6</b><br>当 n=${n} 时，S=${sum}<br>` +
+                `推导要点：由 (k+1)³-k³=3k²+3k+1，累加后化简得到平方和公式。`;
+        } else if (type === "arith") {
+            const a1 = Number(document.getElementById("arith-a1").value);
+            const d = Number(document.getElementById("arith-d").value);
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                const v = a1 + (i - 1) * d;
+                sum += v;
+                points.push({ x: i, y: v });
+            }
+            text = `等差数列：<b>S_n = n(2a1+(n-1)d)/2</b><br>当 a1=${a1}, d=${d}, n=${n} 时，S=${sum.toFixed(6)}`;
+        } else if (type === "geo") {
+            const a1 = Number(document.getElementById("geo-a1").value);
+            const q = Number(document.getElementById("geo-q").value);
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                const v = a1 * Math.pow(q, i - 1);
+                sum += v;
+                points.push({ x: i, y: v });
+            }
+            const closed = Math.abs(q - 1) < 1e-12 ? a1 * n : a1 * (1 - Math.pow(q, n)) / (1 - q);
+            text = `等比数列：<b>S_n = a1(1-q^n)/(1-q)</b><br>当 a1=${a1}, q=${q}, n=${n} 时，S≈${sum.toFixed(6)}，公式值≈${closed.toFixed(6)}`;
+        } else {
+            const expr = document.getElementById("series-custom").value.trim();
+            let fn;
+            try {
+                fn = compileExpression(expr, ["n"]);
+            } catch (e) {
+                formulaBox.innerHTML = "自定义项表达式错误：" + e.message;
+                return;
+            }
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                const v = fn(i);
+                if (Number.isFinite(v)) {
+                    sum += v;
+                    points.push({ x: i, y: v });
+                }
+            }
+            text = `自定义数列：<b>a_n=${expr}</b><br>前 ${n} 项和 S_n≈${sum.toFixed(6)}`;
+        }
+
+        if (points.length) {
+            const maxY = Math.max(...points.map(p => p.y), 1);
+            graphCtx.fillStyle = "#2563eb";
+            points.forEach(point => {
+                const x = point.x;
+                const y = point.y / (Math.abs(maxY) < 1e-9 ? 1 : maxY) * 8;
+                graphCtx.beginPath();
+                graphCtx.arc(toPixelX(x - n / 2), toPixelY(y), 3.5, 0, Math.PI * 2);
+                graphCtx.fill();
+            });
+        }
+
+        formulaBox.innerHTML = text;
+    }
+
+    function drawFinance() {
+        drawGrid();
+        const p = Number(document.getElementById("fin-p").value);
+        const r = Number(document.getElementById("fin-r").value) / 100;
+        const m = Math.max(1, Number(document.getElementById("fin-m").value));
+        const t = Math.max(1, Number(document.getElementById("fin-t").value));
+        const c = Number(document.getElementById("fin-c").value);
+        const periods = Math.floor(m * t);
+        const i = r / m;
+        const fvPrincipal = p * Math.pow(1 + i, periods);
+        const fvAnnuity = Math.abs(i) < 1e-12 ? c * periods : c * (Math.pow(1 + i, periods) - 1) / i;
+        const total = fvPrincipal + fvAnnuity;
+        const list = [];
+        let bal = p;
+        for (let k = 0; k <= periods; k++) {
+            if (k > 0) {
+                bal = bal * (1 + i) + c;
+            }
+            list.push(bal);
+        }
+        const maxV = Math.max(...list, 1);
+        graphCtx.strokeStyle = "#059669";
+        graphCtx.lineWidth = 2;
+        graphCtx.beginPath();
+        list.forEach((v, idx) => {
+            const x = toPixelX((idx / periods) * 14 - 7);
+            const y = toPixelY((v / maxV) * 8);
+            if (idx === 0) graphCtx.moveTo(x, y);
+            else graphCtx.lineTo(x, y);
+        });
+        graphCtx.stroke();
+        formulaBox.innerHTML =
+            `复利终值：<b>A=P(1+r/m)^(mt)</b><br>` +
+            `年金终值：<b>F=C((1+r/m)^(mt)-1)/(r/m)</b><br>` +
+            `推导来源：每期投入 C 的终值构成等比数列 C(1+i)^(n-1)+...+C。<br>` +
+            `当前参数下：本金终值≈${fvPrincipal.toFixed(2)}，追加终值≈${fvAnnuity.toFixed(2)}，总额≈<b>${total.toFixed(2)}</b>`;
+    }
+
+    function parseBinomialExpression(raw) {
+        const text = (raw || "").replace(/\s+/g, "").replace(/\*\*/g, "^");
+        const match = text.match(/^\(([+-]?\d*\.?\d*)?([a-zA-Z]+)([+-]\d*\.?\d+)\)\^(\d+)$/);
+        if (!match) return null;
+        const aText = match[1];
+        const a = aText === "" || aText === "+" || aText === undefined ? 1 : (aText === "-" ? -1 : Number(aText));
+        const xVar = match[2];
+        const b = Number(match[3]);
+        const n = Number(match[4]);
+        if (![a, b, n].every(Number.isFinite)) return null;
+        return { a, b, n, xVar };
+    }
+
+    function drawBinomial() {
+        graphCtx.clearRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+        const parsed = parseBinomialExpression(document.getElementById("bin-expression").value.trim());
+        const a = parsed ? parsed.a : Number(document.getElementById("bin-a").value);
+        const b = parsed ? parsed.b : Number(document.getElementById("bin-b").value);
+        const n = parsed ? parsed.n : Math.max(0, Math.floor(Number(document.getElementById("bin-n").value) || 0));
+        const xVarRaw = parsed ? parsed.xVar : (document.getElementById("bin-var").value || "x");
+        const xVar = xVarRaw.replace(/[^a-zA-Z]/g, "") || "x";
+        const terms = [];
+        const coeffs = [];
+        for (let k = 0; k <= n; k++) {
+            const c = combination(n, k) * Math.pow(a, n - k) * Math.pow(b, k);
+            coeffs.push(c);
+            const power = n - k;
+            let part = "";
+            if (Math.abs(c - 1) > 1e-12 || power === 0) part += c.toFixed(6).replace(/\.?0+$/, "");
+            if (power > 0) {
+                if (part && !part.endsWith("-")) part += "*";
+                part += xVar;
+                if (power > 1) part += "^" + power;
+            }
+            terms.push(part || "1");
+        }
+        const expansion = terms.join(" + ").replace(/\+\s-/g, "- ");
+        const row = [];
+        for (let k = 0; k <= n; k++) row.push(combination(n, k));
+
+        const w = graphCanvas.clientWidth;
+        const h = graphCanvas.clientHeight;
+        const left = 70;
+        const bottom = h - 60;
+        const plotW = w - 130;
+        const maxAbs = Math.max(...coeffs.map(v => Math.abs(v)), 1);
+        const barW = plotW / Math.max(1, coeffs.length);
+        coeffs.forEach((c, i) => {
+            const height = (Math.abs(c) / maxAbs) * (h - 170);
+            const x = left + i * barW + barW * 0.1;
+            const y = bottom - height;
+            graphCtx.fillStyle = c >= 0 ? "#2563eb" : "#ef4444";
+            graphCtx.fillRect(x, y, barW * 0.8, height);
+            graphCtx.fillStyle = "#334155";
+            graphCtx.font = "12px sans-serif";
+            graphCtx.fillText(`k=${i}`, x, bottom + 16);
+        });
+
+        formulaBox.innerHTML = `二项式：<b>(${a}${xVar}${b >= 0 ? "+" : ""}${b})^${n}</b><br>` +
+            `展开：${expansion}<br>` +
+            `二项式系数（杨辉三角第 ${n} 行）：${row.join(", ")}<br>` +
+            `理论： (u+v)^n = Σ C(n,k)u^(n-k)v^k` +
+            `<div class="result-grid"><div class="result-card">支持直接输入：<b>(x+1)^5</b>、<b>(2x-3)^4</b></div>` +
+            `<div class="result-card">柱状图显示每一项系数大小，学生可直接观察“中间大、两端小”。</div></div>`;
+    }
+
+    function drawCombinatorics() {
+        graphCtx.clearRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+        const scene = document.getElementById("comb-scene").value;
+        const n = Math.floor(Number(document.getElementById("comb-n").value) || 0);
+        const r = Math.floor(Number(document.getElementById("comb-r").value) || 0);
+        const N = Math.floor(Number(document.getElementById("comb-pop-n").value) || 0);
+        const K = Math.floor(Number(document.getElementById("comb-pop-k").value) || 0);
+        const drawN = Math.floor(Number(document.getElementById("comb-draw-n").value) || 0);
+        const hitK = Math.floor(Number(document.getElementById("comb-hit-k").value) || 0);
+        const pnr = permutation(n, r);
+        const cnr = combination(n, r);
+        const repeatC = combination(n + r - 1, r);
+        const hyperNum = combination(K, hitK) * combination(N - K, drawN - hitK);
+        const hyperDen = combination(N, drawN);
+        const hyperP = hyperDen ? hyperNum / hyperDen : NaN;
+
+        const w = graphCanvas.clientWidth;
+        const h = graphCanvas.clientHeight;
+        const midX = w * 0.5;
+        const baseY = h - 110;
+        const scaleBar = Math.max(pnr, cnr, 1);
+        const pHeight = (pnr / scaleBar) * 250;
+        const cHeight = (cnr / scaleBar) * 250;
+        graphCtx.fillStyle = "#60a5fa";
+        graphCtx.fillRect(midX - 160, baseY - pHeight, 110, pHeight);
+        graphCtx.fillStyle = "#34d399";
+        graphCtx.fillRect(midX + 50, baseY - cHeight, 110, cHeight);
+        graphCtx.fillStyle = "#0f172a";
+        graphCtx.font = "14px sans-serif";
+        graphCtx.fillText("排列 P(n,r)", midX - 158, baseY + 22);
+        graphCtx.fillText("组合 C(n,r)", midX + 52, baseY + 22);
+
+        const depth = Math.min(Math.max(2, r), 4);
+        graphCtx.strokeStyle = "#94a3b8";
+        graphCtx.fillStyle = "#475569";
+        let prevNodes = [{ x: 70, y: 90, v: n }];
+        for (let d = 1; d <= depth; d++) {
+            const nextNodes = [];
+            prevNodes.forEach((node, idx) => {
+                const branch = Math.min(3, Math.max(1, node.v - (scene === "password" ? 0 : d - 1)));
+                for (let j = 0; j < branch; j++) {
+                    const nx = 70 + d * 120;
+                    const ny = node.y + (j - (branch - 1) / 2) * 42 + idx * 12;
+                    graphCtx.beginPath();
+                    graphCtx.moveTo(node.x, node.y);
+                    graphCtx.lineTo(nx, ny);
+                    graphCtx.stroke();
+                    const remain = Math.max(0, n - (scene === "password" ? 0 : d));
+                    graphCtx.fillText(`${Math.max(1, remain)}`, (node.x + nx) * 0.5 - 8, (node.y + ny) * 0.5 - 4);
+                    nextNodes.push({ x: nx, y: ny, v: remain });
+                }
+            });
+            prevNodes = nextNodes.slice(0, 8);
+        }
+        graphCtx.fillStyle = "#1e293b";
+        graphCtx.fillText("树形直观：乘法原理（每步可选数相乘）", 36, 38);
+
+        const sceneText = scene === "class"
+            ? "班级选干部：不看顺序，用组合 C(n,r)"
+            : scene === "password"
+                ? "密码位次：看顺序，用排列 P(n,r)"
+                : "抽奖不放回：用超几何分布";
+        formulaBox.innerHTML =
+            `场景：<b>${sceneText}</b><br>` +
+            `排列：<b>P(n,r)=n!/(n-r)!</b> = ${pnr}<br>` +
+            `组合：<b>C(n,r)=n!/(r!(n-r)!)</b> = ${cnr}<br>` +
+            `可重复组合：<b>C(n+r-1,r)</b> = ${repeatC}<br>` +
+            `超几何概率：P(X=${hitK}) = C(${K},${hitK})C(${N - K},${drawN - hitK}) / C(${N},${drawN}) ≈ ${Number.isFinite(hyperP) ? hyperP.toFixed(8) : "无定义"}` +
+            `<div class="result-grid"><div class="result-card">柱状图对比：同样 n,r 下，排列通常远大于组合。</div>` +
+            `<div class="result-card">树形图展示“每一步可选数量”，帮助理解为什么是连乘。</div></div>`;
+    }
+
+    function quantile(sorted, q) {
+        if (!sorted.length) return NaN;
+        const pos = (sorted.length - 1) * q;
+        const low = Math.floor(pos);
+        const high = Math.ceil(pos);
+        if (low === high) return sorted[low];
+        return sorted[low] + (sorted[high] - sorted[low]) * (pos - low);
+    }
+
+    function drawProbStats() {
+        graphCtx.clearRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+        const dataText = document.getElementById("stats-data").value;
+        const values = dataText.split(",").map(s => Number(s.trim())).filter(v => Number.isFinite(v));
+        const n = Math.max(1, Math.floor(Number(document.getElementById("prob-n").value) || 1));
+        const p = Number(document.getElementById("prob-p").value);
+        const k = Math.floor(Number(document.getElementById("prob-k").value) || 0);
+        if (!values.length) {
+            formulaBox.innerHTML = "请输入有效样本数据。";
+            return;
+        }
+        const sorted = [...values].sort((a, b) => a - b);
+        const count = values.length;
+        const mean = values.reduce((s, v) => s + v, 0) / count;
+        const popVar = values.reduce((s, v) => s + (v - mean) * (v - mean), 0) / count;
+        const sampleVar = count > 1 ? values.reduce((s, v) => s + (v - mean) * (v - mean), 0) / (count - 1) : NaN;
+        const median = quantile(sorted, 0.5);
+        const q1 = quantile(sorted, 0.25);
+        const q3 = quantile(sorted, 0.75);
+        const pmf = combination(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
+        let cdf = 0;
+        for (let i = 0; i <= k; i++) cdf += combination(n, i) * Math.pow(p, i) * Math.pow(1 - p, n - i);
+
+        const minV = sorted[0];
+        const maxV = sorted[sorted.length - 1];
+        const binCount = Math.min(10, Math.max(4, Math.round(Math.sqrt(count))));
+        const width = (maxV - minV || 1) / binCount;
+        const bins = new Array(binCount).fill(0);
+        values.forEach(v => {
+            const idx = Math.min(binCount - 1, Math.floor((v - minV) / width));
+            bins[idx]++;
+        });
+        const maxBin = Math.max(...bins, 1);
+        bins.forEach((b, i) => {
+            const x = 90 + i * ((graphCanvas.clientWidth - 140) / binCount);
+            const bw = (graphCanvas.clientWidth - 160) / binCount;
+            const h = (graphCanvas.clientHeight - 160) * (b / maxBin);
+            graphCtx.fillStyle = "#60a5fa";
+            graphCtx.fillRect(x, graphCanvas.clientHeight - 60 - h, bw, h);
+        });
+        formulaBox.innerHTML =
+            `统计：样本量=${count}, 均值=${mean.toFixed(6)}, 中位数=${median.toFixed(6)}, Q1=${q1.toFixed(6)}, Q3=${q3.toFixed(6)}<br>` +
+            `总体方差=${popVar.toFixed(6)}, 样本方差=${Number.isFinite(sampleVar) ? sampleVar.toFixed(6) : "无定义"}, 标准差=${Math.sqrt(popVar).toFixed(6)}<br>` +
+            `二项分布：P(X=${k})=C(${n},${k})p^k(1-p)^(n-k)≈${Number.isFinite(pmf) ? pmf.toFixed(8) : "无定义"}，P(X≤${k})≈${Number.isFinite(cdf) ? cdf.toFixed(8) : "无定义"}`;
+    }
+
+    function render() {
+        const mode = modeSelect.value;
+        if (mode === "function") drawFunction();
+        if (mode === "ellipse") drawEllipse();
+        if (mode === "parabola") drawParabola();
+        if (mode === "hyperbola") drawHyperbola();
+        if (mode === "surface3d") drawSurface3D();
+        if (mode === "calculus") drawCalculus();
+        if (mode === "sequence") drawSequence();
+        if (mode === "limit") drawLimit();
+        if (mode === "series-sum") drawSeriesSum();
+        if (mode === "finance") drawFinance();
+        if (mode === "binomial") drawBinomial();
+        if (mode === "combinatorics") drawCombinatorics();
+        if (mode === "prob-stats") drawProbStats();
+    }
+
+    function updatePanelVisibility() {
+        Object.values(panels).forEach(p => p.classList.add("hidden"));
+        panels[modeSelect.value].classList.remove("hidden");
+        render();
+    }
+
+    function animate() {
+        if (!animating) return;
+        ticker += 0.03;
+        render();
+        rafId = requestAnimationFrame(animate);
+    }
+
+    function setupInk() {
+        function getPoint(event) {
+            const rect = inkCanvas.getBoundingClientRect();
+            return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        }
+        function start(event) {
+            if (document.getElementById("ink-enable").value !== "on") return;
+            drawing = true;
+            inkCtx.strokeStyle = document.getElementById("ink-color").value;
+            inkCtx.lineWidth = Number(document.getElementById("ink-width").value);
+            inkCtx.lineCap = "round";
+            inkCtx.lineJoin = "round";
+            const p = getPoint(event);
+            inkCtx.beginPath();
+            inkCtx.moveTo(p.x, p.y);
+        }
+        function move(event) {
+            if (!drawing) return;
+            const p = getPoint(event);
+            inkCtx.lineTo(p.x, p.y);
+            inkCtx.stroke();
+        }
+        function end() { drawing = false; }
+        inkCanvas.addEventListener("pointerdown", start);
+        inkCanvas.addEventListener("pointermove", move);
+        inkCanvas.addEventListener("pointerup", end);
+        inkCanvas.addEventListener("pointerleave", end);
+        document.getElementById("ink-enable").addEventListener("change", (e) => {
+            inkCanvas.style.pointerEvents = e.target.value === "on" ? "auto" : "none";
+        });
+        document.getElementById("clear-ink").addEventListener("click", () => {
+            inkCtx.clearRect(0, 0, inkCanvas.clientWidth, inkCanvas.clientHeight);
+        });
+    }
+
+    scaleInput.addEventListener("input", () => {
+        scale = Number(scaleInput.value);
+        scaleValue.value = String(scale);
+        render();
+    });
+    redrawBtn.addEventListener("click", render);
+    toggleAnimationBtn.addEventListener("click", () => {
+        animating = !animating;
+        toggleAnimationBtn.textContent = animating ? "暂停动画" : "开始动画";
+        if (animating) animate();
+        else if (rafId) cancelAnimationFrame(rafId);
+    });
+    modeSelect.addEventListener("change", updatePanelVisibility);
+
+    document.getElementById("function-preset").addEventListener("change", (e) => {
+        if (e.target.value) {
+            document.getElementById("function-expression").value = e.target.value;
+            render();
+        }
+    });
+    document.getElementById("surface-preset").addEventListener("change", (e) => {
+        if (e.target.value) {
+            document.getElementById("surface-expression").value = e.target.value;
+            render();
+        }
+    });
+    document.getElementById("seq-preset").addEventListener("change", (e) => {
+        if (e.target.value) {
+            document.getElementById("seq-expression").value = e.target.value;
+            render();
+        }
+    });
+
+    Array.from(document.querySelectorAll("input, select")).forEach(el => {
+        if (!["mode", "function-preset", "surface-preset", "seq-preset", "scale", "ink-enable", "ink-color", "ink-width"].includes(el.id)) {
+            el.addEventListener("change", render);
+        }
+        if ((el.tagName === "INPUT" && el.id !== "scale" && el.id !== "ink-width" && el.id !== "ink-color") || el.tagName === "TEXTAREA") {
+            el.addEventListener("input", render);
+        }
+        if (el.type === "range" && el.id !== "scale" && el.id !== "ink-width") {
+            el.addEventListener("input", render);
+        }
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+    setupInk();
+    scaleValue.value = String(scale);
+    updatePanelVisibility();
+    resizeCanvas();
+</script>
+</body>
+</html>
