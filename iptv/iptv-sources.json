@@ -1,0 +1,135 @@
+{
+  "version": 2,
+  "assistant": "https://copilot.aptv.app/chat",
+  "sources": [
+    {
+      "name": "APTV 推荐页（导航入口）",
+      "type": "catalog",
+      "url": "https://profile.aptv.app/",
+      "group": "导航页",
+      "note": "该页面汇总很多源入口，部分是网页而不是 m3u。"
+    },
+    {
+      "name": "IPTV神器Pro（网页）",
+      "type": "catalog",
+      "url": "https://iptv.cqshushu.com/index.php",
+      "group": "导航页",
+      "note": "网页入口，不可直接当直播流。"
+    },
+    {
+      "name": "淘IPTV（网页）",
+      "type": "catalog",
+      "url": "https://taoiptv.com/",
+      "group": "导航页",
+      "note": "网页入口，不可直接当直播流。"
+    },
+    {
+      "name": "APTV 测试直播源",
+      "type": "m3u",
+      "url": "https://gh.aptv.app/https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
+      "group": "APTV 测试",
+      "epg": "https://epg.aptv.app/xml",
+      "note": "公开测试源，仅用于播放器功能测试。"
+    },
+    {
+      "name": "YanG Gather",
+      "type": "m3u",
+      "url": "https://tv.iill.top/m3u/Gather",
+      "group": "APTV 测试"
+    },
+    {
+      "name": "裤佬",
+      "type": "m3u",
+      "url": "https://gh.aptv.app/https://raw.githubusercontent.com/Jsnzkpg/Jsnzkpg/Jsnzkpg/Jsnzkpg1.m3u",
+      "group": "APTV 测试"
+    },
+    {
+      "name": "itvlist",
+      "type": "m3u",
+      "url": "https://gh.aptv.app/https://raw.githubusercontent.com/mzky/checklist/refs/heads/master/itvlist.m3u",
+      "group": "APTV 测试",
+      "note": "建议开启自动刷新配置。"
+    },
+    {
+      "name": "suxuang",
+      "type": "m3u",
+      "url": "https://gh.aptv.app/https://raw.githubusercontent.com/suxuang/myIPTV/main/ipv4.m3u",
+      "group": "APTV 测试"
+    },
+    {
+      "name": "中国移动（全国）",
+      "type": "m3u",
+      "url": "https://itv.aptv.app/china-iptv/zgyd.m3u",
+      "group": "中国移动内网源",
+      "note": "仅中国移动对应网络可用。"
+    },
+    {
+      "name": "全国移动 IPv6（已失效）",
+      "type": "m3u",
+      "url": "https://itv.aptv.app/china-iptv/bjyd.m3u",
+      "group": "中国移动内网源",
+      "disabled": true,
+      "note": "已失效，默认禁用。"
+    },
+    { "name": "北京移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/jsyd.m3u", "group": "中国移动内网源" },
+    { "name": "江苏移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/zjyd.m3u", "group": "中国移动内网源" },
+    { "name": "浙江移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/shyd.m3u", "group": "中国移动内网源" },
+    { "name": "上海移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hunyd.m3u", "group": "中国移动内网源" },
+    { "name": "湖南移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/ahyd.m3u", "group": "中国移动内网源" },
+    { "name": "安徽移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hljyd.m3u", "group": "中国移动内网源" },
+    { "name": "黑龙江移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/sdyd.m3u", "group": "中国移动内网源" },
+    { "name": "山东移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/sxyd.m3u", "group": "中国移动内网源" },
+    { "name": "陕西移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/jxyd.m3u", "group": "中国移动内网源" },
+    { "name": "江西移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hbyd.m3u", "group": "中国移动内网源" },
+    { "name": "湖北移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/fjyd.m3u", "group": "中国移动内网源" },
+    { "name": "福建移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/lnyd.m3u", "group": "中国移动内网源" },
+    { "name": "辽宁移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/gxyd.m3u", "group": "中国移动内网源" },
+    { "name": "广西移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hnyd.m3u", "group": "中国移动内网源" },
+    { "name": "河南移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hnyd.m3u", "group": "中国移动内网源" },
+    { "name": "贵州移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/gzyd.m3u", "group": "中国移动内网源" },
+    { "name": "四川移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/scyd.m3u", "group": "中国移动内网源" },
+    { "name": "广东移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/gdyd.m3u", "group": "中国移动内网源" },
+    { "name": "山西移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/shxyd.m3u", "group": "中国移动内网源" },
+    { "name": "内蒙古移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/nmgyd.m3u", "group": "中国移动内网源" },
+    { "name": "云南移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/ynyd.m3u", "group": "中国移动内网源" },
+    { "name": "河北移动", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hebyd.m3u", "group": "中国移动内网源" },
+    {
+      "name": "河南电信",
+      "type": "m3u",
+      "url": "https://itv.aptv.app/china-iptv/hndx.m3u",
+      "group": "中国电信内网源",
+      "note": "仅对应电信网络可用。"
+    },
+    {
+      "name": "山东电信",
+      "type": "m3u",
+      "url": "https://itv.aptv.app/china-iptv/sddx.m3u",
+      "group": "中国电信内网源"
+    },
+    {
+      "name": "江苏联通",
+      "type": "m3u",
+      "url": "https://itv.aptv.app/china-iptv/jslt.m3u",
+      "group": "中国联通内网源",
+      "note": "仅对应联通网络可用。"
+    },
+    { "name": "上海联通", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/shlt.m3u", "group": "中国联通内网源" },
+    { "name": "湖北联通", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/hblt.m3u", "group": "中国联通内网源" },
+    { "name": "山东联通", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/sdlt.m3u", "group": "中国联通内网源" },
+    { "name": "江西联通", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/jxlt.m3u", "group": "中国联通内网源" },
+    { "name": "四川联通", "type": "m3u", "url": "https://itv.aptv.app/china-iptv/sclt.m3u", "group": "中国联通内网源" },
+    { "name": "虎牙直播", "type": "m3u", "url": "https://cdn.jsdelivr.net/gh/Kimentanm/aptv@master/m3u/ya.m3u", "group": "其他直播源" },
+    { "name": "虎牙一起看", "type": "m3u", "url": "https://cdn.jsdelivr.net/gh/Kimentanm/aptv@refs/heads/master/m3u/yqk.m3u", "group": "其他直播源" },
+    { "name": "斗鱼一起看", "type": "m3u", "url": "https://live.freetv.top/douyuyqk.m3u", "group": "其他直播源" },
+    { "name": "YY轮播", "type": "m3u", "url": "https://www.goodiptv.club/yylunbo.m3u?url=https://lunbo.freetv.top", "group": "其他直播源" },
+    { "name": "BiliBili 直播", "type": "m3u", "url": "https://www.goodiptv.club/bililive.m3u", "group": "其他直播源" },
+    { "name": "APTV 广播源", "type": "m3u", "url": "https://cdn.jsdelivr.net/gh/Kimentanm/aptv@master/m3u/radio.m3u", "group": "其他直播源" }
+  ],
+  "epgSources": [
+    { "name": "APTV EPG 首页", "url": "https://epg.aptv.app/" },
+    { "name": "APTV pp.xml.gz", "url": "https://epg.aptv.app/pp.xml.gz" },
+    { "name": "51zmt e.xml.gz", "url": "http://epg.51zmt.top:8000/e.xml.gz" },
+    { "name": "APTV xml", "url": "https://epg.aptv.app/xml" }
+  ],
+  "notice": "公开源仅用于播放器稳定性与功能测试。部分内网源对运营商、省份、IPv6、组播环境有要求。"
+}
