@@ -24,31 +24,31 @@ const testSites = [
     // --- Domestic (direct) ---
     {
         name: 'speedtest.cn',
-        tag: '国内',
+        tag: 'CN',
         icon: 'https://www.speedtest.cn/favicon.ico',
         detect: () => fetch('https://api-v3.speedtest.cn/ip').then(r => r.json()).then(d => d.data?.ip)
     },
     {
         name: 'ip.useragentinfo',
-        tag: '国内',
+        tag: 'CN',
         icon: 'https://ip.useragentinfo.com/favicon.ico',
         detect: () => fetch('https://ip.useragentinfo.com/ip').then(r => r.text()).then(t => t.trim())
     },
     {
         name: 'myip.ipip.net',
-        tag: '国内',
+        tag: 'CN',
         icon: 'https://www.ipip.net/favicon.ico',
         detect: () => fetch('https://myip.ipip.net/').then(r => r.text()).then(t => { const m = t.match(/([\d.]+)/); return m ? m[1] : null; })
     },
     {
-        name: 'httpbin.org (国内镜像)',
-        tag: '国内',
+        name: 'httpbin.org',
+        tag: 'CN',
         icon: 'https://httpbin.org/favicon.ico',
         detect: () => fetch('https://httpbin.org/ip').then(r => r.json()).then(d => d.origin?.split(',')[0]?.trim())
     },
     {
         name: 'identme',
-        tag: '国内',
+        tag: 'CN',
         icon: '',
         detect: () => fetch('https://ident.me/').then(r => r.text()).then(t => t.trim())
     },
@@ -56,81 +56,81 @@ const testSites = [
     // --- International (proxy) ---
     {
         name: 'Cloudflare (1.0.0.1)',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://www.cloudflare.com/favicon.ico',
         detect: () => cfTrace('1.0.0.1')
     },
     {
         name: 'Cloudflare (workers.dev)',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://www.cloudflare.com/favicon.ico',
         detect: () => cfTrace('cloudflare.com')
     },
     {
         name: 'chatgpt.com',
-        tag: '国际',
+        tag: 'INT',
         tagExtra: 'AI',
         icon: 'https://chatgpt.com/favicon.ico',
         detect: () => cfTrace('chatgpt.com')
     },
     {
         name: 'claude.ai',
-        tag: '国际',
+        tag: 'INT',
         tagExtra: 'AI',
         icon: 'https://claude.ai/favicon.ico',
         detect: () => cfTrace('claude.ai')
     },
     {
         name: 'discord.com',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://discord.com/favicon.ico',
         detect: () => cfTrace('discord.com')
     },
     {
         name: 'x.com (Twitter)',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://x.com/favicon.ico',
         detect: () => cfTrace('x.com')
     },
     {
         name: 'visa.com',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://www.visa.com/favicon.ico',
         detect: () => cfTrace('www.visa.com')
     },
     {
         name: 'medium.com',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://medium.com/favicon.ico',
         detect: () => cfTrace('medium.com')
     },
     {
         name: 'ip-api.com',
-        tag: '国际',
+        tag: 'INT',
         icon: '',
         detect: () => fetch('http://ip-api.com/json/?fields=query').then(r => r.json()).then(d => d.query)
     },
     {
         name: 'ipinfo.io',
-        tag: '国际',
+        tag: 'INT',
         icon: 'https://ipinfo.io/favicon.ico',
         detect: () => fetch('https://ipinfo.io/ip').then(r => r.text()).then(t => t.trim())
     },
     {
         name: 'ifconfig.me',
-        tag: '国际',
+        tag: 'INT',
         icon: '',
         detect: () => fetch('https://ifconfig.me/ip').then(r => r.text()).then(t => t.trim())
     },
     {
         name: 'icanhazip.com',
-        tag: '国际',
+        tag: 'INT',
         icon: '',
         detect: () => fetch('https://icanhazip.com/').then(r => r.text()).then(t => t.trim())
     },
     {
         name: 'api.ip.sb',
-        tag: '国际',
+        tag: 'INT',
         icon: '',
         detect: () => fetch('https://api.ip.sb/ip').then(r => r.text()).then(t => t.trim())
     },
@@ -167,7 +167,7 @@ function cfTrace(domain) {
 function startSplitTest() {
     const tbody = document.getElementById('split-tbody');
     tbody.innerHTML = activeSites.map((site, i) => {
-        let tagHtml = `<span class="badge ${site.tag === '国内' ? 'badge-blue' : site.tag === '自定义' ? 'badge-cyan' : 'badge-green'}" style="font-size:10px;">${site.tag}</span>`;
+        let tagHtml = `<span class="badge ${site.tag === 'CN' ? 'badge-blue' : site.tag === '自定义' ? 'badge-cyan' : 'badge-green'}" style="font-size:10px;">${site.tag}</span>`;
         if (site.tagExtra) tagHtml += ` <span class="badge badge-purple" style="font-size:10px;">${site.tagExtra}</span>`;
 
         return `<tr id="row-${i}">

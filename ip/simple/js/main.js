@@ -1,4 +1,4 @@
-// 等待DOM加载完成
+﻿// 等待DOM加载完成
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化所有功能
     initIPQueries();
@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 初始化IP查询
 function initIPQueries() {
-    // 国内IP查询
+    // CNIP查询
     getIPFromIPIP();
     getIPFromIP138();
     getIPFromIPChaxun();
     getIPFromSpeedtest();
     
-    // 国外IP查询
+    // INTIP查询
     getIPFromIPSB();
     getIPFromIPAPI();
     getIPFromSukkaIPDB();
@@ -46,23 +46,23 @@ function initCDNTests() {
     testCDN('azure', 'Azure CDN', 'https://azure.microsoft.com/favicon.ico', '国际');
     testCDN('gcloud', 'Google Cloud CDN', 'https://cloud.google.com/favicon.ico', '国际');
     
-    // 国内CDN
-    testCDN('qcloud', '腾讯云CDN', 'https://cloud.tencent.com/favicon.ico', '国内');
-    testCDN('aliyun', '阿里云CDN', 'https://www.aliyun.com/favicon.ico', '国内');
-    testCDN('baidu', '百度云CDN', 'https://cloud.baidu.com/favicon.ico', '国内');
-    testCDN('upyun', '又拍云CDN', 'https://www.upyun.com/favicon.ico', '国内');
-    testCDN('huawei', '华为云CDN', 'https://www.huaweicloud.com/favicon.ico', '国内');
-    testCDN('wangsu', '网宿CDN', 'https://www.wangsu.com/favicon.ico', '国内');
+    // CNCDN
+    testCDN('qcloud', '腾讯云CDN', 'https://cloud.tencent.com/favicon.ico', 'CN');
+    testCDN('aliyun', '阿里云CDN', 'https://www.aliyun.com/favicon.ico', 'CN');
+    testCDN('baidu', '百度云CDN', 'https://cloud.baidu.com/favicon.ico', 'CN');
+    testCDN('upyun', '又拍云CDN', 'https://www.upyun.com/favicon.ico', 'CN');
+    testCDN('huawei', '华为云CDN', 'https://www.huaweicloud.com/favicon.ico', 'CN');
+    testCDN('wangsu', '网宿CDN', 'https://www.wangsu.com/favicon.ico', 'CN');
 }
 
 // 初始化网站连通性检查
 function initConnectivityChecks() {
-    // 国内网站
+    // CN
     checkWebsite('baidu', 'https://www.baidu.com');
     checkWebsite('netease', 'https://music.163.com');
     checkWebsite('qq', 'https://www.qq.com');
     
-    // 国外网站
+    // INT
     checkWebsite('github', 'https://github.com');
     checkWebsite('youtube', 'https://www.youtube.com');
     checkWebsite('google', 'https://www.google.com');
@@ -880,30 +880,30 @@ function analyzeProxyStatus(domesticIPs, foreignIPs, statusElement, infoElement)
     let statusColor = '#27ae60';
     
     if (validDomesticIPs.length === 0) {
-        // 只有国外IP可访问
+        // 只有INTIP可访问
         status = '🌍 全局代理';
         statusColor = '#f39c12';
-        info = `仅国外API可访问 (${validForeignIPs.length}个)，当前使用全局代理模式`;
+        info = `仅INTAPI可访问 (${validForeignIPs.length}个)，当前使用全局代理模式`;
         if (foreignUniqueIPs.length > 1) {
             info += `<br><small>检测到${foreignUniqueIPs.length}个不同代理IP</small>`;
         }
     } else if (validForeignIPs.length === 0) {
-        // 只有国内IP可访问
+        // 只有CNIP可访问
         status = '🏠 直连模式';
         statusColor = '#3498db';
-        info = `仅国内API可访问 (${validDomesticIPs.length}个)，当前为直连模式`;
+        info = `仅CNAPI可访问 (${validDomesticIPs.length}个)，当前为直连模式`;
         if (domesticUniqueIPs.length > 1) {
             info += `<br><small>检测到${domesticUniqueIPs.length}个不同出口IP</small>`;
         }
     } else {
-        // 国内外都有IP
+        // CN外都有IP
         const hasCommonIP = domesticUniqueIPs.some(ip => foreignUniqueIPs.includes(ip));
         
-        // 检查是否有真正的分流（国内外IP完全不同）
+        // 检查是否有真正的分流（CN外IP完全不同）
          const isDifferentIPs = !hasCommonIP && domesticUniqueIPs.length > 0 && foreignUniqueIPs.length > 0;
          
          if (isDifferentIPs) {
-             // 完全分流 - 国内外IP完全不同
+             // 完全分流 - CN外IP完全不同
              status = '✅ 分流生效';
              statusColor = '#27ae60';
              const domesticIP = domesticUniqueIPs[0];
@@ -914,7 +914,7 @@ function analyzeProxyStatus(domesticIPs, foreignIPs, statusElement, infoElement)
              const foreignPrefix = foreignIP.split('.').slice(0, 2).join('.');
              const isSameRegion = domesticPrefix === foreignPrefix;
              
-             info = `🏠 国内: ${domesticIP} <br> 🌍 国外: ${foreignIP}`;
+             info = `🏠 CN: ${domesticIP} <br> 🌍 INT: ${foreignIP}`;
              
              if (isSameRegion) {
                  info += `<br><small style="color: #f39c12;">⚠️ IP前缀相同，可能为同一运营商</small>`;
@@ -924,13 +924,13 @@ function analyzeProxyStatus(domesticIPs, foreignIPs, statusElement, infoElement)
              
              // 显示更多IP信息
              if (domesticUniqueIPs.length > 1 || foreignUniqueIPs.length > 1) {
-                 info += `<br><small>国内${domesticUniqueIPs.length}个IP，国外${foreignUniqueIPs.length}个IP</small>`;
+                 info += `<br><small>CN${domesticUniqueIPs.length}个IP，INT${foreignUniqueIPs.length}个IP</small>`;
              }
          } else if (hasCommonIP && allUniqueIPs.length === 1) {
              // 所有IP相同
              status = '❌ 未分流';
              statusColor = '#e74c3c';
-             info = `国内外使用相同IP: ${allUniqueIPs[0]}<br><small>可能未启用分流或分流规则未生效</small>`;
+             info = `CN外使用相同IP: ${allUniqueIPs[0]}<br><small>可能未启用分流或分流规则未生效</small>`;
          } else {
              // 部分分流或混合情况
              status = '⚠️ 部分分流';
@@ -938,10 +938,10 @@ function analyzeProxyStatus(domesticIPs, foreignIPs, statusElement, infoElement)
              info = `检测到${allUniqueIPs.length}个不同IP，部分API可能使用不同路由`;
              
              if (domesticUniqueIPs.length > 0) {
-                 info += `<br><small>国内: ${domesticUniqueIPs.join(', ')}</small>`;
+                 info += `<br><small>CN: ${domesticUniqueIPs.join(', ')}</small>`;
              }
              if (foreignUniqueIPs.length > 0) {
-                 info += `<br><small>国外: ${foreignUniqueIPs.join(', ')}</small>`;
+                 info += `<br><small>INT: ${foreignUniqueIPs.join(', ')}</small>`;
              }
          }
     }
@@ -2107,12 +2107,12 @@ function toggleIPDisplay(hide) {
     });
 }
 
-// 切换国内地理位置显示
+// 切换CN地理位置显示
 function toggleDomesticLocationDisplay(hide) {
     const domesticRows = document.querySelectorAll('.ip-table tr');
     
     domesticRows.forEach((row, index) => {
-        // 前4行是国内IP
+        // 前4行是CNIP
         if (index < 4) {
             const locationElement = row.querySelector('.location');
             

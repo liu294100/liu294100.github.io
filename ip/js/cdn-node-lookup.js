@@ -85,42 +85,42 @@ const cdnProviders = [
     },
     {
         name: '腾讯云 CDN',
-        type: '国内',
+        type: 'CN',
         url: 'https://cloudcache.tencent-cloud.com/qcloud/favicon.ico',
         method: 'timing',
         description: '腾讯云内容分发网络'
     },
     {
         name: '阿里云 CDN',
-        type: '国内',
+        type: 'CN',
         url: 'https://img.alicdn.com/tfs/TB1_ZXuNcfpK1RjSZFOXXa6nFXa-32-32.ico',
         method: 'timing',
         description: '阿里云全站加速'
     },
     {
         name: '华为云 CDN',
-        type: '国内',
+        type: 'CN',
         url: 'https://www.huaweicloud.com/favicon.ico',
         method: 'timing',
         description: '华为云内容分发网络'
     },
     {
         name: '又拍云',
-        type: '国内',
+        type: 'CN',
         url: 'https://www.upyun.com/favicon.ico',
         method: 'timing',
         description: '又拍云 CDN 加速'
     },
     {
         name: '网宿科技',
-        type: '国内',
+        type: 'CN',
         url: 'https://www.wangsu.com/favicon.ico',
         method: 'timing',
         description: '网宿科技 CDN'
     },
     {
         name: '百度云 CDN',
-        type: '国内',
+        type: 'CN',
         url: 'https://cloud.baidu.com/favicon.ico',
         method: 'timing',
         description: '百度智能云 CDN'
@@ -132,7 +132,7 @@ function startCDNLookup() {
     grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;';
     grid.innerHTML = cdnProviders.map((cdn, i) => `
         <div class="stun-card" id="cdn-detail-${i}">
-            <h3>${cdn.name} <span class="badge ${cdn.type === '国内' ? 'badge-blue' : 'badge-green'}">${cdn.type}</span></h3>
+            <h3>${cdn.name} <span class="badge ${cdn.type === 'CN' ? 'badge-blue' : 'badge-green'}">${cdn.type}</span></h3>
             <div class="stun-value"><span class="loading-dot"></span></div>
             <div class="stun-detail">${cdn.description}</div>
         </div>

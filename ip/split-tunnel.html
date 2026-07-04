@@ -30,23 +30,23 @@
     <div class="container">
         <section class="card">
             <h2 class="card-title">代理分流检测</h2>
-            <p class="card-desc">通过同时请求国内和国外的 API 检测你的网络是否启用了代理分流（Split Tunnel），并分析分流规则是否生效。</p>
+            <p class="card-desc">Test if your split tunnel / proxy rules are working by requesting CN and INT APIs simultaneously.</p>
 
             <div class="info-box">
-                <strong>原理：</strong>如果你使用了代理分流，访问国内网站时会走直连（显示真实 IP），访问国外网站时会走代理（显示代理 IP）。两者 IP 不同则表示分流生效。
+                <strong>Principle:</strong> If split tunneling is active, CN sites use direct connection (real IP), while INT sites go through proxy (proxy IP). Different IPs confirm split tunnel is working.
             </div>
 
             <button class="refresh-btn" id="btn-refresh" onclick="startDetection()">&#128260; 重新检测</button>
 
             <div class="split-result" id="split-result">
                 <div class="split-column">
-                    <h3><span class="badge badge-blue">国内</span> 直连出口</h3>
+                    <h3><span class="badge badge-blue">CN</span> Direct</h3>
                     <div id="domestic-list">
                         <div class="split-item"><span class="label">加载中...</span><span class="value"><span class="loading-dot"></span></span></div>
                     </div>
                 </div>
                 <div class="split-column">
-                    <h3><span class="badge badge-green">国外</span> 代理出口</h3>
+                    <h3><span class="badge badge-green">INT</span> Proxy</h3>
                     <div id="foreign-list">
                         <div class="split-item"><span class="label">加载中...</span><span class="value"><span class="loading-dot"></span></span></div>
                     </div>

@@ -13,16 +13,16 @@ function initNavToggle() {
 }
 
 const allSources = [
-    { name: 'ip-api.com', type: '国外', fetch: () => fetch('http://ip-api.com/json/?lang=zh-CN').then(r => r.json()).then(d => ({ ip: d.query, loc: [d.country, d.regionName, d.city, d.isp].filter(Boolean).join(' '), org: d.org || d.as || '' })) },
-    { name: 'ipinfo.io', type: '国外', fetch: () => fetch('https://ipinfo.io/json').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.region, d.city].filter(Boolean).join(' '), org: d.org || '' })) },
-    { name: 'ipwho.is', type: '国外', fetch: () => fetch('https://ipwho.is/').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.region, d.city].filter(Boolean).join(' '), org: d.connection?.isp || '' })) },
-    { name: 'ipapi.co', type: '国外', fetch: () => fetch('https://ipapi.co/json/').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country_name, d.region, d.city].filter(Boolean).join(' '), org: d.org || '' })) },
-    { name: 'ip.sb', type: '国外', fetch: () => fetch('https://api.ip.sb/geoip').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.region, d.city].filter(Boolean).join(' '), org: d.organization || '' })) },
-    { name: 'speedtest.cn', type: '国内', fetch: () => fetch('https://api-v3.speedtest.cn/ip').then(r => r.json()).then(d => ({ ip: d.data?.ip, loc: [d.data?.country, d.data?.province, d.data?.city, d.data?.isp].filter(Boolean).join(' '), org: d.data?.isp || '' })) },
-    { name: 'useragentinfo', type: '国内', fetch: () => fetch('https://ip.useragentinfo.com/json').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.province, d.city].filter(Boolean).join(' '), org: d.isp || '' })) },
-    { name: 'myip.ipip.net', type: '国内', fetch: () => fetch('https://myip.ipip.net/').then(r => r.text()).then(t => { const m = t.match(/([\d.]+)/); const l = t.match(/来自于：([^\n<]+)/); return { ip: m?.[1], loc: l?.[1]?.trim() || '', org: '' }; }) },
-    { name: 'Cloudflare Trace', type: '国外', fetch: () => fetch('https://www.cloudflare.com/cdn-cgi/trace').then(r => r.text()).then(t => { const ip = t.match(/ip=(.+)/); const loc = t.match(/loc=(\w+)/); return { ip: ip?.[1], loc: loc?.[1] || '', org: 'Cloudflare' }; }) },
-    { name: 'ifconfig.me', type: '国外', fetch: () => fetch('https://ifconfig.me/all.json').then(r => r.json()).then(d => ({ ip: d.ip_addr, loc: '', org: '' })) },
+    { name: 'ip-api.com', type: 'INT', fetch: () => fetch('http://ip-api.com/json/?lang=zh-CN').then(r => r.json()).then(d => ({ ip: d.query, loc: [d.country, d.regionName, d.city, d.isp].filter(Boolean).join(' '), org: d.org || d.as || '' })) },
+    { name: 'ipinfo.io', type: 'INT', fetch: () => fetch('https://ipinfo.io/json').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.region, d.city].filter(Boolean).join(' '), org: d.org || '' })) },
+    { name: 'ipwho.is', type: 'INT', fetch: () => fetch('https://ipwho.is/').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.region, d.city].filter(Boolean).join(' '), org: d.connection?.isp || '' })) },
+    { name: 'ipapi.co', type: 'INT', fetch: () => fetch('https://ipapi.co/json/').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country_name, d.region, d.city].filter(Boolean).join(' '), org: d.org || '' })) },
+    { name: 'ip.sb', type: 'INT', fetch: () => fetch('https://api.ip.sb/geoip').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.region, d.city].filter(Boolean).join(' '), org: d.organization || '' })) },
+    { name: 'speedtest.cn', type: 'CN', fetch: () => fetch('https://api-v3.speedtest.cn/ip').then(r => r.json()).then(d => ({ ip: d.data?.ip, loc: [d.data?.country, d.data?.province, d.data?.city, d.data?.isp].filter(Boolean).join(' '), org: d.data?.isp || '' })) },
+    { name: 'useragentinfo', type: 'CN', fetch: () => fetch('https://ip.useragentinfo.com/json').then(r => r.json()).then(d => ({ ip: d.ip, loc: [d.country, d.province, d.city].filter(Boolean).join(' '), org: d.isp || '' })) },
+    { name: 'myip.ipip.net', type: 'CN', fetch: () => fetch('https://myip.ipip.net/').then(r => r.text()).then(t => { const m = t.match(/([\d.]+)/); const l = t.match(/来自于：([^\n<]+)/); return { ip: m?.[1], loc: l?.[1]?.trim() || '', org: '' }; }) },
+    { name: 'Cloudflare Trace', type: 'INT', fetch: () => fetch('https://www.cloudflare.com/cdn-cgi/trace').then(r => r.text()).then(t => { const ip = t.match(/ip=(.+)/); const loc = t.match(/loc=(\w+)/); return { ip: ip?.[1], loc: loc?.[1] || '', org: 'Cloudflare' }; }) },
+    { name: 'ifconfig.me', type: 'INT', fetch: () => fetch('https://ifconfig.me/all.json').then(r => r.json()).then(d => ({ ip: d.ip_addr, loc: '', org: '' })) },
 ];
 
 let results = [];
@@ -35,7 +35,7 @@ function startMultiDetection() {
 
     grid.innerHTML = allSources.map((s, i) => `
         <div class="multi-card" id="multi-${i}">
-            <div class="source-name">${s.name} <span class="badge ${s.type === '国内' ? 'badge-blue' : 'badge-green'}">${s.type}</span></div>
+            <div class="source-name">${s.name} <span class="badge ${s.type === 'CN' ? 'badge-blue' : 'badge-green'}">${s.type}</span></div>
             <div class="source-ip"><span class="loading-dot"></span></div>
             <div class="source-loc"></div>
         </div>

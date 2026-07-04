@@ -113,13 +113,13 @@ function analyzeResults() {
 
     if (uniqueDomestic.length === 0) {
         verdict.className = 'split-verdict partial';
-        verdict.textContent = '⚠️ 仅国外 API 可达，可能使用全局代理模式';
+        verdict.textContent = '⚠️ Only INT APIs reachable, possibly using global proxy';
         return;
     }
 
     if (uniqueForeign.length === 0) {
         verdict.className = 'split-verdict partial';
-        verdict.textContent = '⚠️ 仅国内 API 可达，国外网站不可访问';
+        verdict.textContent = '⚠️ Only CN APIs reachable, INT sites unreachable';
         return;
     }
 
@@ -128,10 +128,10 @@ function analyzeResults() {
 
     if (!hasOverlap) {
         verdict.className = 'split-verdict active';
-        verdict.innerHTML = `✅ 分流生效<br><small style="font-weight:400;font-size:13px;">国内直连: ${uniqueDomestic[0]} | 国外代理: ${uniqueForeign[0]}</small>`;
+        verdict.innerHTML = `✅ Split tunnel active<br><small style="font-weight:400;font-size:13px;">CN direct: ${uniqueDomestic[0]} | INT proxy: ${uniqueForeign[0]}</small>`;
     } else if (uniqueDomestic.length === 1 && uniqueForeign.length === 1 && uniqueDomestic[0] === uniqueForeign[0]) {
         verdict.className = 'split-verdict inactive';
-        verdict.innerHTML = `❌ 未检测到分流<br><small style="font-weight:400;font-size:13px;">国内外均使用: ${uniqueDomestic[0]}</small>`;
+        verdict.innerHTML = `❌ No split detected<br><small style="font-weight:400;font-size:13px;">CN & INT using same IP: ${uniqueDomestic[0]}</small>`;
     } else {
         verdict.className = 'split-verdict partial';
         verdict.innerHTML = `⚠️ 部分分流<br><small style="font-weight:400;font-size:13px;">检测到${uniqueDomestic.length + uniqueForeign.length}个不同出口，规则可能不完整</small>`;
@@ -141,13 +141,13 @@ function analyzeResults() {
 // ========== Rule Tests ==========
 function initRuleTests() {
     const rules = [
-        { domain: 'www.baidu.com', expect: '直连', type: '国内' },
-        { domain: 'www.taobao.com', expect: '直连', type: '国内' },
-        { domain: 'www.bilibili.com', expect: '直连', type: '国内' },
-        { domain: 'www.google.com', expect: '代理', type: '国外' },
-        { domain: 'www.youtube.com', expect: '代理', type: '国外' },
-        { domain: 'www.twitter.com', expect: '代理', type: '国外' },
-        { domain: 'chat.openai.com', expect: '代理', type: '国外' },
+        { domain: 'www.baidu.com', expect: 'Direct', type: 'CN' },
+        { domain: 'www.taobao.com', expect: 'Direct', type: 'CN' },
+        { domain: 'www.bilibili.com', expect: 'Direct', type: 'CN' },
+        { domain: 'www.google.com', expect: 'Proxy', type: 'INT' },
+        { domain: 'www.youtube.com', expect: 'Proxy', type: 'INT' },
+        { domain: 'www.twitter.com', expect: 'Proxy', type: 'INT' },
+        { domain: 'chat.openai.com', expect: 'Proxy', type: 'INT' },
         { domain: 'github.com', expect: '代理/直连', type: '视规则' },
     ];
 
