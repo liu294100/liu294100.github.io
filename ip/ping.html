@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping 测试 | IP 工具箱</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">IP 工具箱</div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="split-tunnel.html">分流检测</a>
+            <a href="multi.html">多出口检测</a>
+            <a href="cdn-node-lookup.html">CDN 节点</a>
+            <a href="dns-exit-lookup.html">DNS 出口</a>
+            <a href="stun.html">STUN 检测</a>
+            <a href="query.html">IP 查询</a>
+            <a href="rule-check.html">规则检测</a>
+            <a href="ai-check.html">AI 检测</a>
+            <a href="ping.html" class="active">Ping</a>
+            <a href="status.html">状态监控</a>
+            <a href="ip-risk.html">IP 风险</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" title="切换主题">🌙</button>
+        <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    </nav>
+
+    <div class="container">
+        <section class="card">
+            <h2 class="card-title">Ping / 延迟测试</h2>
+            <p class="card-desc">通过浏览器模拟 Ping 操作，持续测量到目标域名的延迟，并绘制实时延迟图表。</p>
+
+            <div class="query-box">
+                <input type="text" class="query-input" id="ping-input" placeholder="输入域名（如 google.com）或从下方快捷选择">
+                <button class="query-btn" id="ping-btn" onclick="startPing()">开始 Ping</button>
+                <button class="refresh-btn" id="stop-btn" onclick="stopPing()" style="display:none;">停止</button>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+                <button class="refresh-btn" onclick="setPingTarget('google.com')">Google</button>
+                <button class="refresh-btn" onclick="setPingTarget('baidu.com')">百度</button>
+                <button class="refresh-btn" onclick="setPingTarget('github.com')">GitHub</button>
+                <button class="refresh-btn" onclick="setPingTarget('cloudflare.com')">Cloudflare</button>
+                <button class="refresh-btn" onclick="setPingTarget('youtube.com')">YouTube</button>
+                <button class="refresh-btn" onclick="setPingTarget('bilibili.com')">B站</button>
+                <button class="refresh-btn" onclick="setPingTarget('twitter.com')">Twitter</button>
+                <button class="refresh-btn" onclick="setPingTarget('chat.openai.com')">ChatGPT</button>
+            </div>
+
+            <!-- Stats -->
+            <div id="ping-stats" style="display:none;margin-bottom:16px;">
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
+                    <div class="stun-card" style="padding:14px;text-align:center;">
+                        <h3 style="margin-bottom:4px;">最小</h3>
+                        <div class="stun-value" id="stat-min" style="color:var(--success);font-size:18px;">-</div>
+                    </div>
+                    <div class="stun-card" style="padding:14px;text-align:center;">
+                        <h3 style="margin-bottom:4px;">平均</h3>
+                        <div class="stun-value" id="stat-avg" style="color:var(--accent);font-size:18px;">-</div>
+                    </div>
+                    <div class="stun-card" style="padding:14px;text-align:center;">
+                        <h3 style="margin-bottom:4px;">最大</h3>
+                        <div class="stun-value" id="stat-max" style="color:var(--warning);font-size:18px;">-</div>
+                    </div>
+                    <div class="stun-card" style="padding:14px;text-align:center;">
+                        <h3 style="margin-bottom:4px;">丢包率</h3>
+                        <div class="stun-value" id="stat-loss" style="color:var(--danger);font-size:18px;">-</div>
+                    </div>
+                    <div class="stun-card" style="padding:14px;text-align:center;">
+                        <h3 style="margin-bottom:4px;">次数</h3>
+                        <div class="stun-value" id="stat-count" style="font-size:18px;">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div id="ping-chart-container" style="display:none;">
+                <canvas id="ping-chart" style="width:100%;height:200px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-sm);"></canvas>
+            </div>
+
+            <!-- Log -->
+            <div id="ping-log" style="margin-top:16px;max-height:300px;overflow-y:auto;font-family:var(--mono);font-size:12px;padding:12px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-sm);display:none;"></div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 IP 工具箱 | <a href="index.html">返回首页</a></p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/ping.js"></script>
+</body>
+</html>

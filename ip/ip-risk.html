@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP 风险检测 | IP 工具箱</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .ext-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .ext-link-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .ext-link-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--primary-glow);
+        }
+        .ext-link-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+        .ext-link-text {
+            flex: 1;
+        }
+        .ext-link-text .ext-name {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .ext-link-text .ext-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .ext-link-arrow {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">IP 工具箱</div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="split-tunnel.html">分流检测</a>
+            <a href="multi.html">多出口检测</a>
+            <a href="cdn-node-lookup.html">CDN 节点</a>
+            <a href="dns-exit-lookup.html">DNS 出口</a>
+            <a href="stun.html">STUN 检测</a>
+            <a href="query.html">IP 查询</a>
+            <a href="rule-check.html">规则检测</a>
+            <a href="ai-check.html">AI 检测</a>
+            <a href="ping.html">Ping</a>
+            <a href="status.html">状态监控</a>
+            <a href="ip-risk.html" class="active">IP 风险</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" title="切换主题">🌙</button>
+        <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    </nav>
+
+    <div class="container">
+        <section class="card">
+            <h2 class="card-title">IP 质量 & 风险检测</h2>
+            <p class="card-desc">检测你当前出口 IP 在 ChatGPT / Claude 等 AI 服务上的风险等级和质量评分。高风险 IP 可能导致验证码、限速或封禁。</p>
+
+            <div class="info-box">
+                <strong>说明：</strong>AI 服务商会检测 IP 是否来自数据中心、代理/VPN、或已知滥用源。下方先展示本地分析结果，然后可通过外部链接进行更深入的在线检测。
+            </div>
+
+            <button class="refresh-btn" onclick="startRiskCheck()">&#128260; 重新检测</button>
+        </section>
+
+        <!-- Exit IP Info -->
+        <section class="card">
+            <h2 class="card-title" style="font-size:16px;">🌐 当前出口 IP</h2>
+            <div id="exit-ip-info">
+                <div style="text-align:center;padding:20px;"><span class="loading-dot"></span> 获取出口 IP...</div>
+            </div>
+        </section>
+
+        <!-- External tools -->
+        <section class="card">
+            <h2 class="card-title" style="font-size:16px;">🔍 在线检测工具</h2>
+            <p class="card-desc">点击跳转到对应的专业检测服务（新窗口打开）</p>
+
+            <div class="ext-links-grid">
+                <a href="https://ip.net.coffee/gpt/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">🤖</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">ChatGPT IP 检测</div>
+                        <div class="ext-desc">检测 IP 对 OpenAI 的风险</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://ip.net.coffee/claude/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">🧠</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">Claude IP 检测</div>
+                        <div class="ext-desc">检测 IP 对 Anthropic 的风险</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://ip.net.coffee/ip/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">📋</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">IP 信息查询</div>
+                        <div class="ext-desc">详细 IP 归属地和 ISP</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://ip.net.coffee/ping/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">📶</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">Ping 测速</div>
+                        <div class="ext-desc">在线延迟测试</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://ip.net.coffee/status/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">📊</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">服务状态</div>
+                        <div class="ext-desc">各服务运行状态</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://ping0.cc/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">🛡️</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">Ping0 IP 检测</div>
+                        <div class="ext-desc">IP 风控值检测</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://scamalytics.com/" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">🔐</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">Scamalytics</div>
+                        <div class="ext-desc">IP 欺诈评分</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+                <a href="https://ipqualityscore.com/free-ip-lookup-proxy-vpn-test" target="_blank" rel="noopener" class="ext-link-card">
+                    <div class="ext-link-icon">⚡</div>
+                    <div class="ext-link-text">
+                        <div class="ext-name">IPQualityScore</div>
+                        <div class="ext-desc">VPN/代理检测评分</div>
+                    </div>
+                    <div class="ext-link-arrow">→</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Local Risk Analysis -->
+        <section class="card">
+            <h2 class="card-title" style="font-size:16px;">📊 本地 IP 风险分析</h2>
+            <div id="risk-factors">
+                <div style="text-align:center;padding:20px;"><span class="loading-dot"></span> 分析中...</div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 IP 工具箱 | <a href="index.html">返回首页</a></p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/ip-risk.js"></script>
+</body>
+</html>

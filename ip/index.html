@@ -3,411 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP 地址查询 | 查询本机IP地址及归属地 | 查看DNS出口IP</title>
+    <title>IP 工具箱 | IP查询 & 网络检测</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-brand">IP 工具箱</div>
+        <div class="nav-links">
+            <a href="index.html" class="active">首页</a>
+            <a href="split-tunnel.html">分流检测</a>
+            <a href="multi.html">多出口检测</a>
+            <a href="cdn-node-lookup.html">CDN 节点</a>
+            <a href="dns-exit-lookup.html">DNS 出口</a>
+            <a href="stun.html">STUN 检测</a>
+            <a href="query.html">IP 查询</a>
+            <a href="rule-check.html">规则检测</a>
+            <a href="ai-check.html">AI 检测</a>
+            <a href="ping.html">Ping</a>
+            <a href="status.html">状态监控</a>
+            <a href="ip-risk.html">IP 风险</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" title="切换主题">🌙</button>
+        <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    </nav>
+
     <div class="container">
-        <!-- 顶部标题区域 -->
-        <div class="header-section">
-            <div class="section-title">IP 地址查询</div>
-            <div class="section-title">CDN 命中节点测试</div>
-        </div>
-
-        <!-- 主要内容区域 -->
-        <div class="main-content">
-            <!-- IP地址查询区域 -->
-            <div class="ip-query-section">
-                <table class="ip-table">
-                    <tbody>
-                        <!-- 国内IP信息 -->
-                        <tr>
-                            <td class="source-type">国内</td>
-                            <td class="api-source">IPIP.net</td>
-                            <td class="ip-address" id="ipip-ip">---.---.---.---</td>
-                            <td class="location" id="ipip-location">获取中...</td>
-                        </tr>
-                        <tr>
-                            <td class="source-type">国内</td>
-                            <td class="api-source">IP138.com</td>
-                            <td class="ip-address" id="ip138-ip">---.---.---.---</td>
-                            <td class="location" id="ip138-location">获取中...</td>
-                        </tr>
-                        <tr>
-                            <td class="source-type">国内</td>
-                            <td class="api-source">ipchaxun.com</td>
-                            <td class="ip-address" id="ipchaxun-ip">---.---.---.---</td>
-                            <td class="location" id="ipchaxun-location">获取中...</td>
-                        </tr>
-                        <tr>
-                            <td class="source-type">国内</td>
-                            <td class="api-source">speedtest.cn</td>
-                            <td class="ip-address" id="speedtest-ip">---.---.---.---</td>
-                            <td class="location" id="speedtest-location">获取中...</td>
-                        </tr>
-                        
-                        <!-- 国外IP信息 -->
-                        <tr>
-                            <td class="source-type">国外</td>
-                            <td class="api-source">IP.SB</td>
-                            <td class="ip-address" id="ipsb-ip">---.---.---.---</td>
-                            <td class="location" id="ipsb-location">获取中...</td>
-                        </tr>
-                        <tr>
-                            <td class="source-type">国外</td>
-                            <td class="api-source">ip-api.com</td>
-                            <td class="ip-address" id="ipapi-ip">---.---.---.---</td>
-                            <td class="location" id="ipapi-location">获取中...</td>
-                        </tr>
-                        <tr>
-                            <td class="source-type">国外</td>
-                            <td class="api-source">Sukka IPDB</td>
-                            <td class="ip-address" id="sukka-ip">---.---.---.---</td>
-                            <td class="location" id="sukka-location">获取中...</td>
-                        </tr>
-                        <tr>
-                            <td class="source-type">国外</td>
-                            <td class="api-source">IPinfo.io</td>
-                            <td class="ip-address" id="ipinfo-ip">---.---.---.---</td>
-                            <td class="location" id="ipinfo-location">获取中...</td>
-                        </tr>
-                        
-                        <!-- 代理分流检测 -->
-                        <tr class="proxy-detection-row">
-                            <td class="source-type proxy-label">代理</td>
-                            <td class="api-source">分流检测</td>
-                            <td class="ip-address" id="proxy-status">检测中...</td>
-                            <td class="location" id="proxy-info">分析代理分流情况...</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <!-- 切换开关 -->
-                <div class="toggle-options">
-                    <label class="toggle">
-                        <input type="checkbox" id="hide-ip">
-                        <span class="toggle-slider"></span>
-                        <span class="toggle-text">隐藏 IP</span>
-                    </label>
-                    <label class="toggle">
-                        <input type="checkbox" id="hide-domestic-location">
-                        <span class="toggle-slider"></span>
-                        <span class="toggle-text">隐藏国内地理位置</span>
-                    </label>
-                    <label class="toggle">
-                        <input type="checkbox" id="hide-all-location">
-                        <span class="toggle-slider"></span>
-                        <span class="toggle-text">隐藏所有地理位置</span>
-                    </label>
-                </div>
+        <!-- IP 地址查询区域 -->
+        <section class="card">
+            <h2 class="card-title">IP 地址信息</h2>
+            <p class="card-desc">通过多个数据源查询你的公网 IP 地址和归属地</p>
+            <table class="ip-table" id="ip-table">
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>数据源</th>
+                        <th>IP 地址</th>
+                        <th>归属地</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-source="domestic">
+                        <td><span class="badge badge-blue">国内</span></td>
+                        <td>ipip.net</td>
+                        <td class="ip-cell" id="ipip-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="ipip-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="domestic">
+                        <td><span class="badge badge-blue">国内</span></td>
+                        <td>speedtest.cn</td>
+                        <td class="ip-cell" id="speedtest-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="speedtest-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="domestic">
+                        <td><span class="badge badge-blue">国内</span></td>
+                        <td>useragentinfo</td>
+                        <td class="ip-cell" id="useragent-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="useragent-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="foreign">
+                        <td><span class="badge badge-green">国外</span></td>
+                        <td>ip-api.com</td>
+                        <td class="ip-cell" id="ipapi-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="ipapi-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="foreign">
+                        <td><span class="badge badge-green">国外</span></td>
+                        <td>ipinfo.io</td>
+                        <td class="ip-cell" id="ipinfo-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="ipinfo-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="foreign">
+                        <td><span class="badge badge-green">国外</span></td>
+                        <td>ip.sb</td>
+                        <td class="ip-cell" id="ipsb-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="ipsb-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="foreign">
+                        <td><span class="badge badge-green">国外</span></td>
+                        <td>ipwho.is</td>
+                        <td class="ip-cell" id="ipwho-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="ipwho-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                    <tr data-source="foreign">
+                        <td><span class="badge badge-green">国外</span></td>
+                        <td>ipapi.co</td>
+                        <td class="ip-cell" id="ipapico-ip"><span class="loading-dot"></span></td>
+                        <td class="location-cell" id="ipapico-loc"><span class="loading-dot"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="toggle-bar">
+                <label class="toggle-item">
+                    <input type="checkbox" id="toggle-hide-ip">
+                    <span class="toggle-switch"></span>
+                    <span>隐藏 IP</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="checkbox" id="toggle-hide-loc">
+                    <span class="toggle-switch"></span>
+                    <span>隐藏归属地</span>
+                </label>
             </div>
+        </section>
 
-            <!-- CDN命中节点测试区域 -->
-            <div class="cdn-test-section">
-                <div class="cdn-grid">
-                    <!-- Cloudflare -->
-                    <div class="cdn-card" id="cloudflare">
-                        <div class="cdn-logo">
-                            <img src="img/cloudflare.svg" alt="Cloudflare">
-                        </div>
-                        <div class="cdn-name">Cloudflare</div>
-                        <div class="cdn-node" id="cloudflare-node">获取中...</div>
-                    </div>
-                    
-                    <!-- Fastly -->
-                    <div class="cdn-card" id="fastly">
-                        <div class="cdn-logo">
-                            <img src="img/fastly.svg" alt="Fastly">
-                        </div>
-                        <div class="cdn-name">Fastly</div>
-                        <div class="cdn-node" id="fastly-node">获取中...</div>
-                    </div>
-                    
-                    <!-- Google -->
-                    <div class="cdn-card" id="google">
-                        <div class="cdn-logo">
-                            <img src="img/google.svg" alt="Google">
-                        </div>
-                        <div class="cdn-name">Google Cache</div>
-                        <div class="cdn-node" id="google-node">获取中...</div>
-                    </div>
-                    
-                    <!-- jsDelivr -->
-                    <div class="cdn-card" id="jsdelivr">
-                        <div class="cdn-logo">
-                            <img src="img/jsdelivr.svg" alt="jsDelivr">
-                        </div>
-                        <div class="cdn-name">jsDelivr</div>
-                        <div class="cdn-node" id="jsdelivr-node">获取中...</div>
-                    </div>
-                    
-                    <!-- AWS CloudFront -->
-                    <div class="cdn-card" id="cloudfront">
-                        <div class="cdn-logo">
-                            <img src="img/aws.svg" alt="AWS CloudFront">
-                        </div>
-                        <div class="cdn-name">AWS CloudFront</div>
-                        <div class="cdn-node" id="cloudfront-node">获取中...</div>
-                    </div>
-                    
-                    <!-- Bunny Standard -->
-                    <div class="cdn-card" id="bunny-standard">
-                        <div class="cdn-logo">
-                            <img src="img/bunny.svg" alt="Bunny Standard">
-                        </div>
-                        <div class="cdn-name">Bunny Standard</div>
-                        <div class="cdn-node" id="bunny-standard-node">获取中...</div>
-                    </div>
-                    
-                    <!-- Bunny Volume -->
-                    <div class="cdn-card" id="bunny-volume">
-                        <div class="cdn-logo">
-                            <img src="img/bunny.svg" alt="Bunny Volume">
-                        </div>
-                        <div class="cdn-name">Bunny Volume</div>
-                        <div class="cdn-node" id="bunny-volume-node">获取中...</div>
-                    </div>
-                    
-                    <!-- CDN77 -->
-                    <div class="cdn-card" id="cdn77">
-                        <div class="cdn-logo">
-                            <img src="img/cdn77.svg" alt="CDN77">
-                        </div>
-                        <div class="cdn-name">CDN77</div>
-                        <div class="cdn-node" id="cdn77-node">获取中...</div>
-                    </div>
-                    
-                    <!-- KeyCDN -->
-                    <div class="cdn-card" id="keycdn">
-                        <div class="cdn-logo">
-                            <img src="img/keycdn.svg" alt="KeyCDN">
-                        </div>
-                        <div class="cdn-name">KeyCDN</div>
-                        <div class="cdn-node" id="keycdn-node">获取中...</div>
-                    </div>
-                    
-                    <!-- MaxCDN -->
-                    <div class="cdn-card" id="maxcdn">
-                        <div class="cdn-logo">
-                            <img src="img/maxcdn.svg" alt="MaxCDN">
-                        </div>
-                        <div class="cdn-name">MaxCDN</div>
-                        <div class="cdn-node" id="maxcdn-node">获取中...</div>
-                    </div>
-                    
-                    <!-- 腾讯云CDN -->
-                    <div class="cdn-card" id="qcloud">
-                        <div class="cdn-logo">
-                            <img src="img/qcloud.svg" alt="腾讯云CDN">
-                        </div>
-                        <div class="cdn-name">腾讯云CDN</div>
-                        <div class="cdn-node" id="qcloud-node">获取中...</div>
-                    </div>
-                    
-                    <!-- 阿里云CDN -->
-                    <div class="cdn-card" id="aliyun">
-                        <div class="cdn-logo">
-                            <img src="img/aliyun.svg" alt="阿里云CDN">
-                        </div>
-                        <div class="cdn-name">阿里云CDN</div>
-                        <div class="cdn-node" id="aliyun-node">获取中...</div>
-                    </div>
-                    
-                    <!-- 百度云CDN -->
-                    <div class="cdn-card" id="baidu">
-                        <div class="cdn-logo">
-                            <img src="img/baidu.svg" alt="百度云CDN">
-                        </div>
-                        <div class="cdn-name">百度云CDN</div>
-                        <div class="cdn-node" id="baidu-node">获取中...</div>
-                    </div>
-                    
-                    <!-- 又拍云CDN -->
-                    <div class="cdn-card" id="upyun">
-                        <div class="cdn-logo">
-                            <img src="img/upyun.svg" alt="又拍云CDN">
-                        </div>
-                        <div class="cdn-name">又拍云CDN</div>
-                        <div class="cdn-node" id="upyun-node">获取中...</div>
-                    </div>
-                    
-                    <!-- Microsoft Azure CDN -->
-                    <div class="cdn-card" id="azure">
-                        <div class="cdn-logo">
-                            <img src="img/azure.svg" alt="Azure CDN">
-                        </div>
-                        <div class="cdn-name">Azure CDN</div>
-                        <div class="cdn-node" id="azure-node">获取中...</div>
-                    </div>
-                    
-                    <!-- Google Cloud CDN -->
-                    <div class="cdn-card" id="gcloud">
-                        <div class="cdn-logo">
-                            <img src="img/google.svg" alt="Google Cloud CDN">
-                        </div>
-                        <div class="cdn-name">Google Cloud CDN</div>
-                        <div class="cdn-node" id="gcloud-node">获取中...</div>
-                    </div>
-                    
-                    <!-- 华为云CDN -->
-                    <div class="cdn-card" id="huawei">
-                        <div class="cdn-logo">
-                            <img src="img/huawei.svg" alt="华为云CDN">
-                        </div>
-                        <div class="cdn-name">华为云CDN</div>
-                        <div class="cdn-node" id="huawei-node">获取中...</div>
-                    </div>
-                    
-                    <!-- 网宿CDN -->
-                    <div class="cdn-card" id="wangsu">
-                        <div class="cdn-logo">
-                            <img src="img/wangsu.svg" alt="网宿CDN">
-                        </div>
-                        <div class="cdn-name">网宿CDN</div>
-                        <div class="cdn-node" id="wangsu-node">获取中...</div>
-                    </div>
-                </div>
+        <!-- CDN 节点测试 -->
+        <section class="card">
+            <h2 class="card-title">CDN 命中节点</h2>
+            <p class="card-desc">检测各 CDN 为你分配的边缘节点位置</p>
+            <div class="cdn-grid" id="cdn-grid">
+                <!-- CDN cards will be generated by JS -->
             </div>
-        </div>
+        </section>
 
-        <!-- 网络连通性检查区域 -->
-        <div class="section">
-            <div class="section-title">网络连通性检查</div>
-            <div class="connectivity-grid">
-                <!-- 百度 -->
-                <div class="connectivity-card">
-                    <div class="website-name">百度搜索</div>
-                    <div class="website-type">国内网站</div>
-                    <div class="response-time" id="baidu-time">获取中...</div>
-                </div>
-                
-                <!-- 网易云音乐 -->
-                <div class="connectivity-card">
-                    <div class="website-name">网易云音乐</div>
-                    <div class="website-type">国内网站</div>
-                    <div class="response-time" id="netease-time">获取中...</div>
-                </div>
-                
-                <!-- GitHub -->
-                <div class="connectivity-card">
-                    <div class="website-name">GitHub</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="github-time">获取中...</div>
-                </div>
-                
-                <!-- YouTube -->
-                <div class="connectivity-card">
-                    <div class="website-name">YouTube</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="youtube-time">获取中...</div>
-                </div>
-                
-                <!-- Google -->
-                <div class="connectivity-card">
-                    <div class="website-name">Google</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="google-time">获取中...</div>
-                </div>
-                
-                <!-- Instagram -->
-                <div class="connectivity-card">
-                    <div class="website-name">Instagram</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="instagram-time">获取中...</div>
-                </div>
-                
-                <!-- Wikipedia -->
-                <div class="connectivity-card">
-                    <div class="website-name">Wikipedia</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="wikipedia-time">获取中...</div>
-                </div>
-                
-                <!-- QQ -->
-                <div class="connectivity-card">
-                    <div class="website-name">QQ</div>
-                    <div class="website-type">国内网站</div>
-                    <div class="response-time" id="qq-time">获取中...</div>
-                </div>
-                
-                <!-- Microsoft -->
-                <div class="connectivity-card">
-                    <div class="website-name">Microsoft</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="microsoft-time">获取中...</div>
-                </div>
-                
-                <!-- Bing -->
-                <div class="connectivity-card">
-                    <div class="website-name">Bing</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="bing-time">获取中...</div>
-                </div>
-                
-                <!-- Netflix -->
-                <div class="connectivity-card">
-                    <div class="website-name">Netflix</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="netflix-time">获取中...</div>
-                </div>
-                
-                <!-- Spotify -->
-                <div class="connectivity-card">
-                    <div class="website-name">Spotify</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="spotify-time">获取中...</div>
-                </div>
-                
-                <!-- ChatGPT -->
-                <div class="connectivity-card">
-                    <div class="website-name">ChatGPT</div>
-                    <div class="website-type">国外网站</div>
-                    <div class="response-time" id="chatgpt-time">获取中...</div>
-                </div>
+        <!-- 网络连通性 -->
+        <section class="card">
+            <h2 class="card-title">网络连通性</h2>
+            <p class="card-desc">测试国内外热门网站的可达性和延迟</p>
+            <div class="connectivity-grid" id="connectivity-grid">
+                <!-- Connectivity cards will be generated by JS -->
             </div>
-        </div>
+        </section>
 
-        <!-- 其他实用工具区域 -->
-        <div class="section">
-            <div class="section-title">其他实用工具</div>
-            <div class="tools-links">
-                <a href="#" class="tool-link" data-tool="dns-query">DNS 出口查询</a>
-                <a href="#" class="tool-link" data-tool="geo-ip">IP 地理位置查询</a>
-                <!-- <a href="#" class="tool-link" data-tool="multi-ip">多出口 IP 分流查询</a>
-                <a href="#" class="tool-link" data-tool="domain-ip">域名分流 IP 查询</a>
-                <a href="#" class="tool-link" data-tool="udp-ip">UDP IP 查询</a> -->
-               
+        <!-- 快捷导航 -->
+        <section class="card">
+            <h2 class="card-title">更多工具</h2>
+            <div class="tools-grid">
+                <a href="split-tunnel.html" class="tool-card">
+                    <div class="tool-icon">&#128268;</div>
+                    <div class="tool-name">分流检测</div>
+                    <div class="tool-desc">检测代理分流是否生效</div>
+                </a>
+                <a href="multi.html" class="tool-card">
+                    <div class="tool-icon">&#127760;</div>
+                    <div class="tool-name">多出口检测</div>
+                    <div class="tool-desc">多源 IP 对比分析</div>
+                </a>
+                <a href="cdn-node-lookup.html" class="tool-card">
+                    <div class="tool-icon">&#9889;</div>
+                    <div class="tool-name">CDN 节点查询</div>
+                    <div class="tool-desc">查询 CDN 边缘节点</div>
+                </a>
+                <a href="dns-exit-lookup.html" class="tool-card">
+                    <div class="tool-icon">&#128270;</div>
+                    <div class="tool-name">DNS 出口</div>
+                    <div class="tool-desc">检测 DNS 解析出口</div>
+                </a>
+                <a href="stun.html" class="tool-card">
+                    <div class="tool-icon">&#128225;</div>
+                    <div class="tool-name">STUN 检测</div>
+                    <div class="tool-desc">WebRTC/STUN NAT 检测</div>
+                </a>
+                <a href="query.html" class="tool-card">
+                    <div class="tool-icon">&#128269;</div>
+                    <div class="tool-name">IP 查询</div>
+                    <div class="tool-desc">查询任意 IP 的详细信息</div>
+                </a>
+                <a href="rule-check.html" class="tool-card">
+                    <div class="tool-icon">&#128295;</div>
+                    <div class="tool-name">规则检测</div>
+                    <div class="tool-desc">检测域名/IP 分流走向</div>
+                </a>
+                <a href="ai-check.html" class="tool-card">
+                    <div class="tool-icon">&#129302;</div>
+                    <div class="tool-name">AI 检测</div>
+                    <div class="tool-desc">AI 服务可用性检测</div>
+                </a>
+                <a href="ping.html" class="tool-card">
+                    <div class="tool-icon">&#128225;</div>
+                    <div class="tool-name">Ping 测试</div>
+                    <div class="tool-desc">实时延迟图表</div>
+                </a>
+                <a href="status.html" class="tool-card">
+                    <div class="tool-icon">&#128200;</div>
+                    <div class="tool-name">状态监控</div>
+                    <div class="tool-desc">互联网服务状态一览</div>
+                </a>
+                <a href="ip-risk.html" class="tool-card">
+                    <div class="tool-icon">&#128272;</div>
+                    <div class="tool-name">IP 风险</div>
+                    <div class="tool-desc">ChatGPT/Claude IP 风险检测</div>
+                </a>
             </div>
-        </div>
-
-        <!-- 嵌入代码区域 -->
-        <div class="section">
-            <div class="section-title">在你的应用中使用</div>
-            <div class="embed-code-container">
-                <p>通过 &lt;iframe /&gt; 加载 Embed 版本到你的应用中:</p>
-                <pre class="code-block"><code class="embed-code">&lt;iframe src="https://domain/ip/simple" style="width: 100%; border: 0"&gt;&lt;/iframe&gt;</code></pre>
-                <p>&lt;!-- 暗色模式 --&gt;</p>
-                <pre class="code-block"><code class="embed-code">&lt;iframe src="https://domain/ip/simple-dark" style="width: 100%; border: 0"&gt;&lt;/iframe&gt;</code></pre>
-            </div>
-        </div>
+        </section>
 
         <!-- 页脚 -->
-        <footer>
-            <p>Copyright © 2025 <a href="#" target="_blank">Apollo</a>. All Rights Reserved.</p>
-            <p>友情链接：
-                <a href="https://ping0.cc/" target="_blank">IP检测（可以检测IP的风控值）</a>
-                <a href="https://ip.skk.moe/" target="_blank">IP检测（ip.skk.moe）</a>
-                <a href="https://whatismyipaddress.com/" target="_blank">IP whatismyipaddress </a>
-                <a href="https://www.ip138.com/" target="_blank"> IP138</a>
-                <a href="https://ping.chinaz.com/" target="_blank"> 多个地点ping</a>
-                
-        </p>
-  
+        <footer class="footer">
+            <p>&copy; 2025 IP 工具箱 | 灵感来源于 <a href="https://ip.skk.moe/" target="_blank">ip.skk.moe</a></p>
         </footer>
     </div>
 
-    <script src="js/main.js?v=20250608-5"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
-

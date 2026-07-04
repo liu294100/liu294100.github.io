@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 服务检测 | IP 工具箱</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">IP 工具箱</div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="split-tunnel.html">分流检测</a>
+            <a href="multi.html">多出口检测</a>
+            <a href="cdn-node-lookup.html">CDN 节点</a>
+            <a href="dns-exit-lookup.html">DNS 出口</a>
+            <a href="stun.html">STUN 检测</a>
+            <a href="query.html">IP 查询</a>
+            <a href="rule-check.html">规则检测</a>
+            <a href="ai-check.html" class="active">AI 检测</a>
+            <a href="ping.html">Ping</a>
+            <a href="status.html">状态监控</a>
+            <a href="ip-risk.html">IP 风险</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" title="切换主题">🌙</button>
+        <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    </nav>
+
+    <div class="container">
+        <section class="card">
+            <h2 class="card-title">AI 服务可用性检测</h2>
+            <p class="card-desc">检测各大 AI 服务在当前网络环境下是否可达，并获取连接这些服务时的 DNS 解析 IP 和延迟信息。</p>
+
+            <div class="info-box">
+                <strong>说明：</strong>通过向各 AI 服务域名发起请求来检测可达性。如果某个服务不可达，可能是因为该服务在你的地区受限或你的代理规则未覆盖该域名。
+            </div>
+
+            <button class="refresh-btn" onclick="startAICheck()">&#128260; 重新检测</button>
+
+            <div id="ai-grid" style="margin-top:16px;"></div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 IP 工具箱 | <a href="index.html">返回首页</a></p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/ai-check.js"></script>
+</body>
+</html>

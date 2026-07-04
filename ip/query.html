@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP 查询 | IP 工具箱</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">IP 工具箱</div>
+        <div class="nav-links">
+            <a href="index.html">首页</a>
+            <a href="split-tunnel.html">分流检测</a>
+            <a href="multi.html">多出口检测</a>
+            <a href="cdn-node-lookup.html">CDN 节点</a>
+            <a href="dns-exit-lookup.html">DNS 出口</a>
+            <a href="stun.html">STUN 检测</a>
+            <a href="query.html" class="active">IP 查询</a>
+            <a href="rule-check.html">规则检测</a>
+            <a href="ai-check.html">AI 检测</a>
+            <a href="ping.html">Ping</a>
+            <a href="status.html">状态监控</a>
+            <a href="ip-risk.html">IP 风险</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" title="切换主题">🌙</button>
+        <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    </nav>
+
+    <div class="container">
+        <section class="card">
+            <h2 class="card-title">IP 地址查询</h2>
+            <p class="card-desc">输入一个 IP 地址或域名，查询其详细的地理位置、ISP、ASN、代理检测等信息。留空则查询你自己的 IP。</p>
+
+            <div class="query-box">
+                <input type="text" class="query-input" id="query-input" placeholder="输入 IP 地址或域名 (留空查询自身)">
+                <button class="query-btn" id="query-btn" onclick="queryIP()">查询</button>
+            </div>
+
+            <div class="info-box">
+                <strong>提示：</strong>将同时从 ip-api.com、ipinfo.io、ipapi.co、ipwho.is 等多个数据源获取信息并交叉对比。支持 IPv4、IPv6 和域名查询。
+            </div>
+
+            <div id="query-result-container">
+                <p style="text-align:center;color:var(--text-secondary);padding:40px 0;">输入 IP 地址后点击查询，或直接点击查询按钮获取自身 IP 信息</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">常用 IP 快捷查询</h2>
+            <p class="card-desc">点击以下常用 IP 地址快速查询</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+                <button class="refresh-btn" onclick="quickQuery('8.8.8.8')">Google DNS (8.8.8.8)</button>
+                <button class="refresh-btn" onclick="quickQuery('1.1.1.1')">Cloudflare DNS (1.1.1.1)</button>
+                <button class="refresh-btn" onclick="quickQuery('223.5.5.5')">AliDNS (223.5.5.5)</button>
+                <button class="refresh-btn" onclick="quickQuery('114.114.114.114')">114 DNS</button>
+                <button class="refresh-btn" onclick="quickQuery('208.67.222.222')">OpenDNS</button>
+                <button class="refresh-btn" onclick="quickQuery('')">查询自身 IP</button>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 IP 工具箱 | <a href="index.html">返回首页</a></p>
+        </footer>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/query.js"></script>
+    <script>
+        function quickQuery(ip) {
+            document.getElementById('query-input').value = ip;
+            queryIP();
+        }
+    </script>
+</body>
+</html>
