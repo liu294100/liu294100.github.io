@@ -48,6 +48,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
             }
 
+            // ECharts specific handling
+            if (lang === 'echarts') {
+                try {
+                    // Use a unique ID and store the raw JSON in a script tag to avoid attribute quoting issues
+                    const chartId = 'echarts-' + Math.random().toString(36).substr(2, 9);
+                    return `<div class="echarts-container" id="${chartId}" style="width:100%;height:400px;margin:16px 0;"></div><script type="application/json" class="echarts-data" data-target="${chartId}">${md.utils.escapeHtml(str)}<\/script>`;
+                } catch (e) {
+                    console.error("Error processing ECharts block:", e);
+                    return `<pre class="echarts-error" style="color:red;border:1px solid red;padding:10px;">ECharts Error: ${md.utils.escapeHtml(e.message)}</pre>`;
+                }
+            }
+
             // Standard highlighting
             if (lang && hljs.getLanguage(lang)) {
                 try {
@@ -105,7 +117,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
     // Adjust height initially and on window resize
     adjustEditorHeight();
-    window.addEventListener('resize', adjustEditorHeight);
+    window.addEventListener('resize', () => {
+        adjustEditorHeight();
+        // Resize all ECharts instances on window resize
+        if (typeof echarts !== 'undefined' && previewElement) {
+            previewElement.querySelectorAll('.echarts-container').forEach(container => {
+                const chart = echarts.getInstanceByDom(container);
+                if (chart) chart.resize();
+            });
+        }
+    });
 
 
     // --- Load Initial Content from introduce.md ---
@@ -256,6 +277,52 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
             });
         }
+
+        // 5. Trigger ECharts rendering
+        const echartsDataScripts = previewElement.querySelectorAll('script.echarts-data[data-target]');
+        if (echartsDataScripts.length > 0 && typeof echarts !== 'undefined') {
+            echartsDataScripts.forEach((script, index) => {
+                try {
+                    const targetId = script.getAttribute('data-target');
+                    const container = previewElement.querySelector('#' + targetId);
+                    if (!container) {
+                        console.warn(`ECharts container #${targetId} not found`);
+                        return;
+                    }
+                    
+                    // Decode the HTML-escaped JSON from the script tag
+                    const optionText = script.textContent
+                        .replace(/&amp;/g, '&')
+                        .replace(/&lt;/g, '<')
+                        .replace(/&gt;/g, '>')
+                        .replace(/&quot;/g, '"')
+                        .replace(/&#39;/g, "'");
+                    
+                    const option = JSON.parse(optionText);
+                    
+                    // Dispose existing chart instance if any (prevents memory leak on re-render)
+                    const existingChart = echarts.getInstanceByDom(container);
+                    if (existingChart) {
+                        existingChart.dispose();
+                    }
+                    
+                    const chart = echarts.init(container);
+                    chart.setOption(option);
+                    
+                    // Remove the script tag to prevent re-processing
+                    script.remove();
+                    
+                    console.log(`ECharts diagram ${index + 1} rendered successfully.`);
+                } catch (e) {
+                    console.error(`ECharts rendering error for block ${index + 1}:`, e);
+                    const targetId = script.getAttribute('data-target');
+                    const container = previewElement.querySelector('#' + targetId);
+                    if (container) {
+                        container.innerHTML = `<pre style="color:red;border:1px solid red;padding:10px;font-size:12px;text-align:left;">ECharts Error:\n${e.message}\n\nPlease ensure the option is valid JSON.</pre>`;
+                    }
+                }
+            });
+        }
     }
 
     // --- Debounce Editor Changes ---
@@ -385,6 +452,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
             insertText(`\n\`\`\`mermaid\n${template}\n\`\`\`\n`);
             closeAllDropdowns();
         });
+    });
+
+    // ECharts Insertion
+    document.getElementById('insert-echarts')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const template = `\n\`\`\`echarts\n{\n  "title": {\n    "text": "示例图表"\n  },\n  "tooltip": {},\n  "xAxis": {\n    "data": ["A", "B", "C", "D", "E"]\n  },\n  "yAxis": {},\n  "series": [\n    {\n      "name": "数据",\n      "type": "bar",\n      "data": [5, 20, 36, 10, 10]\n    }\n  ]\n}\n\`\`\`\n`;
+        insertText(template);
+        closeAllDropdowns();
     });
 
     // --- Layout Toggles ---
