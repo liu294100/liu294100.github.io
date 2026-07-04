@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,9 +6,11 @@
     <title>Vditor Markdown Editor - 基于Vditor的在线编辑器</title>
     
     <!-- Vditor CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.10.4/dist/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.10.8/dist/index.css" />
     
-    <!-- Custom Styles -->
+    <!-- html2pdf for PDF export -->
+    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -18,7 +19,7 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
             background-color: #f8f9fa;
             height: 100vh;
             overflow: hidden;
@@ -27,8 +28,8 @@
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 12px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -37,53 +38,70 @@
         }
         
         .header h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             margin: 0;
+            white-space: nowrap;
         }
         
         .header-controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
-            padding: 8px 16px;
+            padding: 7px 14px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            font-size: 13px;
+            transition: all 0.2s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            white-space: nowrap;
+            user-select: none;
         }
         
         .btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.35);
             transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
         }
         
         .btn-primary {
             background: rgba(255,255,255,0.9);
             color: #667eea;
+            font-weight: 500;
         }
         
         .btn-primary:hover {
             background: white;
         }
         
+        .btn-danger {
+            background: rgba(220, 53, 69, 0.8);
+            border-color: rgba(220, 53, 69, 0.9);
+        }
+        
+        .btn-danger:hover {
+            background: rgba(220, 53, 69, 0.95);
+        }
+        
         .editor-container {
-            height: calc(100vh - 80px);
+            height: calc(100vh - 60px);
             background: white;
-            border-radius: 8px 8px 0 0;
             overflow: hidden;
-            margin: 0 10px;
-            box-shadow: 0 -2px 20px rgba(0,0,0,0.1);
+            margin: 0;
         }
         
         #vditor {
@@ -92,9 +110,9 @@
         
         .mode-selector {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             background: rgba(255,255,255,0.1);
-            padding: 4px;
+            padding: 3px;
             border-radius: 6px;
         }
         
@@ -102,16 +120,18 @@
             background: transparent;
             border: none;
             color: rgba(255,255,255,0.8);
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
         
         .mode-btn.active {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             color: white;
+            font-weight: 500;
         }
         
         .mode-btn:hover {
@@ -119,72 +139,263 @@
             color: white;
         }
         
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            padding: 8px 20px;
-            font-size: 12px;
-            color: #666;
-            text-align: center;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            z-index: 1000;
+        /* Dropdown menu for export */
+        .dropdown {
+            position: relative;
+            display: inline-block;
         }
         
-        /* 自定义Vditor样式 */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 6px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 160px;
+            z-index: 2000;
+            overflow: hidden;
+            animation: dropdownIn 0.2s ease;
+        }
+        
+        @keyframes dropdownIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: #333;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .dropdown-item:hover {
+            background: #f0f2ff;
+            color: #667eea;
+        }
+        
+        .dropdown-item + .dropdown-item {
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .toast {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: toastIn 0.3s ease;
+            max-width: 320px;
+        }
+        
+        .toast.success {
+            border-left: 4px solid #28a745;
+        }
+        
+        .toast.error {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .toast.info {
+            border-left: 4px solid #667eea;
+        }
+        
+        .toast.warning {
+            border-left: 4px solid #ffc107;
+        }
+        
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(30px); }
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .loading-overlay.hidden {
+            display: none;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #555;
+            font-size: 14px;
+        }
+        
+        /* Custom Vditor overrides for better rendering */
         .vditor-toolbar {
-            border-bottom: 1px solid #e1e5e9;
+            border-bottom: 1px solid #e8ecf0;
+            padding: 4px 8px !important;
         }
         
         .vditor-content {
             background: #fff;
         }
         
-        /* 响应式设计 */
+        /* Better code block styling */
+        .vditor-reset pre {
+            border-radius: 8px;
+        }
+        
+        /* Better table styling */
+        .vditor-reset table {
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        /* Print styles for PDF export */
+        @media print {
+            .header, .toast-container, .loading-overlay {
+                display: none !important;
+            }
+            .editor-container {
+                height: auto !important;
+                margin: 0 !important;
+            }
+            body {
+                overflow: visible !important;
+            }
+        }
+        
+        /* Responsive design */
         @media (max-width: 768px) {
             .header {
-                padding: 10px 15px;
+                padding: 10px 12px;
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
             }
             
             .header h1 {
-                font-size: 20px;
+                font-size: 18px;
             }
             
             .header-controls {
-                flex-wrap: wrap;
                 justify-content: center;
+                gap: 6px;
             }
             
             .btn {
-                padding: 6px 12px;
+                padding: 5px 10px;
                 font-size: 12px;
             }
             
+            .mode-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            
             .editor-container {
-                margin: 0 5px;
-                height: calc(100vh - 120px);
+                height: calc(100vh - 100px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .mode-selector {
+                display: none;
+            }
+            
+            .header-controls .btn span.btn-text {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🚀 Vditor Markdown Editor</h1>
+        <h1>Vditor Markdown Editor</h1>
         <div class="header-controls">
             <div class="mode-selector">
-                <button class="mode-btn active" data-mode="wysiwyg">所见即所得</button>
-                <button class="mode-btn" data-mode="ir">即时渲染</button>
-                <button class="mode-btn" data-mode="sv">分屏预览</button>
+                <button class="mode-btn active" data-mode="wysiwyg" title="所见即所得">所见即所得</button>
+                <button class="mode-btn" data-mode="ir" title="即时渲染">即时渲染</button>
+                <button class="mode-btn" data-mode="sv" title="分屏预览">分屏预览</button>
             </div>
-            <!-- <button class="btn" id="export-md">📄 导出MD</button>
-            <button class="btn" id="export-html">🌐 导出HTML</button>
-            <button class="btn" id="export-pdf">📑 导出PDF</button> -->
-            <button class="btn btn-primary" id="save-content">💾 保存</button>
+            
+            <div class="dropdown">
+                <button class="btn" id="export-btn" title="导出文件">
+                    <span>📥</span>
+                    <span class="btn-text">导出</span>
+                </button>
+                <div class="dropdown-menu" id="export-menu">
+                    <button class="dropdown-item" id="export-md">📄 导出 Markdown (.md)</button>
+                    <button class="dropdown-item" id="export-html">🌐 导出 HTML (.html)</button>
+                    <button class="dropdown-item" id="export-pdf">📑 导出 PDF (.pdf)</button>
+                </div>
+            </div>
+            
+            <button class="btn" id="load-file-btn" title="加载MD文件">
+                <span>📂</span>
+                <span class="btn-text">加载</span>
+            </button>
+            <input type="file" id="file-input" accept=".md,.markdown,.txt" style="display:none;">
+            
+            <button class="btn btn-danger" id="clear-cache-btn" title="清除缓存并重新加载默认内容">
+                <span>🗑️</span>
+                <span class="btn-text">清除</span>
+            </button>
+            
+            <button class="btn btn-primary" id="save-content" title="保存到本地 (Ctrl+S)">
+                <span>💾</span>
+                <span class="btn-text">保存</span>
+            </button>
         </div>
     </div>
     
@@ -192,40 +403,261 @@
         <div id="vditor"></div>
     </div>
     
-    <div class="footer">
-        基于 <a href="https://github.com/Vanessa219/vditor" target="_blank" style="color: #667eea; text-decoration: none;">Vditor</a> 构建的现代化 Markdown 编辑器 | 支持所见即所得、即时渲染和分屏预览模式
+    <div class="toast-container" id="toast-container"></div>
+    
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">正在加载编辑器...</div>
     </div>
     
     <!-- Vditor JS -->
-    <script src="https://cdn.jsdelivr.net/npm/vditor@3.10.4/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vditor@3.10.8/dist/index.min.js"></script>
     
-    <!-- Custom Script -->
     <script>
-        let vditor;
+        'use strict';
         
-        // 初始化Vditor编辑器
-        function initVditor(mode = 'wysiwyg') {
+        // ============ Toast Notification System ============
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+            toast.innerHTML = `<span>${icons[type] || ''}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+        
+        // ============ Loading Overlay ============
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+        
+        function showLoading(text) {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.querySelector('.loading-text').textContent = text || '正在处理...';
+            overlay.classList.remove('hidden');
+        }
+        
+        // ============ Global State ============
+        let vditor = null;
+        let isInitialized = false;
+        const STORAGE_KEY = 'vditor-md-content-v2';
+        const MODE_KEY = 'vditor-mode';
+        
+        // ============ Content Loading ============
+        async function loadIntroduceContent() {
+            try {
+                const response = await fetch('./introduce.md?' + Date.now());
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const content = await response.text();
+                if (!content || content.trim().length === 0) {
+                    throw new Error('文件内容为空');
+                }
+                return content;
+            } catch (error) {
+                console.warn('加载 introduce.md 失败:', error);
+                return getFallbackContent();
+            }
+        }
+        
+        function getFallbackContent() {
+            const tick = '`';
+            const fence = '```';
+            return [
+'# 欢迎使用 Vditor Markdown 编辑器',
+'',
+'> 基于 [Vditor](https://github.com/Vanessa219/vditor) 构建的现代化 Markdown 编辑器',
+'',
+'为未来而构建的在线 Markdown 编辑器；轻量且强大：内置粘贴 HTML 自动转换为 Markdown，支持流程图、甘特图、时序图、任务列表，可导出携带样式的图片、PDF、微信公众号特制的 HTML 等等。',
+'',
+'高级版：[https://apollo.abcworld.cloudns.org/markdown/index2.html](https://apollo.abcworld.cloudns.org/markdown/index2.html)',
+'',
+'---',
+'',
+'## 功能特性',
+'',
+'- **三种编辑模式**：所见即所得、即时渲染、分屏预览',
+'- **数学公式**：$E = mc^2$',
+'- **图表支持**：Mermaid / ECharts',
+'- **代码高亮**：多种语言支持',
+'- **导出功能**：Markdown / HTML / PDF',
+'',
+'## 如何使用',
+'',
+'默认为[所见即所得](https://hacpai.com/article/1577370404903?ref=github.com)模式，可通过 ' + tick + '⌘-⇧-M' + tick + '（' + tick + 'Ctrl-⇧-M' + tick + '）进行切换；或通过以下方式：',
+'',
+'- 所见即所得：' + tick + '⌘-⌥-7' + tick + '（' + tick + 'Ctrl-alt-7' + tick + '）；',
+'- 即时渲染：' + tick + '⌘-⌥-8' + tick + '（' + tick + 'Ctrl-alt-8' + tick + '）；',
+'- 分屏渲染：' + tick + '⌘-⌥-9' + tick + '（' + tick + 'Ctrl-alt-9' + tick + '）；',
+'',
+'---',
+'',
+'## 什么是 Markdown',
+'',
+tick + 'Markdown' + tick + ' 是一种方便记忆、书写的纯文本标记语言，用户可以使用这些标记符号，以最小的输入代价，生成极富表现力的文档。它使用简单的符号标记不同的标题，分割不同的段落，**粗体**、*斜体* 或者[超文本链接](https://vue-cli3.lovejade.cn/explore/)，更棒的是，它还可以：',
+'',
+'---',
+'',
+'### 1. 制作待办事宜 Todo 列表',
+'',
+'- [X] 🎉 通常 Markdown 解析器自带的基本功能；',
+'- [X] 🍀 支持**流程图**、**甘特图**、**时序图**、**任务列表**；',
+'- [X] 🏁 支持粘贴 HTML 自动转换为 Markdown；',
+'- [X] 💃🏻 支持插入原生 Emoji、设置常用表情列表；',
+'- [X] 🚑 支持编辑内容保存**本地存储**，防止意外丢失；',
+'- [X] 📝 支持**实时预览**，主窗口大小拖拽，字符计数；',
+'- [X] 🛠 支持常用快捷键(**Tab**)，及代码块添加复制',
+'- [X] ✨ 支持**导出**携带样式的 PDF、PNG、JPEG 等；',
+'- [X] ✨ 升级 Vditor，新增对 ' + tick + 'echarts' + tick + ' 图表的支持；',
+'- [X] 👏 支持检查并格式化 Markdown 语法，使其专业；',
+'- [X] 🌟 增加对**所见即所得**编辑模式的支持；',
+'',
+'---',
+'',
+'### 2. 书写一个质能守恒公式',
+'',
+'$$',
+'E=mc^2',
+'$$',
+'',
+'数学公式 (KaTeX): $E=mc^2$ 和',
+'',
+'$$',
+'\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}',
+'$$',
+'',
+'---',
+'',
+'### 3. 高亮一段代码',
+'',
+fence + 'js',
+'// 给页面里所有的 DOM 元素添加一个 1px 的描边（outline）;',
+'[].forEach.call($$("*"),function(a){',
+'  a.style.outline="1px solid #"+(~~(Math.random()*(1<<24))).toString(16);',
+'})',
+fence,
+'',
+'---',
+'',
+'### 4. 高效绘制流程图',
+'',
+fence + 'mermaid',
+'graph TD',
+'    A[用户请求] --> B[语义解析]',
+'    B --> C[RAG检索]',
+'    C -->|知识库匹配| D[上下文增强]',
+'    C -->|无匹配| E[任务分解]',
+'    D --> E',
+'    E --> F{工具选择}',
+'    F -->|核心工具| G[基础操作]',
+'    F -->|MCP扩展| H[MCP操作]',
+'    G --> I[结果验证]',
+'    H --> I',
+'    I --> J{完成判断}',
+'    J -->|是| K[提交结果]',
+'    J -->|否| E',
+fence,
+'',
+'---',
+'',
+'### 5. 高效绘制序列图',
+'',
+fence + 'mermaid',
+'sequenceDiagram',
+'  participant Alice',
+'  participant Bob',
+'  Alice->John: Hello John, how are you?',
+'  loop Healthcheck',
+'      John->John: Fight against hypochondria',
+'  end',
+'  Note right of John: Rational thoughts prevail...',
+'  John-->Alice: Great!',
+'  John->Bob: How about you?',
+'  Bob-->John: Jolly good!',
+fence,
+'',
+'---',
+'',
+'### 6. 高效绘制甘特图',
+'',
+'> **甘特图**内在思想简单。基本是一条线条图，横轴表示时间，纵轴表示活动（项目），线条表示在整个期间上计划和实际的活动完成情况。',
+'',
+fence + 'mermaid',
+'gantt',
+'  title 项目开发流程',
+'  section 项目确定',
+'    需求分析       :a1, 2019-06-22, 3d',
+'    可行性报告     :after a1, 5d',
+'    概念验证       : 5d',
+'  section 项目实施',
+'    概要设计      :2019-07-05, 5d',
+'    详细设计      :2019-07-08, 10d',
+'    编码          :2019-07-15, 10d',
+'    测试          :2019-07-22, 5d',
+'  section 发布验收',
+'    发布: 2d',
+'    验收: 3d',
+fence,
+'',
+'---',
+'',
+'### 7. 绘制表格',
+'',
+'| 功能 | 在线地址 | 说明 |',
+'|------|---------|------|',
+'| IP查询 | [ip.skk.moe](https://ip.skk.moe/) | 多源查询 |',
+'| IP检测 | [ping0.cc](https://ping0.cc/) | 风控值检测 |',
+'| 多地Ping | [ping.chinaz.com](https://ping.chinaz.com/) | 全国节点 |',
+'| Markdown | [markdown.lovejade.cn](https://markdown.lovejade.cn/) | 在线编辑 |',
+'',
+'---',
+'',
+'### 8. 更详细语法说明',
+'',
+'想要查看更详细的语法说明，可以参考这份 [Markdown 资源列表](https://github.com/nicejade/nice-front-end-tutorial/blob/master/tutorial/markdown-tutorial.md)，涵盖入门至进阶教程，以及资源、平台等信息。',
+'',
+'总而言之，不同于其它**所见即所得**的编辑器：你只需使用键盘专注于书写文本内容，就可以生成印刷级的排版格式。**Markdown 在流畅的书写和印刷级的阅读体验之间找到了平衡。**'
+            ].join('\n');
+        }
+        
+        // ============ Vditor Initialization ============
+        function initVditor(mode) {
+            mode = mode || localStorage.getItem(MODE_KEY) || 'wysiwyg';
+            
             if (vditor) {
                 vditor.destroy();
+                vditor = null;
             }
+            
+            isInitialized = false;
             
             vditor = new Vditor('vditor', {
                 height: '100%',
                 mode: mode,
                 theme: 'classic',
                 icon: 'material',
-                placeholder: '开始编写你的 Markdown 文档...\n\n支持的功能：\n- 📝 三种编辑模式\n- 🧮 数学公式 (KaTeX)\n- 📊 图表支持 (Mermaid)\n- 🎵 五线谱\n- 📋 任务列表\n- 🔗 自动链接\n- 🎨 语法高亮\n- 📱 移动端友好',
+                lang: 'zh_CN',
+                placeholder: '开始编写你的 Markdown 文档...',
+                debugger: false,
+                typewriterMode: false,
                 counter: {
                     enable: true,
                     type: 'text'
                 },
                 cache: {
-                    enable: true,
-                    id: 'vditor-cache'
+                    enable: false  // We manage cache manually to avoid conflicts
                 },
+                tab: '    ',
                 preview: {
-                    delay: 500,
-                    mode: mode === 'sv' ? 'both' : 'editor',
+                    delay: 300,
+                    mode: 'both',
                     hljs: {
                         enable: true,
                         lineNumber: true,
@@ -239,8 +671,17 @@
                         toc: true,
                         mark: true,
                         footnotes: true,
-                        autoSpace: true
-                    }
+                        autoSpace: true,
+                        fixTermTypo: true,
+                        sanitize: false,
+                        listStyle: true,
+                        paragraphBeginningSpace: true
+                    },
+                    actions: []
+                },
+                outline: {
+                    enable: true,
+                    position: 'right'
                 },
                 toolbar: [
                     'emoji',
@@ -248,270 +689,438 @@
                     'bold',
                     'italic',
                     'strike',
-                    'link',
                     '|',
+                    'line',
+                    'quote',
                     'list',
                     'ordered-list',
                     'check',
                     'outdent',
                     'indent',
                     '|',
-                    'quote',
-                    'line',
                     'code',
                     'inline-code',
-                    'insert-before',
-                    'insert-after',
-                    '|',
+                    'link',
                     'table',
+                    '|',
                     'upload',
                     'record',
                     '|',
                     'undo',
                     'redo',
                     '|',
-                    'fullscreen',
                     'edit-mode',
+                    'both',
+                    'outline',
+                    'fullscreen',
+                    '|',
+                    'export',
                     {
                         name: 'more',
                         toolbar: [
-                            'both',
+                            'insert-before',
+                            'insert-after',
                             'code-theme',
                             'content-theme',
-                            'export',
-                            'outline',
-                            'preview',
                             'devtools',
                             'info',
                             'help'
                         ]
                     }
                 ],
+                toolbarConfig: {
+                    pin: true
+                },
                 upload: {
-                    accept: 'image/*,.mp3,.wav,.ogg',
+                    accept: 'image/*,.mp3,.wav,.ogg,.mp4',
                     multiple: false,
-                    filename: name => `${name}_${Date.now()}`,
                     handler: (files) => {
-                        // 这里可以实现文件上传逻辑
-                        console.log('上传文件:', files);
-                        // 返回上传后的URL
+                        // Convert to base64 for images
+                        if (files.length > 0 && files[0].type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const imgMd = `![${files[0].name}](${e.target.result})`;
+                                vditor.insertValue(imgMd);
+                            };
+                            reader.readAsDataURL(files[0]);
+                        }
                         return null;
                     }
                 },
                 after: async () => {
-                    console.log('Vditor 初始化完成');
-                    // 检查是否有保存的内容，如果没有则加载 introduce.md
-                    const savedContent = localStorage.getItem('vditor-content');
-                    if (!savedContent) {
+                    isInitialized = true;
+                    console.log('Vditor 初始化完成, 模式:', mode);
+                    
+                    // Load content: saved > introduce.md
+                    const savedContent = localStorage.getItem(STORAGE_KEY);
+                    if (savedContent) {
+                        vditor.setValue(savedContent);
+                        console.log('已恢复保存的内容');
+                    } else {
                         try {
-                            const defaultContent = await getDefaultContent();
-                            vditor.setValue(defaultContent);
-                            console.log('已加载 introduce.md 内容');
-                        } catch (error) {
-                            console.error('设置默认内容失败:', error);
+                            const introContent = await loadIntroduceContent();
+                            vditor.setValue(introContent);
+                            console.log('已加载 introduce.md 默认内容');
+                        } catch (err) {
+                            console.error('加载默认内容失败:', err);
                             vditor.setValue(getFallbackContent());
                         }
                     }
+                    
+                    hideLoading();
+                    
+                    // Save mode preference
+                    localStorage.setItem(MODE_KEY, mode);
                 }
             });
         }
         
-        // 异步加载 introduce.md 文件内容
-        async function loadIntroduceContent() {
-            try {
-                const response = await fetch('./introduce.md');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const content = await response.text();
-                console.log('成功加载 introduce.md 文件');
-                return content;
-            } catch (error) {
-                console.warn('加载 introduce.md 文件失败，使用默认内容:', error);
-                return getFallbackContent();
-            }
-        }
-        
-        // 获取回退的默认内容
-        function getFallbackContent() {
-            return `# 🚀 欢迎使用 Vditor Markdown 编辑器
-
-> 这是一个基于 [Vditor](https://github.com/Vanessa219/vditor) 构建的现代化 Markdown 编辑器
-
-## ✨ 主要特性
-
-### 📝 三种编辑模式
-- **所见即所得 (WYSIWYG)**: 对不熟悉 Markdown 的用户友好
-- **即时渲染 (IR)**: 类似 Typora 的优雅编辑体验
-- **分屏预览 (SV)**: 传统的分屏编辑模式
-
-### 🧮 数学公式支持
-行内公式：$E = mc^2$
-
-块级公式：
-$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
-
-### 📊 图表支持 (Mermaid)
-\`\`\`mermaid
-graph TD
-    A[开始] --> B{是否了解Markdown?}
-    B -->|是| C[直接使用]
-    B -->|否| D[学习基础语法]
-    D --> C
-    C --> E[创作精彩内容]
-\`\`\`
-
-### 📋 任务列表
-- [x] 支持任务列表
-- [x] 支持数学公式
-- [x] 支持图表绘制
-- [ ] 添加更多功能
-
-### 📝 代码高亮
-\`\`\`javascript
-function hello() {
-    console.log('Hello, Vditor!');
-}
-\`\`\`
-
-### 📊 表格支持
-| 功能 | 支持状态 | 说明 |
-|------|---------|------|
-| 所见即所得 | ✅ | 完全支持 |
-| 即时渲染 | ✅ | 类似 Typora |
-| 分屏预览 | ✅ | 传统模式 |
-| 数学公式 | ✅ | KaTeX 渲染 |
-| 图表绘制 | ✅ | Mermaid 支持 |
-
----
-
-**开始你的创作之旅吧！** 🎉`;
-        }
-        
-        // 获取默认内容（现在异步加载 introduce.md）
-        async function getDefaultContent() {
-            return await loadIntroduceContent();
-        }
-        
-        // 模式切换
+        // ============ Mode Switching ============
         document.querySelectorAll('.mode-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const mode = btn.dataset.mode;
+                if (!isInitialized) return;
                 
-                // 更新按钮状态
+                const mode = btn.dataset.mode;
+                const currentContent = vditor ? vditor.getValue() : '';
+                
+                // Update button state
                 document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
-                // 保存当前内容
-                const currentContent = vditor ? vditor.getValue() : '';
+                // Save current content before switching
+                if (currentContent) {
+                    localStorage.setItem(STORAGE_KEY, currentContent);
+                }
                 
-                // 重新初始化编辑器
-                initVditor(mode);
+                // Reinitialize with new mode
+                showLoading('切换编辑模式...');
                 
-                // 恢复内容
-                setTimeout(() => {
-                    if (currentContent && vditor) {
-                        vditor.setValue(currentContent);
-                    }
-                }, 100);
+                // Small delay to let the UI update
+                requestAnimationFrame(() => {
+                    initVditor(mode);
+                });
             });
         });
         
-        // 导出功能 (暂时注释)
-        /*
+        // ============ Export Functions ============
+        
+        // Dropdown toggle
+        document.getElementById('export-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const menu = document.getElementById('export-menu');
+            menu.classList.toggle('show');
+        });
+        
+        // Close dropdown on outside click
+        document.addEventListener('click', () => {
+            document.getElementById('export-menu').classList.remove('show');
+        });
+        
+        // Export Markdown
         document.getElementById('export-md').addEventListener('click', () => {
-            if (!vditor) return;
+            if (!vditor || !isInitialized) return;
             const content = vditor.getValue();
-            downloadFile(content, 'document.md', 'text/markdown');
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            downloadFile(content, generateFilename('md'), 'text/markdown;charset=utf-8');
+            showToast('Markdown 文件已导出', 'success');
         });
         
+        // Export HTML
         document.getElementById('export-html').addEventListener('click', () => {
-            if (!vditor) return;
-            const html = vditor.getHTML();
-            const fullHtml = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Markdown Document</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; }
-        code { background: #f6f8fa; padding: 2px 4px; border-radius: 3px; }
-        blockquote { border-left: 4px solid #dfe2e5; padding-left: 16px; color: #6a737d; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #dfe2e5; padding: 8px 12px; text-align: left; }
-        th { background: #f6f8fa; }
-    </style>
-</head>
-<body>
-${html}
-</body>
-</html>`;
-            downloadFile(fullHtml, 'document.html', 'text/html');
-        });
-        
-        document.getElementById('export-pdf').addEventListener('click', () => {
-            if (!vditor) return;
-            // 这里可以集成PDF导出功能
-            alert('PDF导出功能需要额外的库支持，请使用浏览器的打印功能导出PDF');
-            window.print();
-        });
-        */
-        
-        document.getElementById('save-content').addEventListener('click', () => {
-            if (!vditor) return;
+            if (!vditor || !isInitialized) return;
             const content = vditor.getValue();
-            localStorage.setItem('vditor-content', content);
-            
-            // 显示保存成功提示
-            const btn = document.getElementById('save-content');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ 已保存';
-            btn.style.background = 'rgba(40, 167, 69, 0.9)';
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '';
-            }, 2000);
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            const html = vditor.getHTML();
+            const fullHtml = buildExportHtml(html);
+            downloadFile(fullHtml, generateFilename('html'), 'text/html;charset=utf-8');
+            showToast('HTML 文件已导出', 'success');
         });
         
-        // 下载文件函数
+        // Export PDF
+        document.getElementById('export-pdf').addEventListener('click', async () => {
+            if (!vditor || !isInitialized) return;
+            const content = vditor.getValue();
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            
+            showLoading('正在生成 PDF...');
+            
+            try {
+                const html = vditor.getHTML();
+                const pdfContainer = document.createElement('div');
+                pdfContainer.innerHTML = html;
+                pdfContainer.style.cssText = `
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
+                    line-height: 1.8;
+                    padding: 20px;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    color: #333;
+                `;
+                
+                // Add basic styles for PDF rendering
+                const style = document.createElement('style');
+                style.textContent = `
+                    h1, h2, h3, h4, h5, h6 { margin: 1em 0 0.5em; page-break-after: avoid; }
+                    h1 { font-size: 2em; border-bottom: 2px solid #667eea; padding-bottom: 0.3em; }
+                    h2 { font-size: 1.5em; border-bottom: 1px solid #e8ecf0; padding-bottom: 0.2em; }
+                    p { margin: 0.8em 0; }
+                    pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; page-break-inside: avoid; font-size: 13px; }
+                    code { background: #f0f2f5; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+                    pre code { background: none; padding: 0; }
+                    blockquote { border-left: 4px solid #667eea; padding: 8px 16px; margin: 1em 0; background: #f8f9ff; border-radius: 0 6px 6px 0; }
+                    table { border-collapse: collapse; width: 100%; margin: 1em 0; page-break-inside: avoid; }
+                    th, td { border: 1px solid #dfe2e5; padding: 8px 12px; text-align: left; }
+                    th { background: #f6f8fa; font-weight: 600; }
+                    img { max-width: 100%; height: auto; }
+                    ul, ol { padding-left: 2em; margin: 0.5em 0; }
+                    li { margin: 0.3em 0; }
+                    hr { border: none; border-top: 2px solid #e8ecf0; margin: 2em 0; }
+                    a { color: #667eea; text-decoration: none; }
+                `;
+                pdfContainer.prepend(style);
+                
+                document.body.appendChild(pdfContainer);
+                
+                const opt = {
+                    margin: [10, 10, 10, 10],
+                    filename: generateFilename('pdf'),
+                    image: { type: 'jpeg', quality: 0.95 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        letterRendering: true,
+                        scrollY: 0
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+                
+                await html2pdf().set(opt).from(pdfContainer).save();
+                
+                document.body.removeChild(pdfContainer);
+                hideLoading();
+                showToast('PDF 文件已导出', 'success');
+            } catch (error) {
+                hideLoading();
+                console.error('PDF 导出失败:', error);
+                showToast('PDF 导出失败: ' + error.message, 'error');
+            }
+        });
+        
+        // ============ File Loading ============
+        document.getElementById('load-file-btn').addEventListener('click', () => {
+            document.getElementById('file-input').click();
+        });
+        
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const content = event.target.result;
+                if (vditor && isInitialized) {
+                    vditor.setValue(content);
+                    localStorage.setItem(STORAGE_KEY, content);
+                    showToast(`已加载文件: ${file.name}`, 'success');
+                }
+            };
+            reader.onerror = () => {
+                showToast('文件读取失败', 'error');
+            };
+            reader.readAsText(file);
+            
+            // Reset input so same file can be loaded again
+            e.target.value = '';
+        });
+        
+        // ============ Save Content ============
+        document.getElementById('save-content').addEventListener('click', () => {
+            if (!vditor || !isInitialized) return;
+            saveContent();
+        });
+        
+        function saveContent() {
+            const content = vditor.getValue();
+            localStorage.setItem(STORAGE_KEY, content);
+            showToast('内容已保存到本地存储', 'success');
+        }
+        
+        // ============ Clear Cache ============
+        document.getElementById('clear-cache-btn').addEventListener('click', async () => {
+            if (!confirm('确定要清除缓存吗？这将加载默认的 introduce.md 内容。')) return;
+            
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem('vditor-cache');  // Clear old cache too
+            
+            if (vditor && isInitialized) {
+                const content = await loadIntroduceContent();
+                vditor.setValue(content);
+                showToast('缓存已清除，已加载默认内容', 'success');
+            }
+        });
+        
+        // ============ Utility Functions ============
         function downloadFile(content, filename, mimeType) {
             const blob = new Blob([content], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = filename;
+            a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            
+            // Cleanup
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
         }
         
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', async () => {
-            initVditor('wysiwyg');
-            
-            // 如果有保存的内容，延迟恢复（让 Vditor 的 after 回调先执行）
-            const savedContent = localStorage.getItem('vditor-content');
-            if (savedContent) {
-                setTimeout(() => {
-                    if (vditor) {
-                        vditor.setValue(savedContent);
-                        console.log('已恢复保存的内容');
-                    }
-                }, 800);
+        function generateFilename(ext) {
+            const now = new Date();
+            const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+            const timeStr = `${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+            return `markdown_${dateStr}_${timeStr}.${ext}`;
+        }
+        
+        function buildExportHtml(bodyHtml) {
+            return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.10.8/dist/css/content-theme/light.css"/>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: #fff;
+        }
+        h1 { border-bottom: 2px solid #667eea; padding-bottom: 0.3em; }
+        h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.2em; }
+        pre { background: #f6f8fa; padding: 16px; border-radius: 8px; overflow-x: auto; }
+        code { background: #f0f2f5; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        pre code { background: none; padding: 0; }
+        blockquote { border-left: 4px solid #667eea; padding: 8px 16px; margin: 1em 0; background: #f8f9ff; border-radius: 0 6px 6px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+        th, td { border: 1px solid #dfe2e5; padding: 8px 12px; text-align: left; }
+        th { background: #f6f8fa; font-weight: 600; }
+        img { max-width: 100%; height: auto; border-radius: 4px; }
+        a { color: #667eea; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        hr { border: none; border-top: 2px solid #eaecef; margin: 2em 0; }
+    </style>
+</head>
+<body class="vditor-reset">
+${bodyHtml}
+</body>
+</html>`;
+        }
+        
+        // ============ Keyboard Shortcuts ============
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
+                switch(e.key.toLowerCase()) {
+                    case 's':
+                        e.preventDefault();
+                        if (vditor && isInitialized) saveContent();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        document.getElementById('export-btn').click();
+                        break;
+                }
+            }
+            // Ctrl+Shift+P for PDF export
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                document.getElementById('export-pdf').click();
             }
         });
         
-        // 键盘快捷键
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 's':
-                        e.preventDefault();
-                        document.getElementById('save-content').click();
-                        break;
+        // ============ Auto-save (every 30 seconds) ============
+        setInterval(() => {
+            if (vditor && isInitialized) {
+                const content = vditor.getValue();
+                if (content && content.trim()) {
+                    localStorage.setItem(STORAGE_KEY, content);
+                }
+            }
+        }, 30000);
+        
+        // ============ Drag & Drop file support ============
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.name.match(/\.(md|markdown|txt)$/i)) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        if (vditor && isInitialized) {
+                            vditor.setValue(event.target.result);
+                            localStorage.setItem(STORAGE_KEY, event.target.result);
+                            showToast(`已加载拖入的文件: ${file.name}`, 'success');
+                        }
+                    };
+                    reader.readAsText(file);
+                } else {
+                    showToast('仅支持 .md / .markdown / .txt 文件', 'warning');
+                }
+            }
+        });
+        
+        // ============ Initialize ============
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial mode button state
+            const savedMode = localStorage.getItem(MODE_KEY) || 'wysiwyg';
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === savedMode);
+            });
+            
+            // Check if Vditor loaded
+            if (typeof Vditor === 'undefined') {
+                hideLoading();
+                showToast('Vditor 编辑器加载失败，请检查网络连接', 'error', 5000);
+                return;
+            }
+            
+            initVditor(savedMode);
+        });
+        
+        // ============ Before Unload - Auto save ============
+        window.addEventListener('beforeunload', () => {
+            if (vditor && isInitialized) {
+                const content = vditor.getValue();
+                if (content && content.trim()) {
+                    localStorage.setItem(STORAGE_KEY, content);
                 }
             }
         });
