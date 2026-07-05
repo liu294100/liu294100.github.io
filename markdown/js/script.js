@@ -842,15 +842,53 @@ window.addEventListener('DOMContentLoaded', (event) => {
             const svg = block.querySelector('svg');
             if (svg) {
                 try {
-                    // Serialize SVG to a base64 data URL (avoids blob URL issues with html2canvas)
-                    const svgData = new XMLSerializer().serializeToString(svg);
+                    // Get actual rendered dimensions
+                    const svgRect = svg.getBoundingClientRect();
+                    const svgWidth = svgRect.width || svg.getAttribute('width') || 600;
+                    const svgHeight = svgRect.height || svg.getAttribute('height') || 400;
+                    
+                    // Clone SVG so we can modify without affecting original
+                    const svgClone = svg.cloneNode(true);
+                    
+                    // Ensure the SVG has explicit width/height and viewBox for proper standalone rendering
+                    if (!svgClone.getAttribute('viewBox')) {
+                        svgClone.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+                    }
+                    svgClone.setAttribute('width', svgWidth);
+                    svgClone.setAttribute('height', svgHeight);
+                    
+                    // Ensure xmlns is present
+                    if (!svgClone.getAttribute('xmlns')) {
+                        svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                    }
+                    if (!svgClone.getAttribute('xmlns:xlink')) {
+                        svgClone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+                    }
+                    
+                    // Inline computed styles for all elements inside SVG to preserve Mermaid's scoped styles
+                    const allElements = svgClone.querySelectorAll('*');
+                    const originalElements = svg.querySelectorAll('*');
+                    allElements.forEach((el, idx) => {
+                        if (originalElements[idx]) {
+                            const computed = window.getComputedStyle(originalElements[idx]);
+                            // Only inline critical visual properties
+                            const importantProps = ['fill', 'stroke', 'stroke-width', 'opacity', 'font-family', 'font-size', 'font-weight', 'text-anchor', 'dominant-baseline', 'transform'];
+                            importantProps.forEach(prop => {
+                                const val = computed.getPropertyValue(prop);
+                                if (val && val !== '' && val !== 'none' && val !== 'normal' && val !== '0px') {
+                                    el.style.setProperty(prop, val);
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Serialize SVG to a base64 data URL
+                    const svgData = new XMLSerializer().serializeToString(svgClone);
                     const base64 = btoa(unescape(encodeURIComponent(svgData)));
                     const dataUrl = 'data:image/svg+xml;base64,' + base64;
-                    const svgRect = svg.getBoundingClientRect();
-                    const svgWidth = svgRect.width || 600;
                     
                     mermaidBackup.push({ block, originalHTML: block.innerHTML });
-                    block.innerHTML = `<img src="${dataUrl}" style="width:${svgWidth}px;max-width:100%;height:auto;display:block;margin:0 auto;" />`;
+                    block.innerHTML = `<img src="${dataUrl}" style="width:100%;max-width:${svgWidth}px;height:auto;display:block;margin:0 auto;" />`;
                 } catch (e) {
                     console.warn('Failed to convert Mermaid SVG to image for PDF:', e);
                     mermaidBackup.push({ block, originalHTML: block.innerHTML });
@@ -984,6 +1022,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 margin: 16px 0 !important;
                 text-align: center !important;
                 page-break-inside: avoid !important;
+                overflow: visible !important;
+            }
+            .mermaid img {
+                max-width: 100% !important;
+                width: auto !important;
+                height: auto !important;
+                display: block !important;
+                margin: 0 auto !important;
             }
             .mermaid svg {
                 max-width: 100% !important;
@@ -1042,12 +1088,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
             
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
+            const canvasScale = options.scale || 2; // The scale used in html2canvas
             
-            // Calculate width ratio to fill PDF width while maintaining proportions
-            const widthRatio = usableWidth / (imgWidth * 0.264583);
+            // Convert canvas pixels to actual content pixels (divide by scale)
+            const contentWidthPx = imgWidth / canvasScale;
+            const contentHeightPx = imgHeight / canvasScale;
+            
+            // Calculate the ratio to fit content width into the usable PDF width
+            // 1px at 96dpi = 0.264583mm
+            const contentWidthMm = contentWidthPx * 0.264583;
+            const widthRatio = usableWidth / contentWidthMm;
             
             const finalWidth = usableWidth; // Use full PDF width
-            const finalHeight = imgHeight * 0.264583 * widthRatio;
+            const finalHeight = contentHeightPx * 0.264583 * widthRatio;
             
             // Position content at margin
             const xPos = margin;
@@ -1056,7 +1109,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             // Smart pagination for better content splitting
             if (finalHeight > usableHeight) {
                 console.log("Content requires pagination...");
-                const pageHeight = usableHeight / widthRatio / 0.264583; // Convert back to canvas pixels
+                // pageHeight in canvas pixels (accounting for scale)
+                const pageHeightCanvasPx = (usableHeight / widthRatio / 0.264583) * canvasScale;
                 let currentY = 0;
                 let pageNum = 0;
                 
@@ -1066,7 +1120,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     }
                     
                     const remainingHeight = imgHeight - currentY;
-                    const sliceHeight = Math.min(pageHeight, remainingHeight);
+                    const sliceHeight = Math.min(pageHeightCanvasPx, remainingHeight);
                     
                     // Create a canvas for this page
                     const pageCanvas = document.createElement('canvas');
@@ -1077,8 +1131,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     // Draw the slice
                     pageCtx.drawImage(canvas, 0, currentY, imgWidth, sliceHeight, 0, 0, imgWidth, sliceHeight);
                     
-                    const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.9);
-                    const pageImgHeight = sliceHeight * 0.264583 * widthRatio;
+                    const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.92);
+                    // Convert slice height back to mm for PDF placement
+                    const pageImgHeight = (sliceHeight / canvasScale) * 0.264583 * widthRatio;
                     
                     pdf.addImage(pageImgData, 'JPEG', xPos, margin, finalWidth, pageImgHeight);
                     
@@ -1087,7 +1142,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
             } else {
                 // Single page
-                const imgData = canvas.toDataURL('image/jpeg', 0.9);
+                const imgData = canvas.toDataURL('image/jpeg', 0.92);
                 pdf.addImage(imgData, 'JPEG', xPos, yPos, finalWidth, finalHeight);
             }
             
@@ -1152,7 +1207,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             if (editor) editor.refresh();
         });
         }); // End Promise.all().then()
-        }, 100);
+        }, 300);
     }
 
     // Copy functions
