@@ -573,8 +573,62 @@ window.addEventListener('DOMContentLoaded', (event) => {
         
         // Wait a moment for layout to settle
         setTimeout(() => {
+            // --- Pre-process: Convert ECharts canvas to static images ---
+            const echartsContainers = previewElement.querySelectorAll('.echarts-container');
+            const echartsBackup = [];
+            echartsContainers.forEach((container) => {
+                const chartInstance = typeof echarts !== 'undefined' ? echarts.getInstanceByDom(container) : null;
+                if (chartInstance) {
+                    try {
+                        const dataUrl = chartInstance.getDataURL({
+                            type: 'png',
+                            pixelRatio: 2,
+                            backgroundColor: chartInstance.getOption().backgroundColor || '#fff'
+                        });
+                        echartsBackup.push({ container, originalHTML: container.innerHTML });
+                        container.innerHTML = `<img src="${dataUrl}" style="width:100%;height:auto;display:block;" />`;
+                    } catch (e) {
+                        console.warn('Failed to convert ECharts for PNG export:', e);
+                        echartsBackup.push({ container, originalHTML: container.innerHTML });
+                    }
+                } else {
+                    const canvas = container.querySelector('canvas');
+                    if (canvas) {
+                        try {
+                            const dataUrl = canvas.toDataURL('image/png');
+                            echartsBackup.push({ container, originalHTML: container.innerHTML });
+                            container.innerHTML = `<img src="${dataUrl}" style="width:100%;height:auto;display:block;" />`;
+                        } catch (e) {
+                            echartsBackup.push({ container, originalHTML: container.innerHTML });
+                        }
+                    }
+                }
+            });
+
+            // --- Pre-process: Convert Mermaid SVGs to inline images ---
+            const mermaidBlocks = previewElement.querySelectorAll('.mermaid');
+            const mermaidBackup = [];
+            mermaidBlocks.forEach((block) => {
+                const svg = block.querySelector('svg');
+                if (svg) {
+                    try {
+                        const svgData = new XMLSerializer().serializeToString(svg);
+                        const base64 = btoa(unescape(encodeURIComponent(svgData)));
+                        const dataUrl = 'data:image/svg+xml;base64,' + base64;
+                        const svgRect = svg.getBoundingClientRect();
+                        const svgWidth = svgRect.width || 600;
+                        
+                        mermaidBackup.push({ block, originalHTML: block.innerHTML });
+                        block.innerHTML = `<img src="${dataUrl}" style="width:${svgWidth}px;max-width:100%;height:auto;display:block;margin:0 auto;" />`;
+                    } catch (e) {
+                        mermaidBackup.push({ block, originalHTML: block.innerHTML });
+                    }
+                }
+            });
+
             const options = {
                  useCORS: true,
+                 allowTaint: true,
                  logging: false,
                  scale: window.devicePixelRatio * 1.5,
                  backgroundColor: '#ffffff',
@@ -592,6 +646,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                  link.click();
                  link.remove();
                  
+                 // Restore ECharts and Mermaid
+                 echartsBackup.forEach(({ container, originalHTML }) => { container.innerHTML = originalHTML; });
+                 mermaidBackup.forEach(({ block, originalHTML }) => { block.innerHTML = originalHTML; });
+                 renderPreview();
+                 
                  // Restore original layout
                  if (!wasHidden) {
                      editorPane?.classList.remove('hidden');
@@ -603,6 +662,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
              }).catch(err => {
                  console.error("Export PNG failed:", err);
                  alert(`导出 PNG 失败: ${err.message}\n请检查浏览器控制台获取详细信息。`);
+                 
+                 // Restore ECharts and Mermaid on error
+                 echartsBackup.forEach(({ container, originalHTML }) => { container.innerHTML = originalHTML; });
+                 mermaidBackup.forEach(({ block, originalHTML }) => { block.innerHTML = originalHTML; });
+                 renderPreview();
                  
                  // Restore layout even on error
                  if (!wasHidden) {
@@ -630,8 +694,69 @@ window.addEventListener('DOMContentLoaded', (event) => {
             previewElement?.classList.add('full-width');
         }
         
-        // Wait a moment for layout to settle
+        // Wait a moment for layout to settle and charts to render
         setTimeout(() => {
+
+        // --- Pre-process: Convert ECharts canvas to static images before cloning ---
+        const echartsContainers = previewElement.querySelectorAll('.echarts-container');
+        const echartsBackup = []; // Store original content for restoration
+        echartsContainers.forEach((container) => {
+            const chartInstance = typeof echarts !== 'undefined' ? echarts.getInstanceByDom(container) : null;
+            if (chartInstance) {
+                try {
+                    // Get the chart as a data URL image
+                    const dataUrl = chartInstance.getDataURL({
+                        type: 'png',
+                        pixelRatio: 2,
+                        backgroundColor: chartInstance.getOption().backgroundColor || '#fff'
+                    });
+                    // Backup original innerHTML
+                    echartsBackup.push({ container, originalHTML: container.innerHTML });
+                    // Replace canvas with a static image
+                    container.innerHTML = `<img src="${dataUrl}" style="width:100%;height:auto;display:block;" />`;
+                } catch (e) {
+                    console.warn('Failed to convert ECharts to image for PDF:', e);
+                    echartsBackup.push({ container, originalHTML: container.innerHTML });
+                }
+            } else {
+                // No chart instance - the container might just have a canvas from a previous render
+                const canvas = container.querySelector('canvas');
+                if (canvas) {
+                    try {
+                        const dataUrl = canvas.toDataURL('image/png');
+                        echartsBackup.push({ container, originalHTML: container.innerHTML });
+                        container.innerHTML = `<img src="${dataUrl}" style="width:100%;height:auto;display:block;" />`;
+                    } catch (e) {
+                        console.warn('Failed to convert canvas to image for PDF:', e);
+                        echartsBackup.push({ container, originalHTML: container.innerHTML });
+                    }
+                }
+            }
+        });
+
+        // --- Pre-process: Convert Mermaid SVGs to inline images for better html2canvas compatibility ---
+        const mermaidBlocks = previewElement.querySelectorAll('.mermaid');
+        const mermaidBackup = [];
+        mermaidBlocks.forEach((block) => {
+            const svg = block.querySelector('svg');
+            if (svg) {
+                try {
+                    // Serialize SVG to a base64 data URL (avoids blob URL issues with html2canvas)
+                    const svgData = new XMLSerializer().serializeToString(svg);
+                    const base64 = btoa(unescape(encodeURIComponent(svgData)));
+                    const dataUrl = 'data:image/svg+xml;base64,' + base64;
+                    const svgRect = svg.getBoundingClientRect();
+                    const svgWidth = svgRect.width || 600;
+                    
+                    mermaidBackup.push({ block, originalHTML: block.innerHTML });
+                    block.innerHTML = `<img src="${dataUrl}" style="width:${svgWidth}px;max-width:100%;height:auto;display:block;margin:0 auto;" />`;
+                } catch (e) {
+                    console.warn('Failed to convert Mermaid SVG to image for PDF:', e);
+                    mermaidBackup.push({ block, originalHTML: block.innerHTML });
+                }
+            }
+        });
+
         // Create a temporary container for PDF export with proper styling
          const exportContainer = document.createElement('div');
          // Use a wider container for better PDF layout
@@ -662,6 +787,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 max-width: none !important;
                 margin: 0 !important;
                 padding: 0 !important;
+            }
+            .echarts-container {
+                margin: 16px 0 !important;
+                page-break-inside: avoid !important;
+                background: #212121 !important;
+                border-radius: 6px !important;
+                padding: 8px !important;
+            }
+            .echarts-container img {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
             }
             .markdown-body h1 {
                 font-size: 24px !important;
@@ -763,17 +900,28 @@ window.addEventListener('DOMContentLoaded', (event) => {
         exportContainer.appendChild(clonedContent);
         document.body.appendChild(exportContainer);
         
+        // Wait for all images in the export container to load before capturing
+        const allImages = exportContainer.querySelectorAll('img');
+        const imageLoadPromises = Array.from(allImages).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise((resolve) => {
+                img.onload = resolve;
+                img.onerror = resolve; // Don't block on failed images
+            });
+        });
+        
+        Promise.all(imageLoadPromises).then(() => {
         // Use html2canvas with optimized settings for PDF
         const options = {
             useCORS: true,
+            allowTaint: true,
             logging: false,
-            scale: 1, // Keep original scale to maintain font size
+            scale: 2, // Higher scale for better quality charts
             backgroundColor: '#ffffff',
             width: exportContainer.scrollWidth,
             height: exportContainer.scrollHeight,
             windowWidth: exportContainer.scrollWidth,
-            windowHeight: exportContainer.scrollHeight,
-            removeContainer: true
+            windowHeight: exportContainer.scrollHeight
         };
         
         html2canvas(exportContainer, options).then(canvas => {
@@ -849,6 +997,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
             // Clean up
             document.body.removeChild(exportContainer);
             
+            // Restore ECharts original content
+            echartsBackup.forEach(({ container, originalHTML }) => {
+                container.innerHTML = originalHTML;
+            });
+            
+            // Restore Mermaid original content
+            mermaidBackup.forEach(({ block, originalHTML }) => {
+                block.innerHTML = originalHTML;
+            });
+            
+            // Re-render preview to restore live charts
+            renderPreview();
+            
             // Restore original layout
             if (!wasHidden) {
                 editorPane?.classList.remove('hidden');
@@ -867,6 +1028,19 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 document.body.removeChild(exportContainer);
             }
             
+            // Restore ECharts original content on error
+            echartsBackup.forEach(({ container, originalHTML }) => {
+                container.innerHTML = originalHTML;
+            });
+            
+            // Restore Mermaid original content on error
+            mermaidBackup.forEach(({ block, originalHTML }) => {
+                block.innerHTML = originalHTML;
+            });
+            
+            // Re-render preview to restore live charts
+            renderPreview();
+            
             // Restore layout even on error
             if (!wasHidden) {
                 editorPane?.classList.remove('hidden');
@@ -876,6 +1050,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             }
             if (editor) editor.refresh();
         });
+        }); // End Promise.all().then()
         }, 100);
     }
 
