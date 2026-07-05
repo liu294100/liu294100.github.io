@@ -534,38 +534,44 @@ window.addEventListener('DOMContentLoaded', (event) => {
         // Clone the preview content to avoid modifying the live DOM
         const clonedPreview = previewElement.cloneNode(true);
 
-        // Process Mermaid: Keep the rendered SVGs but make them self-contained
+        // Process Mermaid: Convert SVGs to standalone data URI images
+        // This is the most reliable approach since Mermaid 10.x uses scoped CSS 
+        // inside SVGs that can break when serialized via innerHTML
         if (hasMermaid) {
-            const mermaidDivs = clonedPreview.querySelectorAll('div.mermaid');
-            mermaidDivs.forEach((div) => {
-                const svg = div.querySelector('svg');
-                if (svg) {
-                    // Make the SVG self-contained by inlining all necessary attributes
-                    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-                    svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-                    
-                    // Ensure the SVG has proper width/height for standalone display
-                    if (!svg.getAttribute('width') || svg.getAttribute('width') === '100%') {
-                        // Get viewBox dimensions for sizing
-                        const viewBox = svg.getAttribute('viewBox');
-                        if (viewBox) {
-                            const parts = viewBox.split(/[\s,]+/);
-                            if (parts.length === 4) {
-                                const vbWidth = parseFloat(parts[2]);
-                                const vbHeight = parseFloat(parts[3]);
-                                svg.style.maxWidth = '100%';
-                                svg.style.height = 'auto';
-                                svg.setAttribute('width', vbWidth);
-                                svg.setAttribute('height', vbHeight);
-                            }
+            // Work with the ORIGINAL preview elements (not cloned) to get proper computed styles
+            const originalMermaidDivs = previewElement.querySelectorAll('div.mermaid');
+            const clonedMermaidDivs = clonedPreview.querySelectorAll('div.mermaid');
+            
+            originalMermaidDivs.forEach((originalDiv, index) => {
+                const svg = originalDiv.querySelector('svg');
+                const clonedDiv = clonedMermaidDivs[index];
+                if (svg && clonedDiv) {
+                    try {
+                        // Serialize the SVG with all its internal styles intact
+                        const serializer = new XMLSerializer();
+                        let svgString = serializer.serializeToString(svg);
+                        
+                        // Ensure xmlns is present
+                        if (!svgString.includes('xmlns="http://www.w3.org/2000/svg"')) {
+                            svgString = svgString.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
                         }
+                        
+                        // Convert to a data URI
+                        const encoded = btoa(unescape(encodeURIComponent(svgString)));
+                        const dataUri = 'data:image/svg+xml;base64,' + encoded;
+                        
+                        // Get dimensions
+                        const rect = svg.getBoundingClientRect();
+                        const width = rect.width || svg.viewBox?.baseVal?.width || 600;
+                        
+                        // Replace the cloned div content with an img tag
+                        clonedDiv.innerHTML = `<img src="${dataUri}" style="max-width:100%;height:auto;display:block;margin:0 auto;" alt="Mermaid Diagram" />`;
+                        clonedDiv.removeAttribute('data-processed');
+                        clonedDiv.removeAttribute('data-id');
+                    } catch (e) {
+                        console.error("Error converting Mermaid SVG to image:", e);
+                        // Fallback: keep the SVG as-is in the clone
                     }
-                    
-                    // Keep only the SVG in the mermaid div, remove any leftover text
-                    div.innerHTML = '';
-                    div.appendChild(svg);
-                    div.removeAttribute('data-processed');
-                    div.removeAttribute('data-id');
                 }
             });
         }
