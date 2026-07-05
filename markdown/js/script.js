@@ -516,39 +516,58 @@ window.addEventListener('DOMContentLoaded', (event) => {
     function exportHtml() {
         if (!previewElement) return;
         console.log("Exporting HTML...");
-        const previewContent = previewElement.innerHTML;
 
-        // Check if there are Mermaid diagrams in the content
-        const hasMermaid = previewElement.querySelectorAll('div.mermaid').length > 0;
-
-        // For Mermaid: convert rendered SVGs back to source code for re-rendering in exported file,
-        // OR keep the SVGs as-is. We'll keep rendered SVGs and also include a fallback.
-        // Strategy: replace rendered mermaid divs with the original source code so Mermaid JS can re-render them.
-        let exportContent = previewContent;
+        // Wait for any pending Mermaid rendering to complete
+        const mermaidDivsInPreview = previewElement.querySelectorAll('div.mermaid');
+        const hasMermaid = mermaidDivsInPreview.length > 0;
+        
+        // Check if Mermaid has finished rendering (all divs should have SVGs)
         if (hasMermaid) {
-            // The rendered mermaid divs contain SVGs. We need the original source text.
-            // Re-render from markdown source to get the raw mermaid code blocks
-            const markdownText = editor.getValue();
-            const mermaidBlocks = [];
-            // Extract mermaid code blocks from source
-            markdownText.replace(/```mermaid\s*\n([\s\S]*?)```/g, (match, code) => {
-                mermaidBlocks.push(code.trim());
-            });
+            const allRendered = Array.from(mermaidDivsInPreview).every(div => div.querySelector('svg'));
+            if (!allRendered) {
+                // Wait a bit for rendering to finish, then retry
+                setTimeout(() => exportHtml(), 500);
+                return;
+            }
+        }
 
-            // Replace each rendered mermaid div with source code for re-rendering
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = exportContent;
-            const mermaidDivs = tempDiv.querySelectorAll('div.mermaid');
-            mermaidDivs.forEach((div, index) => {
-                if (index < mermaidBlocks.length) {
-                    // Replace with clean source code for Mermaid to render on load
-                    div.innerHTML = mermaidBlocks[index];
-                    // Remove any data-processed attribute so Mermaid will re-process
+        // Clone the preview content to avoid modifying the live DOM
+        const clonedPreview = previewElement.cloneNode(true);
+
+        // Process Mermaid: Keep the rendered SVGs but make them self-contained
+        if (hasMermaid) {
+            const mermaidDivs = clonedPreview.querySelectorAll('div.mermaid');
+            mermaidDivs.forEach((div) => {
+                const svg = div.querySelector('svg');
+                if (svg) {
+                    // Make the SVG self-contained by inlining all necessary attributes
+                    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                    svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+                    
+                    // Ensure the SVG has proper width/height for standalone display
+                    if (!svg.getAttribute('width') || svg.getAttribute('width') === '100%') {
+                        // Get viewBox dimensions for sizing
+                        const viewBox = svg.getAttribute('viewBox');
+                        if (viewBox) {
+                            const parts = viewBox.split(/[\s,]+/);
+                            if (parts.length === 4) {
+                                const vbWidth = parseFloat(parts[2]);
+                                const vbHeight = parseFloat(parts[3]);
+                                svg.style.maxWidth = '100%';
+                                svg.style.height = 'auto';
+                                svg.setAttribute('width', vbWidth);
+                                svg.setAttribute('height', vbHeight);
+                            }
+                        }
+                    }
+                    
+                    // Keep only the SVG in the mermaid div, remove any leftover text
+                    div.innerHTML = '';
+                    div.appendChild(svg);
                     div.removeAttribute('data-processed');
                     div.removeAttribute('data-id');
                 }
             });
-            exportContent = tempDiv.innerHTML;
         }
 
         // Check if there are ECharts diagrams
@@ -563,9 +582,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             });
 
             if (echartsBlocks.length > 0) {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = exportContent;
-                const echartsDivs = tempDiv.querySelectorAll('.echarts-container');
+                const echartsDivs = clonedPreview.querySelectorAll('.echarts-container');
                 const chartInits = [];
                 echartsDivs.forEach((div, index) => {
                     if (index < echartsBlocks.length) {
@@ -576,8 +593,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     }
                 });
                 // Remove any leftover script.echarts-data tags
-                tempDiv.querySelectorAll('script.echarts-data').forEach(s => s.remove());
-                exportContent = tempDiv.innerHTML;
+                clonedPreview.querySelectorAll('script.echarts-data').forEach(s => s.remove());
                 echartsScript = `
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"><\/script>
     <script>
@@ -594,9 +610,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             }
         }
 
-        const mermaidScript = hasMermaid ? `
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"><\/script>
-    <script>mermaid.initialize({startOnLoad: true, theme: 'default'});<\/script>` : '';
+        const exportContent = clonedPreview.innerHTML;
 
         const fullHtml = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -625,10 +639,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
         .markdown-body hr { height: 0.25em; padding: 0; margin: 24px 0; background-color: #e1e4e8; border: 0; }
         .markdown-body img { max-width: 100%; height: auto; }
         .mermaid { margin: 16px 0; text-align: center; }
+        .mermaid svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
         .echarts-container { width: 100%; height: 400px; margin: 16px 0; }
         .hljs { display: block; overflow-x: auto; padding: 0.8em; background: #f6f8fa; color: #24292e; border-radius: 3px; }
     </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">${mermaidScript}${echartsScript}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">${echartsScript}
 </head>
 <body class="markdown-body">
     ${exportContent}
