@@ -854,9 +854,80 @@ fence,
             showLoading('正在生成 PDF...');
             
             try {
-                const html = vditor.getHTML();
-                const pdfContainer = document.createElement('div');
-                pdfContainer.innerHTML = html;
+                // Get the rendered preview element from Vditor for accurate chart capture
+                // In wysiwyg mode, the content is in .vditor-wysiwyg; in sv/ir mode, use .vditor-preview
+                const vditorEl = document.getElementById('vditor');
+                let sourceElement = vditorEl.querySelector('.vditor-wysiwyg') 
+                    || vditorEl.querySelector('.vditor-preview .vditor-reset') 
+                    || vditorEl.querySelector('.vditor-ir');
+                
+                // Fallback to getHTML() if no rendered DOM found
+                let pdfContainer;
+                
+                if (sourceElement) {
+                    // Clone the live rendered DOM which includes Mermaid SVGs and chart canvases
+                    pdfContainer = document.createElement('div');
+                    const tempSource = sourceElement.cloneNode(true);
+                    
+                    // Convert SVGs (Mermaid diagrams) in the clone to inline images
+                    const svgElements = tempSource.querySelectorAll('svg');
+                    svgElements.forEach(svg => {
+                        try {
+                            const svgData = new XMLSerializer().serializeToString(svg);
+                            const base64 = btoa(unescape(encodeURIComponent(svgData)));
+                            const dataUrl = 'data:image/svg+xml;base64,' + base64;
+                            const img = document.createElement('img');
+                            img.src = dataUrl;
+                            img.style.cssText = 'max-width:100%;height:auto;display:block;margin:16px auto;';
+                            svg.parentNode.replaceChild(img, svg);
+                        } catch (e) {
+                            console.warn('Failed to convert SVG for PDF:', e);
+                        }
+                    });
+                    
+                    // Convert ECharts instances to static images before cloning
+                    if (typeof echarts !== 'undefined') {
+                        const chartContainers = sourceElement.querySelectorAll('[data-type="echarts"], .echarts-container, [class*="echarts"]');
+                        const clonedContainers = tempSource.querySelectorAll('[data-type="echarts"], .echarts-container, [class*="echarts"]');
+                        chartContainers.forEach((container, idx) => {
+                            const chartInstance = echarts.getInstanceByDom(container);
+                            if (chartInstance && clonedContainers[idx]) {
+                                try {
+                                    const dataUrl = chartInstance.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#fff' });
+                                    clonedContainers[idx].innerHTML = `<img src="${dataUrl}" style="max-width:100%;height:auto;display:block;margin:16px auto;" />`;
+                                } catch (e) {
+                                    console.warn('Failed to convert ECharts for PDF:', e);
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Also convert any remaining canvas elements (fallback)
+                    const originalCanvases = Array.from(sourceElement.querySelectorAll('canvas'));
+                    const clonedCanvases = Array.from(tempSource.querySelectorAll('canvas'));
+                    originalCanvases.forEach((originalCanvas, idx) => {
+                        if (clonedCanvases[idx]) {
+                            try {
+                                const dataUrl = originalCanvas.toDataURL('image/png');
+                                if (dataUrl && dataUrl !== 'data:,') {
+                                    const img = document.createElement('img');
+                                    img.src = dataUrl;
+                                    img.style.cssText = 'max-width:100%;height:auto;display:block;margin:16px auto;';
+                                    clonedCanvases[idx].parentNode.replaceChild(img, clonedCanvases[idx]);
+                                }
+                            } catch (e) {
+                                console.warn('Failed to convert canvas for PDF:', e);
+                            }
+                        }
+                    });
+                    
+                    pdfContainer.appendChild(tempSource);
+                } else {
+                    // Fallback: use getHTML()
+                    pdfContainer = document.createElement('div');
+                    pdfContainer.innerHTML = vditor.getHTML();
+                }
+                
                 pdfContainer.style.cssText = `
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
                     line-height: 1.8;
@@ -885,10 +956,23 @@ fence,
                     li { margin: 0.3em 0; }
                     hr { border: none; border-top: 2px solid #e8ecf0; margin: 2em 0; }
                     a { color: #667eea; text-decoration: none; }
+                    svg { max-width: 100%; height: auto; }
+                    .vditor-reset { all: unset; display: block; line-height: 1.8; color: #333; }
+                    .vditor-reset * { max-width: 100%; }
                 `;
                 pdfContainer.prepend(style);
                 
                 document.body.appendChild(pdfContainer);
+                
+                // Wait for images to load
+                const images = pdfContainer.querySelectorAll('img');
+                await Promise.all(Array.from(images).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                    });
+                }));
                 
                 const opt = {
                     margin: [10, 10, 10, 10],
@@ -897,6 +981,7 @@ fence,
                     html2canvas: {
                         scale: 2,
                         useCORS: true,
+                        allowTaint: true,
                         letterRendering: true,
                         scrollY: 0
                     },

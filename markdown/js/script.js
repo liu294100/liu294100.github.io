@@ -533,6 +533,86 @@ window.addEventListener('DOMContentLoaded', (event) => {
             })
             .join('\n');
 
+        // Check if there are Mermaid diagrams in the content
+        const hasMermaid = previewElement.querySelectorAll('div.mermaid').length > 0;
+
+        // For Mermaid: convert rendered SVGs back to source code for re-rendering in exported file,
+        // OR keep the SVGs as-is. We'll keep rendered SVGs and also include a fallback.
+        // Strategy: replace rendered mermaid divs with the original source code so Mermaid JS can re-render them.
+        let exportContent = previewContent;
+        if (hasMermaid) {
+            // The rendered mermaid divs contain SVGs. We need the original source text.
+            // Re-render from markdown source to get the raw mermaid code blocks
+            const markdownText = editor.getValue();
+            const mermaidBlocks = [];
+            // Extract mermaid code blocks from source
+            markdownText.replace(/```mermaid\s*\n([\s\S]*?)```/g, (match, code) => {
+                mermaidBlocks.push(code.trim());
+            });
+
+            // Replace each rendered mermaid div with source code for re-rendering
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = exportContent;
+            const mermaidDivs = tempDiv.querySelectorAll('div.mermaid');
+            mermaidDivs.forEach((div, index) => {
+                if (index < mermaidBlocks.length) {
+                    // Replace with clean source code for Mermaid to render on load
+                    div.innerHTML = mermaidBlocks[index];
+                    // Remove any data-processed attribute so Mermaid will re-process
+                    div.removeAttribute('data-processed');
+                    div.removeAttribute('data-id');
+                }
+            });
+            exportContent = tempDiv.innerHTML;
+        }
+
+        // Check if there are ECharts diagrams
+        const hasEcharts = previewElement.querySelectorAll('.echarts-container').length > 0;
+        let echartsScript = '';
+        if (hasEcharts) {
+            // Extract ECharts options from the markdown source
+            const markdownText = editor.getValue();
+            const echartsBlocks = [];
+            markdownText.replace(/```echarts\s*\n([\s\S]*?)```/g, (match, code) => {
+                echartsBlocks.push(code.trim());
+            });
+
+            if (echartsBlocks.length > 0) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = exportContent;
+                const echartsDivs = tempDiv.querySelectorAll('.echarts-container');
+                const chartInits = [];
+                echartsDivs.forEach((div, index) => {
+                    if (index < echartsBlocks.length) {
+                        const chartId = 'echarts-export-' + index;
+                        div.id = chartId;
+                        div.innerHTML = ''; // Clear any existing content
+                        chartInits.push(`try { var chart${index} = echarts.init(document.getElementById('${chartId}')); chart${index}.setOption(${echartsBlocks[index]}); } catch(e) { document.getElementById('${chartId}').innerHTML = '<pre style=\"color:red\">ECharts Error: ' + e.message + '</pre>'; }`);
+                    }
+                });
+                // Remove any leftover script.echarts-data tags
+                tempDiv.querySelectorAll('script.echarts-data').forEach(s => s.remove());
+                exportContent = tempDiv.innerHTML;
+                echartsScript = `
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"><\/script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            ${chartInits.join('\n            ')}
+            window.addEventListener('resize', function() {
+                document.querySelectorAll('.echarts-container').forEach(function(el) {
+                    var chart = echarts.getInstanceByDom(el);
+                    if (chart) chart.resize();
+                });
+            });
+        });
+    <\/script>`;
+            }
+        }
+
+        const mermaidScript = hasMermaid ? `
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"><\/script>
+    <script>mermaid.initialize({startOnLoad: true, theme: 'default'});<\/script>` : '';
+
         const fullHtml = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -544,14 +624,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ${embeddedStyles}
         /* Ensure base markdown body style is present */
         .markdown-body { line-height: 1.7; color: #24292e; }
-        /* Add any missing essential styles here if needed */
+        .mermaid { margin: 16px 0; text-align: center; }
+        .echarts-container { width: 100%; height: 400px; margin: 16px 0; }
     </style>
-    <!-- Include Mermaid JS if diagrams should be interactive in the export -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"><\/script> -->
-    <!-- <script>mermaid.initialize({startOnLoad: true});<\/script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">${mermaidScript}${echartsScript}
 </head>
 <body class="markdown-body">
-    ${previewContent}
+    ${exportContent}
 </body>
 </html>`;
         downloadFile( (document.getElementById('doc-title')?.value || 'document') + '.html', fullHtml, 'text/html;charset=utf-8');
