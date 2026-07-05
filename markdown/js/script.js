@@ -517,21 +517,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         if (!previewElement) return;
         console.log("Exporting HTML...");
         const previewContent = previewElement.innerHTML;
-        // Embed necessary styles directly for better portability
-        const embeddedStyles = Array.from(document.styleSheets)
-            .filter(sheet => sheet.href === null || sheet.href.includes('style.css') || sheet.href.includes('katex') || sheet.href.includes('highlight')) // Include local and key CDN styles
-            .map(sheet => {
-                try {
-                    return Array.from(sheet.cssRules)
-                        .map(rule => rule.cssText)
-                        .join('\n');
-                } catch (e) {
-                    // Ignore CORS errors for external stylesheets if necessary, or fetch them if possible
-                    console.warn("Could not read rules from stylesheet:", sheet.href, e);
-                    return '';
-                }
-            })
-            .join('\n');
 
         // Check if there are Mermaid diagrams in the content
         const hasMermaid = previewElement.querySelectorAll('div.mermaid').length > 0;
@@ -619,13 +604,29 @@ window.addEventListener('DOMContentLoaded', (event) => {
     <meta charset="UTF-8">
     <title>${document.getElementById('doc-title')?.value || 'Exported Document'}</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        /* Embed crucial styles directly */
-        ${embeddedStyles}
-        /* Ensure base markdown body style is present */
-        .markdown-body { line-height: 1.7; color: #24292e; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 20px 40px; line-height: 1.7; color: #24292e; background: #fff; }
+        .markdown-body { max-width: 860px; margin: 0 auto; line-height: 1.7; color: #24292e; font-size: 16px; }
+        .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }
+        .markdown-body h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid #eaecef; }
+        .markdown-body h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #eaecef; }
+        .markdown-body h3 { font-size: 1.25em; }
+        .markdown-body p { margin-top: 0; margin-bottom: 16px; }
+        .markdown-body a { color: #0366d6; text-decoration: none; }
+        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body ul, .markdown-body ol { margin-top: 0; margin-bottom: 16px; padding-left: 2em; }
+        .markdown-body li { margin-bottom: 0.25em; }
+        .markdown-body blockquote { margin: 0 0 16px 0; padding: 0 1em; color: #6a737d; border-left: 0.25em solid #dfe2e5; }
+        .markdown-body code { padding: 0.2em 0.4em; font-size: 85%; background-color: rgba(27,31,35,0.05); border-radius: 3px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+        .markdown-body pre { margin-bottom: 16px; padding: 16px; overflow: auto; font-size: 85%; line-height: 1.45; background-color: #f6f8fa; border-radius: 6px; }
+        .markdown-body pre code { display: inline; padding: 0; background-color: transparent; border: 0; font-size: 100%; }
+        .markdown-body table { border-collapse: collapse; margin-bottom: 16px; width: auto; }
+        .markdown-body th, .markdown-body td { padding: 6px 13px; border: 1px solid #dfe2e5; }
+        .markdown-body th { font-weight: 600; background-color: #f6f8fa; }
+        .markdown-body hr { height: 0.25em; padding: 0; margin: 24px 0; background-color: #e1e4e8; border: 0; }
+        .markdown-body img { max-width: 100%; height: auto; }
         .mermaid { margin: 16px 0; text-align: center; }
         .echarts-container { width: 100%; height: 400px; margin: 16px 0; }
+        .hljs { display: block; overflow-x: auto; padding: 0.8em; background: #f6f8fa; color: #24292e; border-radius: 3px; }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">${mermaidScript}${echartsScript}
 </head>

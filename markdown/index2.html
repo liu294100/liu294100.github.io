@@ -8,6 +8,9 @@
     <!-- Vditor CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.10.8/dist/index.css" />
     
+    <!-- Font Awesome CSS (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
     <!-- html2pdf for PDF export -->
     <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
     
@@ -370,30 +373,34 @@
             </div>
             
             <div class="dropdown">
-                <button class="btn" id="export-btn" title="导出文件">
-                    <span>📥</span>
+                <button class="btn" id="export-btn" title="保存与导出">
+                    <i class="fas fa-cloud-arrow-down"></i>
                     <span class="btn-text">导出</span>
                 </button>
                 <div class="dropdown-menu" id="export-menu">
-                    <button class="dropdown-item" id="export-md">📄 导出 Markdown (.md)</button>
-                    <button class="dropdown-item" id="export-html">🌐 导出 HTML (.html)</button>
-                    <button class="dropdown-item" id="export-pdf">📑 导出 PDF (.pdf)</button>
+                    <button class="dropdown-item" id="export-png"><i class="fa-regular fa-image fa-fw"></i> 导出图片</button>
+                    <button class="dropdown-item" id="export-md"><i class="fa-regular fa-file-code fa-fw"></i> 导出源文件</button>
+                    <button class="dropdown-item" id="export-pdf"><i class="fa-regular fa-file-pdf fa-fw"></i> 导出PDF文件</button>
+                    <button class="dropdown-item" id="export-html"><i class="fa-brands fa-html5 fa-fw"></i> 导出HTML文件</button>
+                    <button class="dropdown-item" id="copy-md"><i class="fa-regular fa-copy fa-fw"></i> 复制Markdown</button>
+                    <button class="dropdown-item" id="copy-html"><i class="fa-regular fa-clipboard fa-fw"></i> 复制HTML</button>
+                    <button class="dropdown-item" id="copy-wechat"><i class="fa-brands fa-weixin fa-fw"></i> 复制公众号</button>
                 </div>
             </div>
             
             <button class="btn" id="load-file-btn" title="加载MD文件">
-                <span>📂</span>
+                <i class="fas fa-folder-open"></i>
                 <span class="btn-text">加载</span>
             </button>
             <input type="file" id="file-input" accept=".md,.markdown,.txt" style="display:none;">
             
             <button class="btn btn-danger" id="clear-cache-btn" title="清除缓存并重新加载默认内容">
-                <span>🗑️</span>
+                <i class="fas fa-trash-can"></i>
                 <span class="btn-text">清除</span>
             </button>
             
             <button class="btn btn-primary" id="save-content" title="保存到本地 (Ctrl+S)">
-                <span>💾</span>
+                <i class="fas fa-floppy-disk"></i>
                 <span class="btn-text">保存</span>
             </button>
         </div>
@@ -826,6 +833,7 @@ fence,
             }
             downloadFile(content, generateFilename('md'), 'text/markdown;charset=utf-8');
             showToast('Markdown 文件已导出', 'success');
+            document.getElementById('export-menu').classList.remove('show');
         });
         
         // Export HTML
@@ -840,6 +848,207 @@ fence,
             const fullHtml = buildExportHtml(html);
             downloadFile(fullHtml, generateFilename('html'), 'text/html;charset=utf-8');
             showToast('HTML 文件已导出', 'success');
+            document.getElementById('export-menu').classList.remove('show');
+        });
+        
+        // Export PNG
+        document.getElementById('export-png').addEventListener('click', async () => {
+            if (!vditor || !isInitialized) return;
+            const content = vditor.getValue();
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            
+            showLoading('正在生成图片...');
+            document.getElementById('export-menu').classList.remove('show');
+            
+            try {
+                const vditorEl = document.getElementById('vditor');
+                let sourceElement = vditorEl.querySelector('.vditor-wysiwyg') 
+                    || vditorEl.querySelector('.vditor-preview .vditor-reset') 
+                    || vditorEl.querySelector('.vditor-ir');
+                
+                if (!sourceElement) {
+                    throw new Error('无法获取渲染内容');
+                }
+                
+                // Pre-convert SVGs and canvases for html2canvas
+                const svgElements = sourceElement.querySelectorAll('svg');
+                const svgBackup = [];
+                svgElements.forEach(svg => {
+                    try {
+                        const svgData = new XMLSerializer().serializeToString(svg);
+                        const base64 = btoa(unescape(encodeURIComponent(svgData)));
+                        const dataUrl = 'data:image/svg+xml;base64,' + base64;
+                        const img = document.createElement('img');
+                        img.src = dataUrl;
+                        img.style.cssText = 'max-width:100%;height:auto;display:block;margin:0 auto;';
+                        svgBackup.push({ parent: svg.parentNode, original: svg, replacement: img });
+                        svg.parentNode.replaceChild(img, svg);
+                    } catch (e) { /* skip */ }
+                });
+                
+                // Convert ECharts
+                const echartsBackup = [];
+                if (typeof echarts !== 'undefined') {
+                    sourceElement.querySelectorAll('[data-type="echarts"], .echarts-container').forEach(container => {
+                        const chart = echarts.getInstanceByDom(container);
+                        if (chart) {
+                            try {
+                                const dataUrl = chart.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#fff' });
+                                echartsBackup.push({ container, originalHTML: container.innerHTML });
+                                container.innerHTML = `<img src="${dataUrl}" style="width:100%;height:auto;display:block;" />`;
+                            } catch (e) { /* skip */ }
+                        }
+                    });
+                }
+                
+                // Wait for images
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                const canvas = await html2pdf().set({
+                    html2canvas: { scale: 2, useCORS: true, allowTaint: true, scrollY: 0 }
+                }).from(sourceElement).toCanvas();
+                
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = generateFilename('png');
+                link.href = dataUrl;
+                link.click();
+                link.remove();
+                
+                // Restore
+                svgBackup.forEach(({ parent, original, replacement }) => {
+                    if (parent && parent.contains(replacement)) {
+                        parent.replaceChild(original, replacement);
+                    }
+                });
+                echartsBackup.forEach(({ container, originalHTML }) => {
+                    container.innerHTML = originalHTML;
+                });
+                
+                hideLoading();
+                showToast('图片已导出', 'success');
+            } catch (error) {
+                hideLoading();
+                console.error('PNG 导出失败:', error);
+                showToast('图片导出失败: ' + error.message, 'error');
+            }
+        });
+        
+        // Copy Markdown
+        document.getElementById('copy-md').addEventListener('click', async () => {
+            if (!vditor || !isInitialized) return;
+            const content = vditor.getValue();
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            await copyToClipboard(content, 'Markdown源码');
+            document.getElementById('export-menu').classList.remove('show');
+        });
+        
+        // Copy HTML
+        document.getElementById('copy-html').addEventListener('click', async () => {
+            if (!vditor || !isInitialized) return;
+            const content = vditor.getValue();
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            const html = vditor.getHTML();
+            await copyToClipboard(html, 'HTML代码');
+            document.getElementById('export-menu').classList.remove('show');
+        });
+        
+        // Copy WeChat format
+        document.getElementById('copy-wechat').addEventListener('click', async () => {
+            if (!vditor || !isInitialized) return;
+            const content = vditor.getValue();
+            if (!content.trim()) {
+                showToast('编辑器内容为空', 'warning');
+                return;
+            }
+            
+            const html = vditor.getHTML();
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            
+            // Style for WeChat public accounts
+            // Process code blocks
+            tempDiv.querySelectorAll('pre code').forEach(codeBlock => {
+                const codeText = codeBlock.textContent || codeBlock.innerText;
+                const newBlock = document.createElement('pre');
+                newBlock.style.cssText = 'background-color:#f5f5f5;padding:10px;border-radius:5px;border-left:4px solid #667eea;overflow-x:auto;font-family:Consolas,Monaco,monospace;font-size:14px;line-height:1.5;white-space:pre-wrap;';
+                newBlock.textContent = codeText;
+                codeBlock.parentNode.replaceWith(newBlock);
+            });
+            
+            // Process blockquotes
+            tempDiv.querySelectorAll('blockquote').forEach(bq => {
+                bq.style.cssText = 'border-left:4px solid #667eea;margin:0;padding:0 15px;color:#777;background:#f8f9ff;border-radius:0 6px 6px 0;';
+            });
+            
+            // Process headings
+            tempDiv.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(heading => {
+                const level = heading.tagName.toLowerCase();
+                if (level === 'h1') {
+                    heading.style.cssText = 'color:#2c3e50;border-bottom:2px solid #667eea;padding-bottom:10px;';
+                } else if (level === 'h2') {
+                    heading.style.cssText = 'color:#2c3e50;border-bottom:1px solid #bdc3c7;padding-bottom:8px;';
+                } else {
+                    heading.style.cssText = 'color:#34495e;';
+                }
+            });
+            
+            // Process paragraphs
+            tempDiv.querySelectorAll('p').forEach(p => {
+                p.style.cssText = 'line-height:1.8;margin:1em 0;';
+            });
+            
+            // Process links
+            tempDiv.querySelectorAll('a').forEach(link => {
+                link.style.cssText = 'color:#667eea;text-decoration:none;';
+            });
+            
+            // Process strong
+            tempDiv.querySelectorAll('strong').forEach(s => {
+                s.style.cssText = 'color:#e74c3c;';
+            });
+            
+            // Process em
+            tempDiv.querySelectorAll('em').forEach(em => {
+                em.style.cssText = 'color:#9b59b6;';
+            });
+            
+            // Process tables
+            tempDiv.querySelectorAll('table').forEach(table => {
+                table.style.cssText = 'border-collapse:collapse;width:100%;margin:1em 0;';
+            });
+            tempDiv.querySelectorAll('th,td').forEach(cell => {
+                cell.style.cssText = 'border:1px solid #dfe2e5;padding:8px 12px;text-align:left;';
+            });
+            tempDiv.querySelectorAll('th').forEach(th => {
+                th.style.cssText += 'background:#f6f8fa;font-weight:600;';
+            });
+            
+            // Remove Mermaid/chart placeholders
+            tempDiv.querySelectorAll('svg, canvas, [data-type="mermaid"], [data-type="echarts"]').forEach(el => {
+                const placeholder = document.createElement('p');
+                placeholder.style.cssText = 'color:#e67e22;font-style:italic;';
+                placeholder.textContent = '[此处包含图表，请在原文中查看]';
+                el.replaceWith(placeholder);
+            });
+            
+            // Remove class/id attributes
+            tempDiv.querySelectorAll('*').forEach(el => {
+                el.removeAttribute('class');
+                el.removeAttribute('id');
+            });
+            
+            await copyToClipboard(tempDiv.innerHTML, '公众号格式');
+            document.getElementById('export-menu').classList.remove('show');
         });
         
         // Export PDF
@@ -851,6 +1060,7 @@ fence,
                 return;
             }
             
+            document.getElementById('export-menu').classList.remove('show');
             showLoading('正在生成 PDF...');
             
             try {
@@ -1076,6 +1286,29 @@ fence,
             }, 100);
         }
         
+        async function copyToClipboard(text, type) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast(`${type} 已复制到剪贴板`, 'success');
+            } catch (err) {
+                console.error('复制失败:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.cssText = 'position:fixed;left:-999999px;top:-999999px;';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast(`${type} 已复制到剪贴板`, 'success');
+                } catch (err2) {
+                    showToast(`复制失败: ${err2.message}`, 'error');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+        
         function generateFilename(ext) {
             const now = new Date();
             const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
@@ -1084,13 +1317,90 @@ fence,
         }
         
         function buildExportHtml(bodyHtml) {
+            // Strategy: Always extract mermaid source from the original markdown,
+            // replace any rendered mermaid content in the HTML with clean <div class="mermaid"> blocks,
+            // and include the Mermaid JS library to render them fresh in the exported file.
+            
+            const mdContent = vditor ? vditor.getValue() : '';
+            const mermaidSources = [];
+            mdContent.replace(/```mermaid\s*\n([\s\S]*?)```/g, (match, code) => {
+                mermaidSources.push(code.trim());
+            });
+            
+            const hasMermaid = mermaidSources.length > 0;
+            let processedHtml = bodyHtml;
+            
+            if (hasMermaid) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = bodyHtml;
+                
+                // Find all possible mermaid containers that Vditor might produce
+                // Vditor uses various structures: data-type="mermaid-chart", class="language-mermaid",
+                // pre > code.language-mermaid, or divs containing rendered SVGs
+                let mermaidElements = tempDiv.querySelectorAll(
+                    '[data-type="mermaid-chart"], .language-mermaid'
+                );
+                
+                // Also check for code.language-mermaid inside pre blocks
+                if (mermaidElements.length === 0) {
+                    const codeBlocks = tempDiv.querySelectorAll('pre code.language-mermaid');
+                    if (codeBlocks.length > 0) {
+                        mermaidElements = Array.from(codeBlocks).map(code => code.closest('pre') || code.parentElement);
+                    }
+                }
+                
+                if (mermaidElements.length > 0) {
+                    // Replace rendered elements with clean mermaid source
+                    mermaidElements.forEach((el, index) => {
+                        if (index < mermaidSources.length) {
+                            const mermaidDiv = document.createElement('div');
+                            mermaidDiv.className = 'mermaid';
+                            mermaidDiv.textContent = mermaidSources[index];
+                            el.replaceWith(mermaidDiv);
+                        }
+                    });
+                } else {
+                    // Fallback: try matching pre/code blocks by content
+                    const allPres = tempDiv.querySelectorAll('pre');
+                    let mermaidIdx = 0;
+                    const mermaidKeywords = ['graph ', 'graph\n', 'sequenceDiagram', 'classDiagram', 
+                        'stateDiagram', 'erDiagram', 'gantt', 'pie ', 'pie\n', 'mindmap', 'timeline', 'journey',
+                        'flowchart ', 'flowchart\n'];
+                    
+                    allPres.forEach(pre => {
+                        if (mermaidIdx >= mermaidSources.length) return;
+                        const code = pre.querySelector('code');
+                        const text = (code || pre).textContent.trim();
+                        
+                        // Match by content comparison or by known mermaid keywords
+                        const isMermaidContent = text === mermaidSources[mermaidIdx] ||
+                            mermaidKeywords.some(kw => text.startsWith(kw));
+                        
+                        if (isMermaidContent) {
+                            const mermaidDiv = document.createElement('div');
+                            mermaidDiv.className = 'mermaid';
+                            mermaidDiv.textContent = mermaidSources[mermaidIdx];
+                            pre.replaceWith(mermaidDiv);
+                            mermaidIdx++;
+                        }
+                    });
+                }
+                
+                processedHtml = tempDiv.innerHTML;
+            }
+            
+            const mermaidScript = hasMermaid ? `
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"><\/script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+    <\/script>` : '';
+            
             return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.10.8/dist/css/content-theme/light.css"/>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
@@ -1101,12 +1411,15 @@ fence,
             color: #2c3e50;
             background: #fff;
         }
-        h1 { border-bottom: 2px solid #667eea; padding-bottom: 0.3em; }
-        h2 { border-bottom: 1px solid #eaecef; padding-bottom: 0.2em; }
-        pre { background: #f6f8fa; padding: 16px; border-radius: 8px; overflow-x: auto; }
-        code { background: #f0f2f5; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
-        pre code { background: none; padding: 0; }
-        blockquote { border-left: 4px solid #667eea; padding: 8px 16px; margin: 1em 0; background: #f8f9ff; border-radius: 0 6px 6px 0; }
+        h1 { font-size: 2em; border-bottom: 2px solid #667eea; padding-bottom: 0.3em; margin: 0.67em 0; }
+        h2 { font-size: 1.5em; border-bottom: 1px solid #eaecef; padding-bottom: 0.2em; margin: 0.83em 0; }
+        h3 { font-size: 1.25em; margin: 1em 0; }
+        h4 { font-size: 1em; margin: 1.33em 0; }
+        p { margin: 1em 0; }
+        pre { background: #f6f8fa; padding: 16px; border-radius: 8px; overflow-x: auto; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 0.85em; line-height: 1.45; }
+        code { background: #f0f2f5; padding: 2px 6px; border-radius: 3px; font-size: 0.85em; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
+        pre code { background: none; padding: 0; font-size: inherit; }
+        blockquote { border-left: 4px solid #667eea; padding: 8px 16px; margin: 1em 0; background: #f8f9ff; border-radius: 0 6px 6px 0; color: #6a737d; }
         table { border-collapse: collapse; width: 100%; margin: 1em 0; }
         th, td { border: 1px solid #dfe2e5; padding: 8px 12px; text-align: left; }
         th { background: #f6f8fa; font-weight: 600; }
@@ -1114,10 +1427,15 @@ fence,
         a { color: #667eea; text-decoration: none; }
         a:hover { text-decoration: underline; }
         hr { border: none; border-top: 2px solid #eaecef; margin: 2em 0; }
-    </style>
+        ul, ol { padding-left: 2em; margin: 1em 0; }
+        li { margin: 0.25em 0; }
+        input[type="checkbox"] { margin-right: 0.5em; }
+        strong { font-weight: 600; }
+        .mermaid { margin: 16px 0; text-align: center; background: #fafafa; padding: 16px; border-radius: 8px; }
+    </style>${mermaidScript}
 </head>
-<body class="vditor-reset">
-${bodyHtml}
+<body>
+${processedHtml}
 </body>
 </html>`;
         }
